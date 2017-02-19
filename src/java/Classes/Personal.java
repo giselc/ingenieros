@@ -6,6 +6,7 @@
 package Classes;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,8 +31,14 @@ public class Personal {
     private Date vencimientoLicCond;
     private Boolean carneSalud;
     private Date vencimientoCarneSalud;
+    
+    private ArrayList<Sancion> sanciones;
+    private UnidadMilitar unidadPerteneciente;
+    private ArrayList<Documento> documentos;
+    private Apoderado apoderado;
+    private ArrayList<Familiar> familiares;
 
-    public Personal(Grado grado, String nombre, String apellido, int ci, Date vencimientoCI, String pasaporte, Date vencimientoPas, String cc, int ccNro, Especialidad especialidad, Boolean experienciaMision, String lugarExpMision, Boolean licenciaConducir, int nroLicCond, String categoriaLicCond, Date vencimientoLicCond, Boolean carneSalud, Date vencimientoCarneSalud) {
+    public Personal(Grado grado, String nombre, String apellido, int ci, Date vencimientoCI, String pasaporte, Date vencimientoPas, String cc, int ccNro, Especialidad especialidad, Boolean experienciaMision, String lugarExpMision, Boolean licenciaConducir, int nroLicCond, String categoriaLicCond, Date vencimientoLicCond, Boolean carneSalud, Date vencimientoCarneSalud, ArrayList<Sancion> sanciones, UnidadMilitar unidadPerteneciente, ArrayList<Documento> documentos, Apoderado apoderado, ArrayList<Familiar> familiares) {
         this.grado = grado;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -50,7 +57,34 @@ public class Personal {
         this.vencimientoLicCond = vencimientoLicCond;
         this.carneSalud = carneSalud;
         this.vencimientoCarneSalud = vencimientoCarneSalud;
+        this.sanciones = sanciones;
+        this.unidadPerteneciente = unidadPerteneciente;
+        this.documentos = documentos;
+        this.apoderado = apoderado;
+        this.familiares = familiares;
     }
+
+    public ArrayList<Sancion> getSanciones() {
+        return sanciones;
+    }
+
+    public UnidadMilitar getUnidadPerteneciente() {
+        return unidadPerteneciente;
+    }
+
+    public ArrayList<Documento> getDocumentos() {
+        return documentos;
+    }
+
+    public Apoderado getApoderado() {
+        return apoderado;
+    }
+
+    public ArrayList<Familiar> getFamiliares() {
+        return familiares;
+    }
+    
+    
 
     public Grado getGrado() {
         return grado;
