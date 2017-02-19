@@ -15,13 +15,13 @@ import java.sql.Date;
 
 public class Documento {
     private int id;
-    private tipoDocumento tipo;
+    private TipoDocumento tipo;
     private Blob imagen;
     private Date fechaVencimiento;
 
     
     
-    public Documento(int id, tipoDocumento tipo, Blob imagen, Date fechaVencimiento) {
+    public Documento(int id, TipoDocumento tipo, Blob imagen, Date fechaVencimiento) {
         this.id = id;
         this.tipo = tipo;
         this.imagen = imagen;
@@ -32,33 +32,18 @@ public class Documento {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public tipoDocumento getTipo() {
+    public TipoDocumento getTipo() {
         return tipo;
-    }
-
-    public void setTipo(tipoDocumento tipo) {
-        this.tipo = tipo;
     }
 
     public Blob getImagen() {
         return imagen;
     }
 
-    public void setImagen(Blob imagen) {
-        this.imagen = imagen;
-    }
-
     public Date getFechaVencimiento() {
         return fechaVencimiento;
     }
 
-    public void setFechaVencimiento(Date fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
-    }
     
     
     
