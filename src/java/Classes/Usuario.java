@@ -11,18 +11,30 @@ package Classes;
  */
 public class Usuario {
     private int id;
-    private String nombre;
+    private String usuario;
     private String nombreMostrar;
+    private String contrasena;
     private boolean admin;
     private boolean s1;
     private boolean s4;
 
+    public Usuario(int id, String usuario, String nombreMostrar, String contrasena, Boolean admin, Boolean s1, Boolean s4) {
+        this.id = id;
+        this.usuario = usuario;
+        this.nombreMostrar = nombreMostrar;
+        this.contrasena = contrasena;
+        this.admin = admin;
+        this.s1 = s1;
+        this.s4 = s4;
+    }
+
+    
     public int getId() {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getUsuario() {
+        return usuario;
     }
 
     public String getNombreMostrar() {
@@ -40,5 +52,9 @@ public class Usuario {
     public boolean isS4() {
         return s4;
     }    
+
+    public String getContrasena() {
+        return contrasena;
+    }
     
 }

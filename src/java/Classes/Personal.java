@@ -12,6 +12,8 @@ import java.util.ArrayList;
  *
  * @author Gisel
  */
+
+//PERSONAL DE HISTORIAL TIENE NULL DOCUMENTOS.
 public class Personal {
     private Grado grado;
     private String nombre;
