@@ -10,7 +10,6 @@ package Classes;
  * @author Gisel
  */
 public class Apoderado {
-    private int id;
     private int ci;
     private String nombre;
     private String apellido;
@@ -19,8 +18,7 @@ public class Apoderado {
     private String celular;
     private String telefono;
 
-    public Apoderado(int id, int ci, String nombre, String apellido, TipoFamiliar vinculo, String domicilio, String celular, String telefono) {
-        this.id = id;
+    public Apoderado(int ci, String nombre, String apellido, TipoFamiliar vinculo, String domicilio, String celular, String telefono) {
         this.ci = ci;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -30,9 +28,6 @@ public class Apoderado {
         this.telefono = telefono;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public int getCi() {
         return ci;

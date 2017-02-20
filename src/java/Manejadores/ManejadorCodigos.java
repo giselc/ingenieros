@@ -6,6 +6,7 @@
 package Manejadores;
 
 import Classes.ConexionBD;
+import Classes.Especialidad;
 import Classes.Grado;
 import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
@@ -65,7 +66,39 @@ public class ManejadorCodigos {
         }
         return g;
     }
-    
+     public ArrayList<Especialidad> getEspecialidades(){
+        ArrayList<Especialidad> al= new ArrayList<Especialidad>();
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from especialidades";
+            ResultSet rs= s.executeQuery(sql);
+            Especialidad g;
+            while (rs.next()){
+                g= new Especialidad(rs.getInt("id"), rs.getString("descripcion"));
+                al.add(g);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return al;
+    }
+    public Especialidad getEspecialidad(int id){
+        Especialidad g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from especialidades where id="+id;
+            ResultSet rs= s.executeQuery(sql);
+            
+            if (rs.next()){
+                g= new Especialidad(rs.getInt("id"), rs.getString("descripcion"));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
     public ArrayList<TipoDocumento> getTiposDocumentos(){
         ArrayList<TipoDocumento> al= new ArrayList<TipoDocumento>();
         try {
