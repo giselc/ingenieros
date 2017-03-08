@@ -89,7 +89,7 @@
                                 </form>
                             </td>
                             <td style="width: 60%; vertical-align: top">
-                                <p align="center" ><img src="images/LOGO.png" title="INICIO" <% //if(u.isAdmin()){out.print("onclick=location.href='/postulantes.jsp'");}else{out.print("onclick=location.href='/listar.jsp'");} %> style="height: 15%; width: 100%"/></p>
+                                <p align="center" ><img src="images/LOGO.png" title="INICIO" <% if(u.isAdmin()){out.print("onclick=location.href='/index2.jsp'");}else{out.print("onclick=location.href='/index.jsp'");} %> style="height: 15%; width: 100%"/></p>
                             </td>
                             
                             <td style="width: 20%">

@@ -57,13 +57,13 @@
     </style> 
 <ul  class="nav2" style="text-align: center; width: 100%; padding: 0px">
         <li style="width: 25%">
-            <a href="s1.jsp"><img src="images/S1.png" width="80%" /></a>
+            <a href="s1.jsp"><img src="images/button_s1.png" width="80%" /></a>
         </li>
         <li style="width: 25%">
-            <a href="s4.jsp"><img src="images/S4.png" width="80%" /></a>
+            <a href="s4.jsp"><img src="images/button_s4.png" width="80%" /></a>
         </li>
         <li style="width: 25%">
-            <a href="escribiente.jsp"><img src="images/ESCRIBIENTE.png" width="80%" /></a>
+            <a href="escribiente.jsp"><img src="images/button_escribiente.png" width="80%" /></a>
         </li>
         <li style="width: 25%">
             <a href="usuarios.jsp"><img src="images/CONFIG.png" width="80%" /></a>
