@@ -22,23 +22,26 @@ public class ConexionBD {
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            String servidor = "jdbc:mysql://localhost";
+            String servidor = "jdbc:mysql://localhost/ingenieros";
             String usuarioDB="root";
             String passwordDB="";
             conexion= DriverManager.getConnection(servidor,usuarioDB,passwordDB);
         }
         catch(ClassNotFoundException ex)
         {
+            System.out.print(ex.getMessage()+1);
             JOptionPane.showMessageDialog(null, ex, "Error1 en la Conexión con la BD "+ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion=null;
         }
         catch(SQLException ex)
         {
+            System.out.print(ex.getMessage()+2);
             JOptionPane.showMessageDialog(null, ex, "Error2 en la Conexión con la BD "+ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion=null;
         }
         catch(Exception ex)
         {
+            System.out.print(ex.getMessage()+3);
             JOptionPane.showMessageDialog(null, ex, "Error3 en la Conexión con la BD "+ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion=null;
         }

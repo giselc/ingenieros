@@ -17,15 +17,22 @@ public class Sancion {
     private String parte;
     private int dias;
     private Date fecha;
+    private Personal orden;
 
-    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha) {
+    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Personal orden) {
         this.id = id;
         this.tipo = tipo;
         this.parte = parte;
         this.dias = dias;
         this.fecha = fecha;
+        this.orden = orden;
     }
 
+    public Personal getOrden() {
+        return orden;
+    }
+
+    
     public int getId() {
         return id;
     }

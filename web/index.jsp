@@ -31,7 +31,7 @@
                         <table width="100%">
                         <td>
                             <div style="position:absolute; width:30%;padding-top:115px;padding-left: 45%">
-                                <form method="POST" action="login" style="height:400px;" > 
+                                <form method="POST" action="Login" style="height:400px;" > 
                             <table border="0" width="80%" cellpadding="0px" cellspacing="0px" align="center">   
                                     <tr> 
                                     <td > <p align='center' style='margin:0px'><img src='images/usuarioChapa2.png' width='35%'/></p> </td> 

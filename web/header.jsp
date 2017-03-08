@@ -66,23 +66,22 @@
                 <td class="fondo">
                     
                     <% 
-                    //HttpSession sesion= request.getSession();
-                   // if (sesion.getAttribute("usuarioID")!=null){
+                    HttpSession sesion= request.getSession();
+                    if (sesion.getAttribute("usuario")!=null){
                     %>
                     <table style="width: 100%">
                         <tr>
                             <td style="width: 20%; vertical-align: top" >
                                 <p style="color: #ffffff; margin: 0px"><%
-                                    //ManejadorCodigoBD mc = new ManejadorCodigoBD();
-                                   // Usuario u= mc.getUsuario(Integer.valueOf(sesion.getAttribute("usuarioID").toString()));
-                                   // out.print("Bienvenido ");out.print(u.getNombreMostrar());
+                                    Usuario u= (Usuario)sesion.getAttribute("usuario");
+                                    out.print("Bienvenido ");out.print(u.getNombreMostrar());
                                     %></p>
-                                <form action="logout" method="POST" style="font-size: 100%">
+                                <form action="Logout" method="POST" style="font-size: 100%">
                                     <ul class="nav" style="padding: 0px;margin: 0px">
-                                        <li><a <% //if(u.isAdmin()){out.print("href='postulantes.jsp'");}else{out.print("href='listar.jsp'");} %>><table><tr><td align="center"><img src="images/home.png" width="80%" /></td><td>Inicio</td></tr></table> </a></li>
+                                        <li><a <% if(u.isAdmin()){out.print("href='index2.jsp'");}else{out.print("href=''");} %>><table><tr><td align="center"><img src="images/home.png" width="80%" /></td><td>Inicio</td></tr></table> </a></li>
                                         <li><a > <table><tr><td align="center"><img src="images/menu.png" width="80%" /></td><td>Cuenta</td></tr></table> </a>
                                             <ul>
-                                                        <li><a href="cambiarContrasena.jsp">Cambiar contrase&ntilde;a </a></li>
+                                                        <li><a href="changePass.jsp?id=<%= u.getId() %>">Cambiar contrase&ntilde;a </a></li>
                                                         <li><a align="center"><input type="submit" value="SALIR"/></a></li>
                                                 </ul>
                                         </li>
@@ -108,4 +107,4 @@
                         <tr>
                             <td style="width: 5%">
                             </td>
-                            <td class="conteinermenu">
+                            <td class="conteinermenu" >

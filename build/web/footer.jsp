@@ -3,11 +3,11 @@
                             </tr>
                         </table>
                         <%
-                  //      }
-                  //      else{
-                   //         sesion.setAttribute("login", "vacio");
-                   //         response.sendRedirect("");
-                   //     }
+                        }
+                        else{
+                            sesion.setAttribute("login", "vacio");
+                            response.sendRedirect("");
+                        }
                     %>    
             </td>
             </tr>

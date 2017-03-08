@@ -54,7 +54,7 @@ public class ManejadorCodigos {
         Grado g=null;
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from tipodocumento where id="+id;
+            String sql="Select * from grado where id="+id;
             ResultSet rs= s.executeQuery(sql);
             
             if (rs.next()){
@@ -66,7 +66,49 @@ public class ManejadorCodigos {
         }
         return g;
     }
-     public ArrayList<Especialidad> getEspecialidades(){
+    public Grado agregarGrado(String desc){
+        Grado g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into grado(descripcion) values('"+desc+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                ResultSet rs = s.getGeneratedKeys();
+                if(rs.next()){
+                        int id = (int)rs.getLong(1);
+                        g= new Grado(id, desc);
+                }
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean modificarGrado(Grado g){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update grado set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarGrado(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from grado where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    
+    public ArrayList<Especialidad> getEspecialidades(){
         ArrayList<Especialidad> al= new ArrayList<Especialidad>();
         try {
             Statement s= connection.createStatement();
@@ -99,6 +141,47 @@ public class ManejadorCodigos {
         }
         return g;
     }
+    public Especialidad agregarEspecialidad(String desc){
+        Especialidad g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into especialidades(descripcion) values('"+desc+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                ResultSet rs = s.getGeneratedKeys();
+                if(rs.next()){
+                        int id = (int)rs.getLong(1);
+                        g= new Especialidad(id, desc);
+                }
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean modificarEspecialidad(Especialidad g){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update especialidades set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarEspecialidad(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from especialidades where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+     
     public ArrayList<TipoDocumento> getTiposDocumentos(){
         ArrayList<TipoDocumento> al= new ArrayList<TipoDocumento>();
         try {
@@ -132,6 +215,47 @@ public class ManejadorCodigos {
         }
         return td;
     }
+    public TipoDocumento agregarTipoDocumento(String desc){
+        TipoDocumento g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into tipodocumento(descripcion) values('"+desc+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                ResultSet rs = s.getGeneratedKeys();
+                if(rs.next()){
+                        int id = (int)rs.getLong(1);
+                        g= new TipoDocumento(id, desc);
+                }
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean modificarTipoDocumento(TipoDocumento g){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update TipoDocumento set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarTipoDocumento(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from TipoDocumento where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     public ArrayList<TipoFamiliar> getTiposFamiliares(){
         ArrayList<TipoFamiliar> al= new ArrayList<TipoFamiliar>();
         try {
@@ -165,6 +289,47 @@ public class ManejadorCodigos {
         }
         return tf;
     }
+    public TipoFamiliar agregarTipoFamiliar(String desc){
+        TipoFamiliar g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into TipoFamiliar(descripcion) values('"+desc+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                ResultSet rs = s.getGeneratedKeys();
+                if(rs.next()){
+                        int id = (int)rs.getLong(1);
+                        g= new TipoFamiliar(id, desc);
+                }
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean modificarTipoFamiliar(TipoFamiliar g){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update TipoFamiliar set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarTipoFamiliar(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from TipoFamiliar where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+     
     public ArrayList<TipoSancion> getTiposSanciones(){
         ArrayList<TipoSancion> al= new ArrayList<TipoSancion>();
         try {
@@ -198,7 +363,47 @@ public class ManejadorCodigos {
         }
         return ts;
     }
-    
+    public TipoSancion agregarTipoSancion(String desc){
+        TipoSancion g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into TipoSancion(descripcion) values('"+desc+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                ResultSet rs = s.getGeneratedKeys();
+                if(rs.next()){
+                        int id = (int)rs.getLong(1);
+                        g= new TipoSancion(id, desc);
+                }
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean modificarTipoSancion(TipoSancion g){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update TipoSancion set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarTipoSancion(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from TipoSancion where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+     
     public ArrayList<UnidadMilitar> getUnidadesMilitares(){
         ArrayList<UnidadMilitar> al= new ArrayList<UnidadMilitar>();
         try {
@@ -232,5 +437,44 @@ public class ManejadorCodigos {
         }
         return um;
     }
-    
+    public UnidadMilitar agregarUnidadMilitar(String correo, String nombre, String telefono){
+        UnidadMilitar g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into unidadesmilitares(correo, nombre, telefono) values('"+correo+"','"+nombre+"','"+telefono+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                ResultSet rs = s.getGeneratedKeys();
+                if(rs.next()){
+                        int id = (int)rs.getLong(1);
+                        g= new UnidadMilitar(id, nombre,telefono,correo);
+                }
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean modificarUnidadMilitar(UnidadMilitar g){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update UnidadesMilitares set nombre='"+g.getNombre()+"',correo='"+g.getCorreo()+"',telefono='"+g.getTelefono()+"' where id="+g.getId();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarUnidadMilitar(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from UnidadesMilitares where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }

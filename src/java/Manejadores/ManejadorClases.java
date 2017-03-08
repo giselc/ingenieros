@@ -8,6 +8,7 @@ package Manejadores;
 import Classes.Apoderado;
 import Classes.ConexionBD;
 import Classes.Usuario;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,11 +52,10 @@ public class ManejadorClases {
     //Retorna un Usuario con los parametros indicados persistiendolo en la base de datos si 'creador' es Admin.
     //retorna null si creador no es admin o se produjo algun error en la escritura de la base de datos.
     //PRECONDICIONES: - existeUsuario(usuario)==false
-    public Usuario crarUsuario(Usuario creador, String usuario, String nombreMostrar, String contrasena, boolean admin, boolean s1, boolean s4){
-        Usuario u=null;
+    public boolean crarUsuario(Usuario creador, String usuario, String nombreMostrar, String contrasena, boolean admin, boolean s1, boolean s4){
         if (creador.isAdmin()){
             try {
-                String sql= "insert into usuarios (usuario, nombreMostrar, contrasena,admin, s1, s4) values(?,?,MD5(?),?,?,?),";
+                String sql= "insert into usuarios (usuario, nombreMostrar, contrasena,admin, s1, s4) values(?,?,MD5(?),?,?,?)";
                 PreparedStatement s= connection.prepareStatement(sql);
                 s.setString(1, usuario);
                 s.setString(2, nombreMostrar);
@@ -64,20 +64,14 @@ public class ManejadorClases {
                 s.setBoolean(5, s1);
                 s.setBoolean(6, s4);
                 int result = s.executeUpdate();
-                int id=0;
                 if(result>0){
-                    ResultSet rs = s.getGeneratedKeys();
-                    if(rs.next()){
-                        id = (int)rs.getLong(1);
-                    }
+                    return true;
                 }
-                u= new Usuario(id, usuario, nombreMostrar, admin, s1, s4);
-                
             } catch (SQLException ex) {
                 Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return u;
+        return false;
     }
     
     //retorna false si 'creador' no es admin o se produjo algun error en la escritura de la base de datos.
@@ -86,7 +80,7 @@ public class ManejadorClases {
     public boolean ModificarUsuario(Usuario creador, int id, String nombreMostrar, boolean admin, boolean s1, boolean s4){
         if (creador.isAdmin()){
             try {
-                String sql= "Update usuarios set nombreMostrar=?, admin=?, s1=?, s2=? where id=?";
+                String sql= "Update usuarios set nombreMostrar=?, admin=?, s1=?, s4=? where id=?";
                 PreparedStatement s= connection.prepareStatement(sql);
                 s.setString(1, nombreMostrar);
                 s.setBoolean(2, admin);
@@ -121,11 +115,11 @@ public class ManejadorClases {
         return false;
     }
     
-    //retorna false si 'creador' no es admin o no es su contrasena o se produjo algun error en la escritura de la base de datos.
-    public boolean cambiarContrasena(Usuario creador, int id, String contrasenaNueva){
+    //retorna false si 'creador' no es admin(o no es contrasena propia) o su contrasena anterior es incorrecta o se produjo algun error en la escritura de la base de datos.
+    public boolean cambiarContrasena(Usuario creador, int id, String contrasenaNueva, String contrasenaAnterior){
         if(creador.isAdmin() || creador.getId()== id){
             try {
-                String sql= "Update usuarios set contrasena=MD5('"+contrasenaNueva+"') where id="+id;
+                String sql= "Update usuarios set contrasena=MD5('"+contrasenaNueva+"') where id="+id + " and contrasena=MD5('"+contrasenaAnterior+"')";
                 Statement s= connection.createStatement();
                 int result = s.executeUpdate(sql);
                 if(result>0){
@@ -173,6 +167,23 @@ public class ManejadorClases {
                 Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return u;
+    }
+    
+    public Usuario getUsuario(String usuario, String pass){
+       
+        Usuario u= null;
+        try {
+                String sql= "Select * from usuarios where usuario='"+usuario+"' and contrasena=MD5('"+pass+"')";
+                Statement s= connection.createStatement();
+                ResultSet rs = s.executeQuery(sql);
+                while(rs.next()){
+                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
         return u;
     }
     
@@ -234,6 +245,54 @@ public class ManejadorClases {
         return null;
     }
     
+    //modifica atributos de un apoderado y su vinculo con idPersonal
+    public boolean modificarApoderado(int idPersonal, Apoderado apod){
+        try {
+            Statement s= connection.createStatement();
+            String sql="Update personal-apoderado left join apoderados on idApoderado=ci set idVinculo="+ apod.getVinculo().getId() +", nombre="+ apod.getNombre() +", apellido="+ apod.getApellido() +", celular="+ apod.getCelular() +", domicilio="+ apod.getDomicilio() +", telefono="+ apod.getTelefono() +" where apoderados.ci="+apod.getCi() +" and Personal-apoderado.idPersonal="+idPersonal;
+            int rs= s.executeUpdate(sql);
+            return (rs>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    //desvincula el apoderado con ci=idApod con el personal con ci=idPersonal
+    //los datos del apoderado son eliminados de la base de datos si no hay ningun otro vinculo con idApod
+    //retorna 0 si se produjo error con base de datos
+    // 1 si se desvinculo y no se borro los datos
+    // 2 si se desvinculo y se borro los datos 
+    public int desvincularApoderado(int idPersonal, int idApod){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete form personal-apoderado where idApoderado="+idApod +" and idPersonal="+idPersonal;
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                sql="select form personal-apoderado where idApoderado="+idApod;
+                ResultSet rs= s.executeQuery(sql);
+                if(rs.next()){
+                    return 1;
+                }
+                else{
+                    sql="delete form apoderados where ci="+idApod;
+                    i= s.executeUpdate(sql);
+                    if(i>0){
+                        return 2;
+                    }
+                    else{
+                        return 0;
+                    }
+                }
+            }
+            else{
+                return 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
     
     
 }
