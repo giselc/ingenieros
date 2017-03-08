@@ -5,11 +5,9 @@
  */
 package servlet;
 
-import Manejadores.ManejadorClases;
 import Manejadores.ManejadorCodigos;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Gisel
  */
-public class Listar extends HttpServlet {
+public class UnidadMilitar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,23 +31,48 @@ public class Listar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+                response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        Classes.Usuario u = (Classes.Usuario) sesion.getAttribute("usuario");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String tipo = request.getParameter("tipo");
-            if(tipo.equals("usuarios")){
-                ManejadorClases mc = new ManejadorClases();
-                mc.imprimirUsuarios(out, u);
-            }
-            else{
-                ManejadorCodigos mc = new ManejadorCodigos();
-                if(tipo.equals("unidadesMilitares")){
-                    mc.imprimirUnidadesMilitares(out);
+            ManejadorCodigos mc = new ManejadorCodigos();
+            if(request.getParameter("id")!= null){ //alta o modficacion
+                int id= Integer.valueOf(request.getParameter("id"));
+                String nombre = request.getParameter("nombre");
+                String telefono = request.getParameter("telefono");
+                String correo = request.getParameter("correo");
+                if(id==-1){ //alta
+                    if(mc.agregarUnidadMilitar(correo, nombre, telefono)){
+                        sesion.setAttribute("mensaje", "Unidad militar agregada correctamente.");
+                    }
+                    else{
+                        sesion.setAttribute("mensaje", "ERROR al agregar la unidad militar.");
+                    }
+                    
+                    response.sendRedirect("unidadesMilitares.jsp");
+                }
+                else{ //modificacion
+                    if(mc.modificarUnidadMilitar(id, nombre, telefono, correo)){
+                       sesion.setAttribute("mensaje", "Unidad Militar modificada correctamente.");
+                    }
+                    else{
+                        sesion.setAttribute("mensaje", "ERROR al modificar la unidad militar.");
+                    }
+                    response.sendRedirect("unidadesMilitares.jsp");
                 }
             }
-            
+            else{
+                if(request.getParameter("elim")!= null){
+                    int id=Integer.valueOf(request.getParameter("elim"));
+                    if(mc.eliminarUnidadMilitar(id)){
+                        sesion.setAttribute("mensaje", "Unidad militar eliminada correctamente.");
+                    }
+                    else{
+                        sesion.setAttribute("mensaje", "ERROR al eliminar la unidad militar.");
+                    }
+                    response.sendRedirect("unidadesMilitares.jsp"); 
+                }
+            }
         }
     }
 

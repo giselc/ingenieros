@@ -71,30 +71,25 @@
         </tr>
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Usuarios del sistema:</h3></td>
-            <td style="width: 15%"><a href="usuario.jsp" title="Agregar Comando"><img width="30%" src='images/agregarLista.png' /></a> </td>
+            <td style="width: 15%"><a href="usuario.jsp" title="Agregar Usuario"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir usuarios"src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>
     </table>
 </form>    
     <table style="width: 100%;">
-        <tr>
-            <td>
-                <input name="Listar" hidden="hidden" value="usuarios"/>
-            </td>
-        </tr>
             <%
                 ManejadorClases  mc = new ManejadorClases();
                 ArrayList<Usuario> au = mc.getUsuarios(u);
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Usuario</h3></td>");
-                            out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Mostrar</h3></td>");
+                            out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Nombre para mostrar</h3></td>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Admin</h3></td>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S1</h3></td>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S4</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
-                       out.print("</tr></table>  <table id=\"datosComando\" style=\"width: 100%;\">" );
+                       out.print("</tr></table>  <table style=\"width: 100%;\">" );
                 int i=0;
                 String color;
                 for (Usuario u1: au){

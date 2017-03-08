@@ -186,7 +186,38 @@ public class ManejadorClases {
         
         return u;
     }
-    
+    public void imprimirUsuarios(PrintWriter out, Usuario creador){
+        out.print("<h1 align='center'>USUARIOS DEL SISTEMA</h1>");
+        out.print("<table style=\"width: 100%;\">");
+        ArrayList<Usuario> au = this.getUsuarios(creador);
+        out.print("<tr style='background-color:#ffcc66'>");
+                out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Usuario</h3></td>");
+                out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Nombre para mostrar</h3></td>");
+                out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Admin</h3></td>");
+                out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S1</h3></td>");
+                out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S4</h3></td>");
+        out.print("</tr></table>  <table style=\"width: 100%;\">" );
+        int i=0;
+        String color;
+        for (Usuario u1: au){
+            if ((i%2)==0){
+                color=" #ccccff";
+            }
+            else{
+                color=" #ffff99";
+            }
+            i++;
+
+            out.print("<tr style='background-color:"+color+"'>");
+                out.print("<td style='width: 20%' align='center'>"+u1.getUsuario()+"</td>");
+                out.print("<td style='width: 20%' align='center'>"+u1.getNombreMostrar()+"</td>");
+                out.print("<td style='width: 10%' align='center'>"+u1.isAdmin()+"</td>");
+                out.print("<td style='width: 10%' align='center'>"+u1.isS1()+"</td>"); 
+                out.print("<td style='width: 10%' align='center'>"+u1.isS4()+"</td>"); 
+            out.print("</tr>");
+        }
+        out.print("</table>");
+    }
     
     //APODERADOOO
     

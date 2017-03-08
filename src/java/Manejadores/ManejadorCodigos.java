@@ -12,6 +12,7 @@ import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
 import Classes.TipoSancion;
 import Classes.UnidadMilitar;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -437,28 +438,23 @@ public class ManejadorCodigos {
         }
         return um;
     }
-    public UnidadMilitar agregarUnidadMilitar(String correo, String nombre, String telefono){
-        UnidadMilitar g=null;
+    public boolean agregarUnidadMilitar(String correo, String nombre, String telefono){
         try {
             Statement s= connection.createStatement();
             String sql="insert into unidadesmilitares(correo, nombre, telefono) values('"+correo+"','"+nombre+"','"+telefono+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
-                ResultSet rs = s.getGeneratedKeys();
-                if(rs.next()){
-                        int id = (int)rs.getLong(1);
-                        g= new UnidadMilitar(id, nombre,telefono,correo);
-                }
+                return true;
             }            
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return g;
+        return false;
     }
-    public boolean modificarUnidadMilitar(UnidadMilitar g){
+    public boolean modificarUnidadMilitar(int id, String nombre, String telefono, String correo){
         try {
             Statement s= connection.createStatement();
-            String sql="update UnidadesMilitares set nombre='"+g.getNombre()+"',correo='"+g.getCorreo()+"',telefono='"+g.getTelefono()+"' where id="+g.getId();
+            String sql="update UnidadesMilitares set nombre='"+nombre+"',correo='"+correo+"',telefono='"+telefono+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -476,5 +472,33 @@ public class ManejadorCodigos {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    public void imprimirUnidadesMilitares(PrintWriter out){
+        out.print("<h1 align='center'>UNIDADES MILITARES DEL SISTEMA</h1>");
+        out.print("<table style=\"width: 100%;\">");
+        ArrayList<UnidadMilitar> au = this.getUnidadesMilitares();
+        out.print("<tr style='background-color:#ffcc66'>");
+                out.print("<td style='width: 30%' align='center'><h3 style='margin:2%;'>Nombre</h3></td>");
+                out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Telefono</h3></td>");
+                out.print("<td style='width: 30%' align='center'><h3 style='margin:2%;'>Correo</h3></td>");
+        out.print("</tr></table>  <table style=\"width: 100%;\">" );
+        int i=0;
+        String color;
+        for (UnidadMilitar u1: au){
+            if ((i%2)==0){
+                color=" #ccccff";
+            }
+            else{
+                color=" #ffff99";
+            }
+            i++;
+
+            out.print("<tr style='background-color:"+color+"'>");
+                out.print("<td style='width: 30%' align='center'>"+u1.getNombre()+"</td>");
+                out.print("<td style='width: 20%' align='center'>"+u1.getTelefono()+"</td>");
+                out.print("<td style='width: 30%' align='center'>"+u1.getCorreo()+"</td>");
+            out.print("</tr>");
+        }
+        out.print("</table>");
     }
 }

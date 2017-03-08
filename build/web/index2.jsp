@@ -75,16 +75,16 @@
                     <a  href="unidadesMilitares.jsp">Unidades Militares</a>
                 </li>
                 <li>
+                    <a  href="tipoFamiliar.jsp">Familiares/V&iacute;nculos</a>
+                </li>
+                <li>
                     <a href="grados.jsp">Grados</a>
                 </li>
                 <li>
                     <a href="tipoDocumento.jsp">Documentos</a>
                 </li>
                 <li>
-                    <a  href="tipoFamiliar.jsp">Familiares/V&iacute;nculos</a>
-                </li>
-                <li>
-                    <a  href="tipoSancion.jsp">Sanci&oacute;n</a>
+                    <a  href="tipoSancion.jsp">Tipos de Sanciones</a>
                 </li>
                 <li>
                     <a href="especialidades.jsp">Especialidades</a>
