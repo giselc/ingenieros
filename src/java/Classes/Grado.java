@@ -9,20 +9,8 @@ package Classes;
  *
  * @author Gisel
  */
-public class Grado {
-    private int id;
-    private String descripcion;
-
+public class Grado extends Tipo{
     public Grado(int id, String descripcion) {
-        this.id = id;
-        this.descripcion = descripcion;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
+        super(id,descripcion);
     }
 }

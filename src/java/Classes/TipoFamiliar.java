@@ -12,22 +12,9 @@ package Classes;
 
 //SE CREARON ESTA CLASE DEBIDO A QUE CADA TIPO ES TRAIDO DE LA BASE DE DATOS, SI LO HACIAMOS A TRAVES DE UN ENUM 
 // Y LUEGO QUERIAMOS AGREGAR UN NUEVO "TIPO DE FAMILIAR" HAY QUE GENERAR UN NUEVO .JAR
-public class TipoFamiliar { 
-    private int id;
-    private String descripcion;
+public class TipoFamiliar extends Tipo{ 
 
     public TipoFamiliar(int id, String descripcion) {
-        this.id = id;
-        this.descripcion = descripcion;
+        super(id,descripcion);
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-    
-    
 }

@@ -20,6 +20,10 @@
         <servlet-name>UnidadMilitar</servlet-name>
         <servlet-class>servlet.UnidadMilitar</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Tipo</servlet-name>
+        <servlet-class>servlet.Tipo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>UnidadMilitar</servlet-name>
         <url-pattern>/UnidadMilitar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Tipo</servlet-name>
+        <url-pattern>/Tipo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

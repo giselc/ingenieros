@@ -57,7 +57,18 @@
     </style> 
 <ul  class="nav2" style="text-align: center; width: 100%; padding: 0px">
         <li style="width: 25%">
-            <a href="s1.jsp"><img src="images/button_s1.png" width="80%" /></a>
+            <a><img src="images/button_s1.png" width="80%" /></a>
+            <ul>
+                <li>
+                    <a href="s1-personal.jsp">Personal</a>
+                </li>
+                <li>
+                    <a href="s1-sanciones.jsp">Sanciones</a>
+                </li>
+                <li>
+                    <a href="s1-historial.jsp">Historial</a>
+                </li>
+            </ul>
         </li>
         <li style="width: 25%">
             <a href="s4.jsp"><img src="images/button_s4.png" width="80%" /></a>
@@ -66,7 +77,7 @@
             <a href="escribiente.jsp"><img src="images/button_escribiente.png" width="80%" /></a>
         </li>
         <li style="width: 25%">
-            <a href="usuarios.jsp"><img src="images/CONFIG.png" width="80%" /></a>
+            <a><img src="images/CONFIG.png" width="80%" /></a>
             <ul>
                 <li>
                     <a href="usuarios.jsp">Usuarios</a>
@@ -75,19 +86,19 @@
                     <a  href="unidadesMilitares.jsp">Unidades Militares</a>
                 </li>
                 <li>
-                    <a  href="tipoFamiliar.jsp">Familiares/V&iacute;nculos</a>
+                    <a  href="tipos.jsp?codigo=Familiares">Familiares/V&iacute;nculos</a>
                 </li>
                 <li>
-                    <a href="grados.jsp">Grados</a>
+                    <a href="tipos.jsp?codigo=Grados">Grados</a>
                 </li>
                 <li>
-                    <a href="tipoDocumento.jsp">Documentos</a>
+                    <a href="tipos.jsp?codigo=Documentos">Documentos</a>
                 </li>
                 <li>
-                    <a  href="tipoSancion.jsp">Tipos de Sanciones</a>
+                    <a  href="tipos.jsp?codigo=Sanciones">Tipos de Sanciones</a>
                 </li>
                 <li>
-                    <a href="especialidades.jsp">Especialidades</a>
+                    <a href="tipos.jsp?codigo=Especialidades">Especialidades</a>
                 </li>
             </ul>
         </li>

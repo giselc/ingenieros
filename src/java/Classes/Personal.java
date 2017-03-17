@@ -19,53 +19,55 @@ public class Personal {
     private String nombre;
     private String apellido;
     private int ci;
-    private Date vencimientoCI;
+    private Date fechaNac;
+    private Date vtoCI;
     private String pasaporte;
-    private Date vencimientoPas;
+    private Date vtoPas;
     private String cc;
     private int ccNro;
-    private Especialidad especialidad;
-    private Boolean experienciaMision;
+    private Boolean expMision;
     private String lugarExpMision;
     private Boolean licenciaConducir;
     private int nroLicCond;
-    private String categoriaLicCond;
-    private Date vencimientoLicCond;
+    private String catLicCond;
+    private Date vtoLicCond;
     private Boolean carneSalud;
-    private Date vencimientoCarneSalud;
+    private Date vtoCarneSalud;
     
     private ArrayList<Sancion> sanciones;
     private UnidadMilitar unidadPerteneciente;
     private ArrayList<Documento> documentos;
     private Apoderado apoderado;
     private ArrayList<Familiar> familiares;
+    private ArrayList<Especialidad> especialidades;
 
-    public Personal(Grado grado, String nombre, String apellido, int ci, Date vencimientoCI, String pasaporte, Date vencimientoPas, String cc, int ccNro, Especialidad especialidad, Boolean experienciaMision, String lugarExpMision, Boolean licenciaConducir, int nroLicCond, String categoriaLicCond, Date vencimientoLicCond, Boolean carneSalud, Date vencimientoCarneSalud, ArrayList<Sancion> sanciones, UnidadMilitar unidadPerteneciente, ArrayList<Documento> documentos, Apoderado apoderado, ArrayList<Familiar> familiares) {
+    public Personal(Grado grado, String nombre, String apellido, int ci, Date FechaNac,Date vtoCI, String pasaporte, Date vtoPas, String cc, int ccNro, Boolean expMision, String lugarExpMision, Boolean licenciaConducir, int nroLicCond, String catLicCond, Date vtoLicCond, Boolean carneSalud, Date vtoCarneSalud, UnidadMilitar unidadPerteneciente, Apoderado apoderado) {
         this.grado = grado;
         this.nombre = nombre;
         this.apellido = apellido;
         this.ci = ci;
-        this.vencimientoCI = vencimientoCI;
+        this.fechaNac = FechaNac;
+        this.vtoCI = vtoCI;
         this.pasaporte = pasaporte;
-        this.vencimientoPas = vencimientoPas;
+        this.vtoPas = vtoPas;
         this.cc = cc;
         this.ccNro = ccNro;
-        this.especialidad = especialidad;
-        this.experienciaMision = experienciaMision;
+        this.expMision = expMision;
         this.lugarExpMision = lugarExpMision;
         this.licenciaConducir = licenciaConducir;
         this.nroLicCond = nroLicCond;
-        this.categoriaLicCond = categoriaLicCond;
-        this.vencimientoLicCond = vencimientoLicCond;
+        this.catLicCond = catLicCond;
+        this.vtoLicCond = vtoLicCond;
         this.carneSalud = carneSalud;
-        this.vencimientoCarneSalud = vencimientoCarneSalud;
-        this.sanciones = sanciones;
+        this.vtoCarneSalud = vtoCarneSalud;
+        this.sanciones = new ArrayList<>();
         this.unidadPerteneciente = unidadPerteneciente;
-        this.documentos = documentos;
+        this.documentos = new ArrayList<>();
         this.apoderado = apoderado;
-        this.familiares = familiares;
+        this.familiares = new ArrayList<>();
+        this.especialidades = new ArrayList<>();
     }
-
+    
     public ArrayList<Sancion> getSanciones() {
         return sanciones;
     }
@@ -104,16 +106,16 @@ public class Personal {
         return ci;
     }
 
-    public Date getVencimientoCI() {
-        return vencimientoCI;
+    public Date getVtoCI() {
+        return vtoCI;
     }
 
     public String getPasaporte() {
         return pasaporte;
     }
 
-    public Date getVencimientoPas() {
-        return vencimientoPas;
+    public Date getVtoPas() {
+        return vtoPas;
     }
 
     public String getCc() {
@@ -124,12 +126,12 @@ public class Personal {
         return ccNro;
     }
 
-    public Especialidad getEspecialidad() {
-        return especialidad;
+    public ArrayList<Especialidad> getEspecialidad() {
+        return especialidades;
     }
 
-    public Boolean getExperienciaMision() {
-        return experienciaMision;
+    public Boolean getExpMision() {
+        return expMision;
     }
 
     public String getLugarExpMision() {
@@ -144,20 +146,20 @@ public class Personal {
         return nroLicCond;
     }
 
-    public String getCategoriaLicCond() {
-        return categoriaLicCond;
+    public String getCatLicCond() {
+        return catLicCond;
     }
 
-    public Date getVencimientoLicCond() {
-        return vencimientoLicCond;
+    public Date getVtoLicCond() {
+        return vtoLicCond;
     }
 
     public Boolean getCarneSalud() {
         return carneSalud;
     }
 
-    public Date getVencimientoCarneSalud() {
-        return vencimientoCarneSalud;
+    public Date getVtoCarneSalud() {
+        return vtoCarneSalud;
     }
     
     

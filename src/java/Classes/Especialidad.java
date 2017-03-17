@@ -9,20 +9,9 @@ package Classes;
  *
  * @author Gisel
  */
-public class Especialidad {
-    private int id;
-    private String descripcion;
+public class Especialidad extends Tipo{
 
     public Especialidad(int id, String descripcion) {
-        this.id = id;
-        this.descripcion = descripcion;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
+        super(id,descripcion);
     }
 }

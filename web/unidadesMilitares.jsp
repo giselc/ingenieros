@@ -16,27 +16,6 @@
 %>
 
 <script>
-    function abrir_dialog(dialog) {
-        $( dialog ).dialog({
-            modal: true
-        });
-      };
-    function cerrar_dialog(dialog) {
-        $( dialog ).dialog('close');
-    };
-    function seleccionar_todo(){ 
-          if (document.getElementById("selTodo").checked){
-              for (i=1;i<document.formListar.elements.length;i++) 
-             if(document.formListar.elements[i].type == "checkbox")	
-                document.formListar.elements[i].checked=1 ;
-          }
-          else{
-              for (i=1;i<document.formListar.elements.length;i++) 
-             if(document.formListar.elements[i].type == "checkbox")	
-                document.formListar.elements[i].checked=0;
-          }
-
-    }
     function listar(form) {//Funcion creada para no perder la sesion luego del submit
         form.submit();
         return false;
@@ -73,7 +52,7 @@
         </tr>
     </table>
 </form>    
-    <table style="width: 100%;">
+    <table style="width: 100%;" align='center'>
             <%
                 ManejadorCodigos  mc = new ManejadorCodigos();
                 ArrayList<UnidadMilitar> au = mc.getUnidadesMilitares();
@@ -83,7 +62,7 @@
                             out.print("<td style='width: 30%' align='center'><h3 style='margin:2%;'>Correo</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
-                       out.print("</tr></table>  <table style=\"width: 100%;\">" );
+                       out.print("</tr>" );
                 int i=0;
                 String color;
                 for (UnidadMilitar u1: au){

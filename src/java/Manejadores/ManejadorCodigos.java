@@ -8,6 +8,7 @@ package Manejadores;
 import Classes.ConexionBD;
 import Classes.Especialidad;
 import Classes.Grado;
+import Classes.Tipo;
 import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
 import Classes.TipoSancion;
@@ -20,6 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.print.PrinterJobWrapper;
 
 /**
  *
@@ -34,8 +36,8 @@ public class ManejadorCodigos {
         connection = ConexionBD.GetConnection();
     }
     
-    public ArrayList<Grado> getGrados(){
-        ArrayList<Grado> al= new ArrayList<Grado>();
+    public ArrayList<Tipo> getGrados(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
             Statement s= connection.createStatement();
             String sql="Select * from grado";
@@ -67,28 +69,23 @@ public class ManejadorCodigos {
         }
         return g;
     }
-    public Grado agregarGrado(String desc){
-        Grado g=null;
+    public boolean agregarGrado(String desc){
         try {
             Statement s= connection.createStatement();
             String sql="insert into grado(descripcion) values('"+desc+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
-                ResultSet rs = s.getGeneratedKeys();
-                if(rs.next()){
-                        int id = (int)rs.getLong(1);
-                        g= new Grado(id, desc);
-                }
+                return true;
             }            
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return g;
+        return false;
     }
-    public boolean modificarGrado(Grado g){
+    public boolean modificarGrado(int id, String desc){
         try {
             Statement s= connection.createStatement();
-            String sql="update grado set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            String sql="update grado set descripcion='"+desc+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -109,8 +106,8 @@ public class ManejadorCodigos {
     }
     
     
-    public ArrayList<Especialidad> getEspecialidades(){
-        ArrayList<Especialidad> al= new ArrayList<Especialidad>();
+    public ArrayList<Tipo> getEspecialidades(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
             Statement s= connection.createStatement();
             String sql="Select * from especialidades";
@@ -142,28 +139,23 @@ public class ManejadorCodigos {
         }
         return g;
     }
-    public Especialidad agregarEspecialidad(String desc){
-        Especialidad g=null;
+    public boolean agregarEspecialidad(String desc){
         try {
             Statement s= connection.createStatement();
             String sql="insert into especialidades(descripcion) values('"+desc+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
-                ResultSet rs = s.getGeneratedKeys();
-                if(rs.next()){
-                        int id = (int)rs.getLong(1);
-                        g= new Especialidad(id, desc);
-                }
+                return true;
             }            
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return g;
+        return false;
     }
-    public boolean modificarEspecialidad(Especialidad g){
+    public boolean modificarEspecialidad(int id, String desc){
         try {
             Statement s= connection.createStatement();
-            String sql="update especialidades set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            String sql="update especialidades set descripcion='"+desc+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -183,8 +175,8 @@ public class ManejadorCodigos {
         return false;
     }
      
-    public ArrayList<TipoDocumento> getTiposDocumentos(){
-        ArrayList<TipoDocumento> al= new ArrayList<TipoDocumento>();
+    public ArrayList<Tipo> getTiposDocumentos(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
             Statement s= connection.createStatement();
             String sql="Select * from tipodocumento";
@@ -216,28 +208,23 @@ public class ManejadorCodigos {
         }
         return td;
     }
-    public TipoDocumento agregarTipoDocumento(String desc){
-        TipoDocumento g=null;
+    public boolean agregarTipoDocumento(String desc){
         try {
             Statement s= connection.createStatement();
             String sql="insert into tipodocumento(descripcion) values('"+desc+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
-                ResultSet rs = s.getGeneratedKeys();
-                if(rs.next()){
-                        int id = (int)rs.getLong(1);
-                        g= new TipoDocumento(id, desc);
-                }
+                return true;
             }            
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return g;
+        return false;
     }
-    public boolean modificarTipoDocumento(TipoDocumento g){
+    public boolean modificarTipoDocumento(int id, String desc){
         try {
             Statement s= connection.createStatement();
-            String sql="update TipoDocumento set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            String sql="update TipoDocumento set descripcion='"+desc+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -257,8 +244,8 @@ public class ManejadorCodigos {
         return false;
     }
     
-    public ArrayList<TipoFamiliar> getTiposFamiliares(){
-        ArrayList<TipoFamiliar> al= new ArrayList<TipoFamiliar>();
+    public ArrayList<Tipo> getTiposFamiliares(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
             Statement s= connection.createStatement();
             String sql="Select * from tipofamiliar";
@@ -290,28 +277,23 @@ public class ManejadorCodigos {
         }
         return tf;
     }
-    public TipoFamiliar agregarTipoFamiliar(String desc){
-        TipoFamiliar g=null;
+    public boolean agregarTipoFamiliar(String desc){
         try {
             Statement s= connection.createStatement();
             String sql="insert into TipoFamiliar(descripcion) values('"+desc+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
-                ResultSet rs = s.getGeneratedKeys();
-                if(rs.next()){
-                        int id = (int)rs.getLong(1);
-                        g= new TipoFamiliar(id, desc);
-                }
+                return true;
             }            
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return g;
+        return false;
     }
-    public boolean modificarTipoFamiliar(TipoFamiliar g){
+    public boolean modificarTipoFamiliar(int id, String desc){
         try {
             Statement s= connection.createStatement();
-            String sql="update TipoFamiliar set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            String sql="update TipoFamiliar set descripcion='"+desc+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -331,8 +313,8 @@ public class ManejadorCodigos {
         return false;
     }
      
-    public ArrayList<TipoSancion> getTiposSanciones(){
-        ArrayList<TipoSancion> al= new ArrayList<TipoSancion>();
+    public ArrayList<Tipo> getTiposSanciones(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
             Statement s= connection.createStatement();
             String sql="Select * from tipofamiliar";
@@ -364,28 +346,24 @@ public class ManejadorCodigos {
         }
         return ts;
     }
-    public TipoSancion agregarTipoSancion(String desc){
+    public boolean agregarTipoSancion(String desc){
         TipoSancion g=null;
         try {
             Statement s= connection.createStatement();
             String sql="insert into TipoSancion(descripcion) values('"+desc+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
-                ResultSet rs = s.getGeneratedKeys();
-                if(rs.next()){
-                        int id = (int)rs.getLong(1);
-                        g= new TipoSancion(id, desc);
-                }
+                return true;
             }            
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return g;
+        return false;
     }
-    public boolean modificarTipoSancion(TipoSancion g){
+    public boolean modificarTipoSancion(int id, String desc){
         try {
             Statement s= connection.createStatement();
-            String sql="update TipoSancion set descripcion='"+g.getDescripcion()+"' where id="+g.getId();
+            String sql="update TipoSancion set descripcion='"+desc+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {

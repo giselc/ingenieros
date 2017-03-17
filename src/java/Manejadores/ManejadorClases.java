@@ -223,33 +223,26 @@ public class ManejadorClases {
     
     //retorna una Apoderado con los datos obtenidos y persiste en la base de datos la relacion apoderado-personal
     //retorna null si se produce algun error en la escritura de la base de datos.
-    public Apoderado crearApoderado(int idPersonal, int ci,String nombres, String apellidos,int idvinculo,String domicilio,String celular,String telefono){
+    public Apoderado crearApoderado(int ciPersonal, int ci,String nombres, String apellidos,int idvinculo,String domicilio,String celular,String telefono){
         try {
             Statement s= connection.createStatement();
             String sql="Select * from apoderados where ci="+ci;
             ResultSet rs= s.executeQuery(sql);
-            if (rs.next()){
+            int i;
+            if (!rs.next()){
                 sql="insert into apoderados (ci, nombres, apellidos, domicilio, celular,telefono) values("+ci+",'"+nombres+"','"+apellidos+"','"+domicilio+"','"+celular+"','"+telefono+"')";
-                int i= s.executeUpdate(sql);
-                if(i>0){
-                    sql="insert into personal-apoderado (idPersonal, idApoderado, idVinculo) values("+idPersonal+","+ci+","+idvinculo+")";
-                    s.executeUpdate(sql);
-                    ManejadorCodigos mc= new ManejadorCodigos();
-                    return (new Apoderado(ci, nombres, apellidos, mc.getTipoFamiliar(idvinculo) , domicilio, celular, telefono));
-                }
+                i= s.executeUpdate(sql);
+                
             }
             else{
-                sql="Select * from personal-apoderado where idPersonal="+idPersonal+" and idApoderado="+ci;
-                rs= s.executeQuery(sql);
-                if (rs.next()){
-                    return(getApoderado(ci,idPersonal));
-                }
-                else{
-                    sql="insert into personal-apoderado (idPersonal, idApoderado, idVinculo) values("+idPersonal+","+ci+","+idvinculo+")";
-                    s.executeUpdate(sql);
-                    ManejadorCodigos mc= new ManejadorCodigos();
-                    return (new Apoderado(ci, nombres, apellidos, mc.getTipoFamiliar(idvinculo) , domicilio, celular, telefono));
-                }
+                sql="update apoderados set nombres='"+nombres+"',apellidos='"+apellidos+"',domicilio='"+domicilio+"',celular='"+celular+"',telefono='"+telefono+"' where ci="+ci;
+                i= s.executeUpdate(sql);
+            }
+            if(i>0){
+                sql="update personal set idApoderado="+ci+", idVinculo="+idvinculo+" where ci="+ciPersonal;
+                s.executeUpdate(sql);
+                ManejadorCodigos mc= new ManejadorCodigos();
+                return (new Apoderado(ci, nombres, apellidos, mc.getTipoFamiliar(idvinculo) , domicilio, celular, telefono));
             }
             
         } catch (SQLException ex) {
@@ -261,14 +254,14 @@ public class ManejadorClases {
     //retorna el apoderado que tiene la relacion apoderado-personal segun los parametros
     //retorna null si no hay relacion
     //retorna null si se produjo un error con la base de datos
-    public Apoderado getApoderado(int ci, int idPersonal){
+    public Apoderado getApoderado(int ciPersonal){
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from personal-apoderado left join apoderados on idApoderado=ci where idApoderado.ci="+ci +" and idPersonal.ci="+idPersonal;
+            String sql="Select * from personal left join apoderados on personal.idApoderado=apoderados.ci where idPersonal.ci="+ciPersonal;
             ResultSet rs= s.executeQuery(sql);
             if (rs.next()){
                 ManejadorCodigos mc= new ManejadorCodigos();
-                return new Apoderado(rs.getInt("ci"), rs.getString("nombre"), rs.getString("apellido"), mc.getTipoFamiliar(rs.getInt("vinculo")), rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
+                return new Apoderado(rs.getInt("idApoderado"), rs.getString("apoderado.nombres"), rs.getString("apoderado.apellidos"), mc.getTipoFamiliar(rs.getInt("vinculo")), rs.getString("apoderado.domicilio"), rs.getString("apoderado.celular"), rs.getString("apoderado.telefono"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
@@ -297,10 +290,10 @@ public class ManejadorClases {
     public int desvincularApoderado(int idPersonal, int idApod){
         try {
             Statement s= connection.createStatement();
-            String sql="delete form personal-apoderado where idApoderado="+idApod +" and idPersonal="+idPersonal;
+            String sql="update form personal set idApoderado=-1, idVinculo=-1 where  ci="+idPersonal;
             int i= s.executeUpdate(sql);
             if (i>0){
-                sql="select form personal-apoderado where idApoderado="+idApod;
+                sql="select form personal where idApoderado="+idApod;
                 ResultSet rs= s.executeQuery(sql);
                 if(rs.next()){
                     return 1;

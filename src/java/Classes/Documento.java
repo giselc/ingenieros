@@ -17,17 +17,15 @@ public class Documento {
     private int id;
     private TipoDocumento tipo;
     private Blob imagen;
-    private Date fechaVencimiento;
 
     
     
-    public Documento(int id, TipoDocumento tipo, Blob imagen, Date fechaVencimiento) {
+    public Documento(int id, TipoDocumento tipo, Blob imagen) {
         this.id = id;
         this.tipo = tipo;
         this.imagen = imagen;
-        this.fechaVencimiento = fechaVencimiento;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -38,10 +36,6 @@ public class Documento {
 
     public Blob getImagen() {
         return imagen;
-    }
-
-    public Date getFechaVencimiento() {
-        return fechaVencimiento;
     }
 
     
