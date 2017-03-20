@@ -13,19 +13,25 @@ import java.sql.Date;
  */
 public class Sancion {
     private int id;
+    private Personal a;
     private TipoSancion tipo; //tipoSancion
     private String parte;
     private int dias;
     private Date fecha;
     private Personal orden;
 
-    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Personal orden) {
+    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Personal orden, Personal a) {
         this.id = id;
         this.tipo = tipo;
         this.parte = parte;
         this.dias = dias;
         this.fecha = fecha;
         this.orden = orden;
+        this.a = a;
+    }
+
+    public Personal getA() {
+        return a;
     }
 
     public Personal getOrden() {

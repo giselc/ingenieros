@@ -317,7 +317,7 @@ public class ManejadorCodigos {
         ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from tipofamiliar";
+            String sql="Select * from tipoSancion";
             ResultSet rs= s.executeQuery(sql);
             TipoSancion ts;
             while (rs.next()){
@@ -334,7 +334,7 @@ public class ManejadorCodigos {
         TipoSancion ts=null;
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from tipofamiliar where id="+id;
+            String sql="Select * from tipoSancion where id="+id;
             ResultSet rs= s.executeQuery(sql);
             
             if (rs.next()){

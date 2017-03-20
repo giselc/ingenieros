@@ -58,7 +58,7 @@
         </tr>
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Personal:</h3></td>
-            <td style="width: 15%"><a href="personal.jsp" title="Agregar personal"><img width="30%" src='images/agregarLista.png' /></a> </td>
+            <td style="width: 15%"><a href="datosBasicos.jsp" title="Agregar personal"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir personal"src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>
     </table>
@@ -66,7 +66,7 @@
     <table style="width: 100%;">
             <%
                 ManejadorPersonal  mc = new ManejadorPersonal();
-                ArrayList<Personal> au = mc.getPersonalListar();
+                ArrayList<Personal> au = mc.getListaPersonalBasico();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Grado</h3></td>");
                             out.print("<td style='width: 25%' align='center'><h3 style='margin:2%;'>Nombres</h3></td>");
@@ -74,7 +74,7 @@
                             out.print("<td style='width: 15%' align='center'><h3 style='margin:2%;'>CI</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
-                       out.print("</tr></table>  <table style=\"width: 100%;\">" );
+                       out.print("</tr>" );
                 int i=0;
                 String color;
                 for (Personal u1: au){
