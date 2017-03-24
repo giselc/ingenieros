@@ -47,6 +47,7 @@
         </tr>
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Unidades militares del sistema:</h3></td>
+            <td style="width: 15%"><a href="index2.jsp"><img src="images/atras.png" width="100%"/></a></td>
             <td style="width: 15%"><a href="unidadMilitar.jsp" title="Agregar Unidad Militar"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir unidades militares"src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>

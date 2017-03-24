@@ -32,6 +32,14 @@
         <servlet-name>Sancion</servlet-name>
         <servlet-class>servlet.Sancion</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Backup</servlet-name>
+        <servlet-class>servlet.Backup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Documento</servlet-name>
+        <servlet-class>servlet.Documento</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -63,6 +71,14 @@
     <servlet-mapping>
         <servlet-name>Sancion</servlet-name>
         <url-pattern>/Sancion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Backup</servlet-name>
+        <url-pattern>/Backup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Documento</servlet-name>
+        <url-pattern>/Documento</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

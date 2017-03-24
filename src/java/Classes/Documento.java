@@ -15,15 +15,21 @@ import java.sql.Date;
 
 public class Documento {
     private int id;
+    private Personal p;
     private TipoDocumento tipo;
     private Blob imagen;
 
     
     
-    public Documento(int id, TipoDocumento tipo, Blob imagen) {
+    public Documento(int id, Personal p, TipoDocumento tipo, Blob imagen) {
         this.id = id;
         this.tipo = tipo;
         this.imagen = imagen;
+        this.p = p;
+    }
+
+    public Personal getP() {
+        return p;
     }
 
     public int getId() {

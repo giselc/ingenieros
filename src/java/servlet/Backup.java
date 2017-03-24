@@ -5,22 +5,20 @@
  */
 package servlet;
 
-import Manejadores.ManejadorClases;
-import Manejadores.ManejadorCodigos;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Gisel
  */
-public class Listar extends HttpServlet {
+public class Backup extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,31 +29,35 @@ public class Listar extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static void backup() {
+        try {
+           Process p = Runtime
+                 .getRuntime()
+                   
+                 .exec("C:/xampp/mysql/bin/mysqldump -u root ingenieros");
+
+           InputStream is = p.getInputStream();
+           FileOutputStream fos = new FileOutputStream("C:/Backup/backup_ingenieros.sql");
+           byte[] buffer = new byte[1000];
+
+           int leido = is.read(buffer);
+           while (leido > 0) {
+              fos.write(buffer, 0, leido);
+              leido = is.read(buffer);
+           }
+
+           fos.close();
+
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+     }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();
-        Classes.Usuario u = (Classes.Usuario) sesion.getAttribute("usuario");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String tipo = request.getParameter("tipo");
-            if(tipo.equals("usuarios")){
-                ManejadorClases mc = new ManejadorClases();
-                mc.imprimirUsuarios(out, u);
-            }
-            else{
-                ManejadorCodigos mc = new ManejadorCodigos();
-                if(tipo.equals("unidadesMilitares")){
-                    mc.imprimirUnidadesMilitares(out);
-                }
-                else{
-                    if(tipo.equals("tipos")){
-                        String codigos = request.getParameter("codigo");
-                        mc.imprmirTipo(out, tipo);
-                    }
-                }
-            }
-            
+            backup();
+            response.sendRedirect("index2.jsp");
         }
     }
 

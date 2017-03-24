@@ -30,7 +30,7 @@
         s= mp.getSancion(id);
     }
 %>
-<h1 align="center"><u><% if (s!=null){out.print("Ver sanción");}else{out.print("Alta sanción");}%></u></h1>
+<h1 align="center"><u><% if (s!=null){out.print("Editar sanción");}else{out.print("Alta sanción");}%></u></h1>
 
 
     <table  width='70%' style="font-size: 130%; text-align: left" >
@@ -49,7 +49,15 @@
                             <p><b>Fecha:</b></p>
                         </td>
                         <td>
-                            <input type=date name="fecha" <%if( s!=null){out.print("value="+s.getFecha());}else{out.print(new SimpleDateFormat("yyyy-MM-dd").toString());} %> required="required"/>
+                            <input type=date name="fecha" <%if( s!=null){out.print("value="+s.getFecha());} %> required="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><b>Hora:</b></p>
+                        </td>
+                        <td>
+                            <input type=time name="hora" <%if( s!=null){out.print("value="+s.getHora());} %> required="required"/>
                         </td>
                     </tr>
                     <tr>
@@ -57,21 +65,33 @@
                             <p><b>Para:</b></p>
                         </td>
                         <td>
-                            <select name="a" form="formulario" <%if (request.getParameter("ci")!=null){out.print("readonly");} %> required='required'>
-                                <%
-                                ArrayList<Personal> ap = mp.getListaPersonalBasico();
+                            <%
+                            ArrayList<Personal> ap = mp.getListaPersonalBasico();
                                 String mostrarNombre="";
                                 
+                            if (request.getParameter("ci")==null && request.getParameter("id")==null){
+                                out.print("<select name=\"a\" form=\"formulario\">");
+                                
                                 for(Personal p: ap ){
-                                    mostrarNombre=p.getGrado().getDescripcion()+" "+p.getNombre()+" "+ p.getApellido();
-                                    String selected ="";
-                                    if(s!=null && p.getCi()==s.getA().getCi()){
-                                        selected="selected";
-                                    }
-                                    out.print("<option " + selected +" value='"+p.getCi()+"'>"+ mostrarNombre +"</option>");
+                                    mostrarNombre=p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+ p.getApellido();
+                                    out.print("<option value='"+p.getCi()+"'>"+ mostrarNombre +"</option>");
                                 }
-                                %>
-                            </select>
+                               
+                                out.print("</select>");
+                            } 
+                            else{
+                                Personal p=null;
+                                if(request.getParameter("ci")!=null){
+                                    p= mp.getPersonalBasico(Integer.valueOf(request.getParameter("ci")));
+                                }
+                                else{
+                                    p=s.getA();
+                                }
+                                out.print(p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+p.getApellido());
+                                out.print("<input value='"+p.getCi()+"' hidden='hidden' name='a'");
+                            }
+                            
+                                    %>
                         </td>
                     </tr>
                     <tr>
@@ -116,7 +136,7 @@
                             <select name="orden" form="formulario" <%if (request.getParameter("ci")!=null){out.print("readonly");} %> required='required'>
                                 <%
                                 for(Personal p: ap ){
-                                    mostrarNombre=p.getGrado().getDescripcion()+" "+p.getNombre()+" "+ p.getApellido();
+                                    mostrarNombre=p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+ p.getApellido();
                                     String selected ="";
                                     if(s!=null && p.getCi()==s.getOrden().getCi()){
                                         selected="selected";

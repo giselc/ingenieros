@@ -6,6 +6,7 @@
 package Classes;
 
 import java.sql.Date;
+import java.sql.Time;
 
 /**
  *
@@ -19,15 +20,27 @@ public class Sancion {
     private int dias;
     private Date fecha;
     private Personal orden;
+    private Time hora;
+    private boolean vigente;
 
-    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Personal orden, Personal a) {
+    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Time hora,Personal orden, Personal a, boolean vigente) {
         this.id = id;
         this.tipo = tipo;
         this.parte = parte;
         this.dias = dias;
+        this.hora = hora;
         this.fecha = fecha;
         this.orden = orden;
         this.a = a;
+        this.vigente= vigente;
+    }
+
+    public boolean isVigente() {
+        return vigente;
+    }
+
+    public Time getHora() {
+        return hora;
     }
 
     public Personal getA() {

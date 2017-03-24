@@ -55,7 +55,7 @@
 			}
 			
     </style> 
-<ul  class="nav2" style="text-align: center; width: 100%; padding: 0px">
+<ul  class="nav2" style="text-align: center; width: 100%; padding-left:12%">
         <li style="width: 25%">
             <a><img src="images/button_s1.png" width="80%" /></a>
             <ul>
@@ -72,9 +72,6 @@
         </li>
         <li style="width: 25%">
             <a href="s4.jsp"><img src="images/button_s4.png" width="80%" /></a>
-        </li>
-        <li style="width: 25%">
-            <a href="escribiente.jsp"><img src="images/button_escribiente.png" width="80%" /></a>
         </li>
         <li style="width: 25%">
             <a><img src="images/CONFIG.png" width="80%" /></a>
@@ -99,6 +96,9 @@
                 </li>
                 <li>
                     <a href="tipos.jsp?codigo=Especialidades">Especialidades</a>
+                </li>
+                <li>
+                    <a href="Backup">Respaldo</a>
                 </li>
             </ul>
         </li>

@@ -109,7 +109,14 @@
             }
         }
 </script>
-
+<% 
+    Personal p=null;    
+    if(request.getParameter("id")!=null){
+        int ci = Integer.valueOf(request.getParameter("id"));
+        ManejadorPersonal mp = new ManejadorPersonal();
+        p= mp.getPersonalBasico(ci);
+    }
+%>
 <h1 align="center"><u><% if (p!=null){out.print("Personal: "+p.getNombre()+" "+p.getApellido());}else{out.print("Agregar personal");}%></u></h1>
 <%
 String foto="";

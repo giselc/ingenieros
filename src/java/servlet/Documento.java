@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Gisel
  */
-public class Sancion extends HttpServlet {
+public class Documento extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,59 +38,42 @@ public class Sancion extends HttpServlet {
             ManejadorPersonal mp = new ManejadorPersonal();
             if(request.getParameter("id")!= null){ //alta o modficacion
                 int id= Integer.valueOf(request.getParameter("id"));
-                int a= Integer.valueOf(request.getParameter("a"));
-                int orden= Integer.valueOf(request.getParameter("orden"));
-                int tipoSancion= Integer.valueOf(request.getParameter("tipoSancion"));
-                int dias= Integer.valueOf(request.getParameter("dias"));
-                String parte = request.getParameter("parte");
-                String fecha = request.getParameter("fecha");
-                String hora = request.getParameter("hora");
+                
+                int tipoDocumento= Integer.valueOf(request.getParameter("tipoDocumento"));
+                String foto= request.getParameter("foto2");
                 
                 if(id==-1){ //alta
-                    if(mp.crearSancion(a, tipoSancion, orden, parte, dias, fecha, hora)){
-                        sesion.setAttribute("mensaje", "Sancion agregada correctamente.");
+                    int ci= Integer.valueOf(request.getParameter("ci"));
+                    if(mp.crearDocumento(tipoDocumento, ci, foto)){
+                        sesion.setAttribute("mensaje", "Documento agregado correctamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al agregar la sancion.");
+                        sesion.setAttribute("mensaje", "ERROR al agregar el documento.");
                     }
-                    if(request.getParameter("ci")!=null){
-                        response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
-                    }
-                    else{
-                        response.sendRedirect("s1-sanciones.jsp");
-                    }
+                    response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     
                 }
                 else{ //modificacion
-                    if(mp.modificarSancion(id, a, tipoSancion, orden, parte, dias, fecha,hora)){
-                       sesion.setAttribute("mensaje", "Sancion modificada correctamente.");
+                    if(mp.modificarDocumento(id, tipoDocumento, foto)){
+                       sesion.setAttribute("mensaje", "Documento modificado correctamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al modificar la Sancion.");
+                        sesion.setAttribute("mensaje", "ERROR al modificar el documento.");
                     }
-                    if(request.getParameter("ci")!=null){
-                        response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
-                    }
-                    else{
-                        response.sendRedirect("s1-sanciones.jsp");
-                    }
+                    
+                    response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                 }
             }
             else{
                 if(request.getParameter("elim")!= null){
                     int id=Integer.valueOf(request.getParameter("elim"));
-                    if(mp.eliminarSancion(id)){
-                        sesion.setAttribute("mensaje", "Sancion eliminada correctamente.");
+                    if(mp.eliminarDocumento(id)){
+                        sesion.setAttribute("mensaje", "Documento eliminado correctamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al eliminar la sancion.");
+                        sesion.setAttribute("mensaje", "ERROR al eliminar el documento.");
                     }
-                    if(request.getParameter("ci")!=null){
-                        response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
-                    }
-                    else{
-                        response.sendRedirect("s1-sanciones.jsp");
-                    }
+                    response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                 }
             }
         }

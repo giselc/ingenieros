@@ -13,14 +13,7 @@
     if(u.isAdmin()|| u.isS1()){
 
 %>
-<% 
-    Personal p=null;    
-    if(request.getParameter("id")!=null){
-        int ci = Integer.valueOf(request.getParameter("id"));
-        ManejadorPersonal mp = new ManejadorPersonal();
-        p= mp.getPersonalBasico(ci);
-    }
-%>
+
     <script>
          $(document).ready(function() {
                  $("#content div").hide();
@@ -28,6 +21,7 @@
                  $("#content div:first").fadeIn();
                  $("#loader").fadeOut();
              $('#tabs a').click(function(e) {
+                 document.getElementById("mensaje").innerHTML="";
                  e.preventDefault();
                  $("#content div").hide();
                  $("#tabs li").attr("id","");
@@ -38,10 +32,16 @@
      </script>
      <ul id="tabs">
         <li><a href="#" title="Datos-Personales">Datos Personales</a></li>
+        <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Apoderado">Apoderado</a></li>
+        <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Especialidades">Especialidades</a></li>
+        <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Documentos">Documentos</a></li>
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Sanciones">Sanciones</a></li>
-     </ul>
+    </ul>
     <div id="content">
          <div id="Datos-Personales"><%@include file="datosBasicos.jsp" %></div>
+         <div id="Documentos"><%@include file="documentos.jsp" %></div>
+         <div id="Apoderado"><%@include file="apoderado.jsp" %></div>
+         <div id="Especialidades"><%@include file="especialidades.jsp" %></div>
          <div id="Sanciones"><%@include file="sanciones.jsp" %></div>
      </div>
      <a href="s1-personal.jsp">Atr&aacute;s</a>

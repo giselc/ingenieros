@@ -7,6 +7,8 @@ package Manejadores;
 
 import Classes.Apoderado;
 import Classes.ConexionBD;
+import Classes.Documento;
+import Classes.Especialidad;
 import Classes.Personal;
 import Classes.RecordPersonal;
 import Classes.Sancion;
@@ -17,9 +19,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import static java.sql.Types.NULL;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -259,17 +265,93 @@ public class ManejadorPersonal {
     }
     
     //Sanciones
-    
+    public int diferenciasDiasDesdeHoy(Sancion s) {
+
+        final int MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
+        java.util.Date hoy = new java.util.Date();
+        long deltaDays = ( hoy.getTime() - s.getFecha().getTime())/MILLSECS_PER_DAY;
+        int diasCumplidos =0;
+        if(hoy.getHours()>=18){
+            diasCumplidos= (int)deltaDays + 1;
+        }
+        else{
+            diasCumplidos= (int)deltaDays;
+        }
+        return diasCumplidos;
+    }
+    public HashMap<Integer,Integer> getListaDiasPortipoSancion(int idPersonal){
+        HashMap<Integer,Integer> hm= new HashMap<>();
+        try {
+            String sql= "Select * from sanciones where vigente=1 and idPersonal="+idPersonal + " order by fecha asc, hora asc";
+            String sql2= "Select sum(dias) as suma from sanciones where vigente=1 and idPersonal="+idPersonal;
+            Statement s= connection.createStatement();
+            Statement s2= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            ResultSet rs2 = s2.executeQuery(sql2);
+            Sancion sancion;
+            int diasAcumplir=0;
+            if(rs2.next()){
+                diasAcumplir=rs2.getInt("suma");
+            }
+            System.out.print(diasAcumplir);
+            ManejadorCodigos mc = new ManejadorCodigos();
+            int diasCumplidos;
+            int diasRestantes=0;
+            while(rs.next()){
+                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getBoolean("vigente"));
+                if(hm.get(sancion.getTipo().getId())==null){ //si es primero de su tipo
+                    diasCumplidos = diferenciasDiasDesdeHoy(sancion);
+                    System.out.print(diasCumplidos);
+                    if(diasCumplidos - sancion.getDias() >=0){ //cumpli mas dias
+                        this.modificarSancionVigente(false, sancion.getId());
+                        hm.put(sancion.getTipo().getId(), diasAcumplir- diasCumplidos);
+                    }
+                    else{ //me quedan dias por cumplir
+                        hm.put(sancion.getTipo().getId(), diasRestantes);
+                    }
+                    diasRestantes = diasCumplidos - sancion.getDias();
+                    System.out.print(diasRestantes);
+                }
+                else{ // ya pase los calculos debo colocar vigente a lo que me resta
+                    if(diasRestantes-sancion.getDias()>0){
+                        this.modificarSancionVigente(false, sancion.getId());
+                        diasRestantes -=sancion.getDias();
+                    }
+                    else{
+                        diasRestantes -=sancion.getDias();
+                    }
+                     System.out.print(diasRestantes);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return hm;
+    }
+    public boolean modificarSancionVigente(boolean vigente, int id){
+        try{
+             String sql= "update sanciones set vigente=? where id="+id;
+                PreparedStatement s= connection.prepareStatement(sql);
+                s.setBoolean(1, vigente);
+                int result = s.executeUpdate();
+                if(result>0){
+                    return true;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return false;
+    }
     public ArrayList<Sancion> getSanciones(int idPersonal){
         ArrayList<Sancion> as= new ArrayList<>();
         try {
-            String sql= "Select * from sanciones where idPersonal="+idPersonal;
+            String sql= "Select * from sanciones where idPersonal="+idPersonal + " order by vigente desc, fecha desc, hora desc";
             Statement s= connection.createStatement();
             ResultSet rs = s.executeQuery(sql);
             Sancion sancion;
             ManejadorCodigos mc = new ManejadorCodigos();
             while(rs.next()){
-                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")));
+                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getBoolean("vigente"));
                 as.add(sancion);
             }
         } catch (SQLException ex) {
@@ -286,7 +368,7 @@ public class ManejadorPersonal {
             Sancion sancion;
             ManejadorCodigos mc = new ManejadorCodigos();
             while(rs.next()){
-                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),this.getPersonalBasico(rs.getInt("idorden")), this.getPersonalBasico(rs.getInt("idPersonal")));
+                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")), this.getPersonalBasico(rs.getInt("idPersonal")),rs.getBoolean("vigente"));
                 return sancion;
             }
         } catch (SQLException ex) {
@@ -295,8 +377,8 @@ public class ManejadorPersonal {
         
         return null;
     }
-    public boolean crearSancion(int ci, int tipoSancion, int orden, String parte, int dias, String fecha){
-        String sql= "insert into sanciones (idPersonal, idOrden, parte,fecha, idTipoSancion,dias) values(?,?,?,?,?,?)";
+    public boolean crearSancion(int ci, int tipoSancion, int orden, String parte, int dias, String fecha, String hora){
+        String sql= "insert into sanciones (idPersonal, idOrden, parte,fecha, idTipoSancion,dias, hora) values(?,?,?,?,?,?,?)";
         try{
             PreparedStatement s= connection.prepareStatement(sql);
             s.setInt(1,ci);
@@ -305,7 +387,7 @@ public class ManejadorPersonal {
             s.setString(4, fecha);
             s.setInt(5, tipoSancion);
             s.setInt(6, dias);
-            
+            s.setString(7, hora);
             int result = s.executeUpdate();
             if(result>0){
                 return true;
@@ -316,9 +398,9 @@ public class ManejadorPersonal {
 
         return false;
     }
-    public  boolean modificarSancion(int id, int ci, int tipoSancion, int orden, String parte, int dias, String fecha){
+    public  boolean modificarSancion(int id, int ci, int tipoSancion, int orden, String parte, int dias, String fecha, String hora){
         try{
-             String sql= "update sanciones set idPersonal=?, idTipoSancion=?, orden=?, parte=?, dias=? ,fecha=? where id="+id;
+             String sql= "update sanciones set idPersonal=?, idTipoSancion=?, idorden=?, parte=?, dias=? ,fecha=?,hora=? where id="+id;
                 PreparedStatement s= connection.prepareStatement(sql);
                 s.setInt(1, ci);
                 s.setInt(2, tipoSancion);
@@ -326,6 +408,7 @@ public class ManejadorPersonal {
                 s.setString(4, parte);
                 s.setInt(5, dias);
                 s.setString(6,fecha);
+                s.setString(7,hora);
                 int result = s.executeUpdate();
                 if(result>0){
                     return true;
@@ -346,7 +429,144 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    //APODERADOOO
+    //documentos
+    public ArrayList<Documento> getDocumentosListar(int idPersonal){ //sin la imagen
+        ArrayList<Documento> as= new ArrayList<>();
+        try {
+            String sql= "Select * from documentos where idPersonal="+idPersonal;
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            Documento documento;
+            ManejadorCodigos mc = new ManejadorCodigos();
+            Personal p = this.getPersonalBasico(idPersonal);
+            while(rs.next()){
+                documento=new Documento(rs.getInt("id"),p,mc.getTipoDocumento(rs.getInt("idTipoDocumento")),null);
+                as.add(documento);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return as;
+    }
+    public Documento getDocumento(int id){
+        Documento p=null;
+        try {
+            String sql= "Select * from documentos where id="+id;
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            ManejadorCodigos mc = new ManejadorCodigos();
+            if(rs.next()){
+                p= new Documento(id, this.getPersonalBasico(rs.getInt("idPersonal")), mc.getTipoDocumento(rs.getInt("idTipoDocumento")), rs.getBlob("imagen"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return p;
+    }
+    public boolean modificarDocumento(int id, int tipoDocumento, String foto){
+        try {
+            String strFoto="";
+            if(!foto.equals("")){
+                 strFoto=", imagen=?";
+            }
+            String sql= "update documentos set idTipoDocumento=?"+strFoto+" where id="+id;
+            PreparedStatement s= connection.prepareStatement(sql);
+            s.setInt(1,tipoDocumento);
+            if(!foto.equals("")){
+                byte[] imageByte = Base64.getDecoder().decode(foto);
+                Blob blob = connection.createBlob();//Where connection is the connection to db object. 
+                blob.setBytes(1, imageByte);
+                s.setBlob(2, blob);
+            }
+           
+            int result = s.executeUpdate();
+            if(result>0){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean crearDocumento(int tipoDocumento, int idPersonal, String foto){
+        try {
+            String sql= "insert into documentos (idPersonal, idTipoDocumento, imagen) values(?,?,?)";
+            PreparedStatement s= connection.prepareStatement(sql);
+            s.setInt(1,idPersonal);
+            s.setInt(2, tipoDocumento);
+            byte[] imageByte = Base64.getDecoder().decode(foto);
+            Blob blob = connection.createBlob();//Where connection is the connection to db object. 
+            blob.setBytes(1, imageByte);
+            s.setBlob(3, blob);
+            int result = s.executeUpdate();
+            if(result>0){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarDocumento(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from documentos where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    //especialidades
+    public ArrayList<Especialidad> getEspecialidadesListar(int idPersonal){ //sin la imagen
+        ArrayList<Especialidad> as= new ArrayList<>();
+        try {
+            String sql= "Select * from `personal-especialidad` where idPersonal="+idPersonal;
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            Especialidad especialidad;
+            ManejadorCodigos mc = new ManejadorCodigos();
+            while(rs.next()){
+                especialidad=mc.getEspecialidad(rs.getInt("idEspecialidad"));
+                as.add(especialidad);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return as;
+    }
+    public boolean agregarEspecialidad(int idEspecialidad, int idPersonal){
+        try {
+            String sql= "insert into personal-especialidad (idPersonal, idEspecialidad) values ("+idPersonal+","+idEspecialidad+")";
+            Statement s= connection.createStatement();
+            int result = s.executeUpdate(sql);
+            if(result>0){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public boolean eliminarEspecialidad(int idEspecialidad, int idPersonal){
+        try {
+            String sql= "delete from personal-especialidad where idPersonal="+idPersonal+" and idEspecialidad="+idEspecialidad;
+            Statement s= connection.createStatement();
+            int result = s.executeUpdate(sql);
+            if(result>0){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//APODERADOOO
     
     //retorna una Apoderado con los datos obtenidos y persiste en la base de datos la relacion apoderado-personal
     //retorna null si se produce algun error en la escritura de la base de datos.

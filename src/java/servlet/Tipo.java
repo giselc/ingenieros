@@ -41,13 +41,15 @@ public class Tipo extends HttpServlet {
             if(request.getParameter("id")!= null){ //alta o modficacion
                 int id= Integer.valueOf(request.getParameter("id"));
                 String descripcion = request.getParameter("descripcion");
+                
                 if(id==-1){ //alta
                     if(codigo.equals("Familiares")){
                         ok=mc.agregarTipoFamiliar(descripcion);
                     }
                     else{
                         if(codigo.equals("Grados")){
-                            ok= mc.agregarGrado(descripcion);
+                            String abreviacion = request.getParameter("abreviacion");
+                            ok= mc.agregarGrado(descripcion,abreviacion);
                         }
                         else{
                             if(codigo.equals("Documentos")){
@@ -78,7 +80,9 @@ public class Tipo extends HttpServlet {
                     }
                     else{
                         if(codigo.equals("Grados")){
-                            ok= mc.modificarGrado(id, descripcion);
+                            String abreviacion = request.getParameter("abreviacion");
+                            System.out.print(abreviacion);
+                            ok= mc.modificarGrado(id, descripcion,abreviacion);
                         }
                         else{
                             if(codigo.equals("Documentos")){

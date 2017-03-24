@@ -13,6 +13,7 @@ import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
 import Classes.TipoSancion;
 import Classes.UnidadMilitar;
+import com.sun.org.apache.xalan.internal.utils.SecuritySupport;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -44,7 +45,7 @@ public class ManejadorCodigos {
             ResultSet rs= s.executeQuery(sql);
             Grado g;
             while (rs.next()){
-                g= new Grado(rs.getInt("id"), rs.getString("descripcion"));
+                g= new Grado(rs.getInt("id"), rs.getString("descripcion"), rs.getString("abreviacion"));
                 al.add(g);
             }
             
@@ -61,7 +62,7 @@ public class ManejadorCodigos {
             ResultSet rs= s.executeQuery(sql);
             
             if (rs.next()){
-                g= new Grado(rs.getInt("id"), rs.getString("descripcion"));
+                g= new Grado(rs.getInt("id"), rs.getString("descripcion"), rs.getString("abreviacion"));
             }
             
         } catch (SQLException ex) {
@@ -69,10 +70,10 @@ public class ManejadorCodigos {
         }
         return g;
     }
-    public boolean agregarGrado(String desc){
+    public boolean agregarGrado(String desc, String abr){
         try {
             Statement s= connection.createStatement();
-            String sql="insert into grado(descripcion) values('"+desc+"')";
+            String sql="insert into grado(descripcion,abreviacion) values('"+desc+"','"+abr+"')";
             int i= s.executeUpdate(sql);
             if (i>0){
                 return true;
@@ -82,10 +83,11 @@ public class ManejadorCodigos {
         }
         return false;
     }
-    public boolean modificarGrado(int id, String desc){
+    public boolean modificarGrado(int id, String desc, String abr){
         try {
+            System.out.print("abr:"+abr);
             Statement s= connection.createStatement();
-            String sql="update grado set descripcion='"+desc+"' where id="+id;
+            String sql="update grado set descripcion='"+desc+"',abreviacion='"+abr+"' where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -104,7 +106,7 @@ public class ManejadorCodigos {
         }
         return false;
     }
-    
+
     
     public ArrayList<Tipo> getEspecialidades(){
         ArrayList<Tipo> al= new ArrayList<Tipo>();
@@ -174,7 +176,7 @@ public class ManejadorCodigos {
         }
         return false;
     }
-     
+    
     public ArrayList<Tipo> getTiposDocumentos(){
         ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
@@ -475,6 +477,45 @@ public class ManejadorCodigos {
                 out.print("<td style='width: 30%' align='center'>"+u1.getNombre()+"</td>");
                 out.print("<td style='width: 20%' align='center'>"+u1.getTelefono()+"</td>");
                 out.print("<td style='width: 30%' align='center'>"+u1.getCorreo()+"</td>");
+            out.print("</tr>");
+        }
+        out.print("</table>");
+    }
+    
+    public void imprmirTipo(PrintWriter out, String tipo){
+        ArrayList<Tipo> au = null;
+        switch(tipo){
+            case "Especialidades":  au = this.getEspecialidades(); out.print("<h1 align='center'>ESPECIALIDADES DEL SISTEMA</h1>");break;
+            case "Grados":  au = this.getGrados(); out.print("<h1 align='center'>GRADOS DEL SISTEMA</h1>");break;
+            case "Documentos":  au = this.getTiposDocumentos(); out.print("<h1 align='center'>DOCUMENTOS DEL SISTEMA</h1>");break;
+            case "Familiares":  au = this.getTiposFamiliares(); out.print("<h1 align='center'>FAMILIARES DEL SISTEMA</h1>");break;
+            case "Sanciones":  au = this.getTiposSanciones(); out.print("<h1 align='center'>SANCIONES DEL SISTEMA</h1>");break;
+        }
+        
+        out.print("<table style=\"width: 100%;\">");
+        
+        out.print("<tr style='background-color:#ffcc66' align='center'>");
+                if(tipo.equals("Grados")){
+                    out.print("<td style='width: 30%' align='center'><h3 style='margin:2%;'>Abreviacion</h3></td>");
+                }
+                out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Descripcion</h3></td>");
+        out.print("</tr>" );
+        int i=0;
+        String color;
+        for (Tipo u1: au){
+            if ((i%2)==0){
+                color=" #ccccff";
+            }
+            else{
+                color=" #ffff99";
+            }
+            i++;
+
+            out.print("<tr style='background-color:"+color+"'>");
+                if(tipo.equals("Grados")){
+                    out.print("<td style='width: 30%' align='center'>"+((Grado)u1).getAbreviacion()+"</td>");
+                }
+                out.print("<td style='width: 20%' align='center'>"+u1.getDescripcion()+"</td>");
             out.print("</tr>");
         }
         out.print("</table>");

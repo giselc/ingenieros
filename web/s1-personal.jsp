@@ -58,7 +58,7 @@
         </tr>
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Personal:</h3></td>
-            <td style="width: 15%"><a href="datosBasicos.jsp" title="Agregar personal"><img width="30%" src='images/agregarLista.png' /></a> </td>
+            <td style="width: 15%"><a href="personal.jsp" title="Agregar personal"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir personal"src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>
     </table>
@@ -87,7 +87,7 @@
                         i++;
 
                     out.print("<tr style='background-color:"+color+"'>");
-                    out.print("<td style='width: 10%' align='center'>"+u1.getGrado().getDescripcion()+"</td>"); 
+                    out.print("<td style='width: 10%' align='center'>"+u1.getGrado().getAbreviacion()+"</td>"); 
                     out.print("<td style='width: 25%' align='center'>"+u1.getNombre()+"</td>");
                     out.print("<td style='width: 30%' align='center'>"+u1.getApellido()+"</td>");
                     out.print("<td style='width: 15%' align='center'>"+u1.getCi()+"</td>");

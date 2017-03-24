@@ -4,6 +4,7 @@
     Author     : Gisel
 --%>
 
+<%@page import="Classes.Grado"%>
 <%@page import="Manejadores.ManejadorCodigos"%>
 <%@page import="Classes.Tipo"%>
 <%@page import="Manejadores.ManejadorClases"%>
@@ -66,6 +67,22 @@
             <td width='50%'>
                 <form method="post" action="Tipo?id=<%if (t!=null){out.print(t.getId());}else{out.print("-1");} %>&codigo=<%= codigo %>">
                 <table>
+                    <%
+                    if(codigo.equals("Grados")){
+                        Grado g= (Grado)t;
+                    
+                    %>
+                    <tr>
+                        <td>
+                            <p><b>Abreviaci&oacute;n:</b></p>
+                        </td>
+                        <td>
+                            <p align="center"><input type="text" value="<% if (t!=null){out.print(g.getAbreviacion());}%>"  required='required' name="abreviacion" /></p>
+                        </td>
+                    </tr>
+                    <%
+                    }
+                    %>
                     <tr>
                         <td>
                             <p><b>Descripci&oacute;n:</b></p>
