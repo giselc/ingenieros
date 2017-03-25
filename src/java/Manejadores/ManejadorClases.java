@@ -30,7 +30,13 @@ public class ManejadorClases {
     public ManejadorClases() {
         connection = ConexionBD.GetConnection();
     }
-    
+    public void CerrarConexionManejador(){
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     //USUARIOOOO
     
     //funcion creada para asegurar que no existe otro usuario con usuario='usuario'

@@ -141,6 +141,7 @@ public class Tipo extends HttpServlet {
                     
                 }
             }
+            mc.CerrarConexionManejador();
             response.sendRedirect("tipos.jsp?codigo="+codigo);
                     
             

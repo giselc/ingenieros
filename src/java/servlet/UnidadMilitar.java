@@ -48,7 +48,7 @@ public class UnidadMilitar extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al agregar la unidad militar.");
                     }
-                    
+                    mc.CerrarConexionManejador();
                     response.sendRedirect("unidadesMilitares.jsp");
                 }
                 else{ //modificacion
@@ -58,6 +58,7 @@ public class UnidadMilitar extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al modificar la unidad militar.");
                     }
+                    mc.CerrarConexionManejador();
                     response.sendRedirect("unidadesMilitares.jsp");
                 }
             }
@@ -70,6 +71,7 @@ public class UnidadMilitar extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al eliminar la unidad militar.");
                     }
+                    mc.CerrarConexionManejador();
                     response.sendRedirect("unidadesMilitares.jsp"); 
                 }
             }

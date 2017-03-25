@@ -66,6 +66,7 @@ public class Usuario extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "Usuario ya existente en el sistema.");
                     }
+                    mc.CerrarConexionManejador();
                     response.sendRedirect("usuarios.jsp");
                 }
                 else{ //modificacion
@@ -75,6 +76,7 @@ public class Usuario extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al modificar el usuario.");
                     }
+                    mc.CerrarConexionManejador();
                     response.sendRedirect("usuarios.jsp");
                 }
             }
@@ -89,6 +91,7 @@ public class Usuario extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al modificar la contraseña.");
                     }
+                    mc.CerrarConexionManejador();
                     response.sendRedirect("usuarios.jsp"); 
                 }
                 else{
@@ -100,6 +103,7 @@ public class Usuario extends HttpServlet {
                         else{
                             sesion.setAttribute("mensaje", "ERROR al eliminar el usuario.");
                         }
+                        mc.CerrarConexionManejador();
                         response.sendRedirect("usuarios.jsp"); 
                     }
                 }

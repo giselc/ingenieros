@@ -19,6 +19,7 @@
         int id = Integer.valueOf(request.getParameter("id"));
         ManejadorCodigos mc = new ManejadorCodigos();
         u1= mc.getUnidadMilitar(id);
+        mc.CerrarConexionManejador();
     }
 %>
 <h1 align="center"><u><% if (u1!=null){out.print("Unidad Militar: "+u1.getNombre());}else{out.print("Agregar Unidad Militar");}%></u></h1>

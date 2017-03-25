@@ -84,7 +84,7 @@
                         }
                     }
                 }
-                
+                mc.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 60%' align='center'><h3 style='margin:2%;'>Descripcion</h3></td>");
                             out.print("<td style='width: 20%' align='center'></td>");

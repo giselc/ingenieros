@@ -41,7 +41,7 @@
     </ul>
     <div id="content">
          <div id="Datos-Personales"><%@include file="datosBasicos.jsp" %></div>
-         <div id="Documentos"><%@include file="familiares.jsp" %></div>
+         <div id="Familiares"><%@include file="familiares.jsp" %></div>
          <div id="Documentos"><%@include file="documentos.jsp" %></div>
          <div id="Apoderado"><%@include file="apoderado.jsp" %></div>
          <div id="Especialidades"><%@include file="especialidades.jsp" %></div>

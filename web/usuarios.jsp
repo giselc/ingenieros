@@ -60,6 +60,7 @@
             <%
                 ManejadorClases  mc = new ManejadorClases();
                 ArrayList<Usuario> au = mc.getUsuarios(u);
+                mc.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Usuario</h3></td>");
                             out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Nombre para mostrar</h3></td>");

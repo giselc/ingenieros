@@ -42,6 +42,7 @@ public class Listar extends HttpServlet {
             if(tipo.equals("usuarios")){
                 ManejadorClases mc = new ManejadorClases();
                 mc.imprimirUsuarios(out, u);
+                mc.CerrarConexionManejador();
             }
             else{
                 ManejadorCodigos mc = new ManejadorCodigos();
@@ -54,6 +55,7 @@ public class Listar extends HttpServlet {
                         mc.imprmirTipo(out, codigos);
                     }
                 }
+                mc.CerrarConexionManejador();
             }
             
         }

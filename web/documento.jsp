@@ -87,6 +87,7 @@
         int id = Integer.valueOf(request.getParameter("id"));
         ManejadorPersonal mp = new ManejadorPersonal();
         d= mp.getDocumento(id);
+        mp.CerrarConexionManejador();
     }
 %>
 <h1 align="center"><u><% if (d!=null){out.print("Editar Documento");}else{out.print("Agregar Documento");}%></u></h1>
@@ -139,6 +140,7 @@ else{
                                     }
                                     out.print("<option " + s +" value='"+String.valueOf(g.getId()) +"'>"+ g.getDescripcion() +"</option>");
                                 }
+                                mc.CerrarConexionManejador();
                                 %>
                             </select>
                         </td>

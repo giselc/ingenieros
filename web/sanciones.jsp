@@ -42,6 +42,7 @@
                 </tr>
                 <%
                     HashMap<Integer,Integer> listaSanciones = mp.getListaDiasPortipoSancion(ci);
+                    mc= new ManejadorCodigos();
                     for (Map.Entry<Integer, Integer> entry : listaSanciones.entrySet()) {
                         out.print("<tr>");
                             out.print("<td style=\"border: #000000 1px solid\" width='50%'>");
@@ -58,6 +59,9 @@
             <%
                
                 ArrayList<Sancion> a = mp.getSanciones(ci);
+                mp.CerrarConexionManejador();
+                mc.CerrarConexionManejador();
+                        
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha</h3></td>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Tipo Sancion</h3></td>");

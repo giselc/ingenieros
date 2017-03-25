@@ -68,6 +68,7 @@
             <%
                 ManejadorPersonal  mc = new ManejadorPersonal();
                 ArrayList<Personal> au = mc.getListaPersonalBasico();
+                mc.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Grado</h3></td>");
                             out.print("<td style='width: 25%' align='center'><h3 style='margin:2%;'>Nombres</h3></td>");

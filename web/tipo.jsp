@@ -51,6 +51,7 @@
                 }
             }
         }
+        mc.CerrarConexionManejador();
     }
 %>
 <h1 align="center"><u><% if (t!=null){out.print(mostrar+" "+ t.getDescripcion());}else{out.print("Alta "+mostrar);}%></u></h1>

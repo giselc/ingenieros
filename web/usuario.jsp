@@ -36,6 +36,7 @@
         int id = Integer.valueOf(request.getParameter("id"));
         ManejadorClases mc = new ManejadorClases();
         u1= mc.getUsuario(u, id);
+        mc.CerrarConexionManejador();
     }
 %>
 <h1 align="center"><u><% if (u1!=null){out.print("Usuario: "+u1.getUsuario());}else{out.print("Alta de usuario");}%></u></h1>

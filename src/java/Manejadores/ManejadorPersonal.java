@@ -39,6 +39,13 @@ public class ManejadorPersonal {
     public ManejadorPersonal() {
         connection = ConexionBD.GetConnection();
     }
+    public void CerrarConexionManejador(){
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public Personal getPersonalBasico(int ci){
         Personal p=null;
         try {
@@ -617,6 +624,20 @@ public class ManejadorPersonal {
         }
         return null;
     }
+    public Apoderado getApoderado2(int ciApoderado){
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from apoderados where ci="+ciApoderado;
+            ResultSet rs= s.executeQuery(sql);
+            if (rs.next()){
+                ManejadorCodigos mc= new ManejadorCodigos();
+                return new Apoderado(rs.getInt("ci"), rs.getString("nombres"), rs.getString("apellidos"), null, rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
     //modifica atributos de un apoderado y su vinculo con idPersonal
     public boolean modificarApoderado(int idPersonal, Apoderado apod){
@@ -642,13 +663,13 @@ public class ManejadorPersonal {
             String sql="update personal set idApoderado=-1, idVinculo=-1 where  ci="+idPersonal;
             int i= s.executeUpdate(sql);
             if (i>0){
-                sql="select * form personal where idApoderado="+idApod;
+                sql="select * from personal where idApoderado="+idApod;
                 ResultSet rs= s.executeQuery(sql);
                 if(rs.next()){
                     return 1;
                 }
                 else{
-                    sql="delete form apoderados where ci="+idApod;
+                    sql="delete from apoderados where ci="+idApod;
                     i= s.executeUpdate(sql);
                     if(i>0){
                         return 2;

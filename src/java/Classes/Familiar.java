@@ -10,33 +10,34 @@ package Classes;
  * @author Gisel
  */
 public class Familiar {
-    private int id;
     private TipoFamiliar tipo; //tipoFamiliar
     private String nombre;
     private String apellido;
-    private String ci; //NO SE IDENTIFICA POR CI PORQUE EL PERSONAL PUEDE DESCONOCER ESTE DATO
+    private int ci; 
+    private int edad;
     private String domicilio;
     private String ocupacion;
     private String telefono;
     private String celular;
     private Boolean discapacidad; //Boolean con mayuscula porque permite valor NULL
 
-    public Familiar(int id, TipoFamiliar tipo, String nombre, String apellido, String ci, String domicilio, String ocupacion, String telefono, String celular, Boolean discapacidad) {
-        this.id = id;
+    public Familiar( int ci, TipoFamiliar tipo, String nombre, int edad,String apellido, String domicilio, String ocupacion, String telefono, String celular, Boolean discapacidad) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.apellido = apellido;
         this.ci = ci;
+        this.edad = edad;
         this.domicilio = domicilio;
         this.ocupacion = ocupacion;
         this.telefono = telefono;
         this.celular = celular;
         this.discapacidad = discapacidad;
     }
-    
-    public int getId() {
-        return id;
+
+    public int getEdad() {
+        return edad;
     }
+    
 
     public TipoFamiliar getTipo() {
         return tipo;
@@ -50,7 +51,7 @@ public class Familiar {
         return apellido;
     }
 
-    public String getCi() {
+    public int getCi() {
         return ci;
     }
 

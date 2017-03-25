@@ -34,6 +34,7 @@
                             <td>
                                 <%
                                 ArrayList<Tipo> ap = mc.getEspecialidades();
+                                mc.CerrarConexionManejador();
                                 out.print("<select name=\"idEspecialidad\" form=\"formulario\">");
 
                                     for(Tipo p: ap ){

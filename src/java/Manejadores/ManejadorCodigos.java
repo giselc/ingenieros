@@ -34,7 +34,13 @@ public class ManejadorCodigos {
     public ManejadorCodigos() {
         connection = ConexionBD.GetConnection();
     }
-    
+    public void CerrarConexionManejador(){
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public ArrayList<Tipo> getGrados(){
         ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {
@@ -55,6 +61,7 @@ public class ManejadorCodigos {
     public Grado getGrado(int id){
         Grado g=null;
         try {
+            
             Statement s= connection.createStatement();
             String sql="Select * from grado where id="+id;
             ResultSet rs= s.executeQuery(sql);

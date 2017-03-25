@@ -115,6 +115,7 @@
         int ci = Integer.valueOf(request.getParameter("id"));
         ManejadorPersonal mp = new ManejadorPersonal();
         p= mp.getPersonalBasico(ci);
+        mp.CerrarConexionManejador();
     }
 %>
 <h1 align="center"><u><% if (p!=null){out.print("Personal: "+p.getNombre()+" "+p.getApellido());}else{out.print("Agregar personal");}%></u></h1>
@@ -221,6 +222,7 @@ else{
                                     }
                                     out.print("<option " + s +" value='"+String.valueOf(um.getId()) +"'>"+ um.getNombre() +"</option>");
                                 }
+                                mc.CerrarConexionManejador();
                                 %>
                             </select>
                         </td>

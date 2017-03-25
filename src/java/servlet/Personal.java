@@ -89,6 +89,7 @@ public class Personal extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al ingresar el personal sistema.");
                     }
+                    mp.CerrarConexionManejador();
                     response.sendRedirect("s1-personal.jsp");
                 }
                 else{ //modificacion
@@ -98,6 +99,7 @@ public class Personal extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al modificar el personal.");
                     }
+                    mp.CerrarConexionManejador();
                     response.sendRedirect("s1-personal.jsp");
                 }
             }

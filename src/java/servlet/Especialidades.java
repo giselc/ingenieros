@@ -45,6 +45,7 @@ public class Especialidades extends HttpServlet {
                 else{
                     sesion.setAttribute("mensaje", "ERROR al agregar la especialidad.");
                 }
+                mp.CerrarConexionManejador();
                 response.sendRedirect("personal.jsp?id="+ci);
             }
             else{
@@ -57,9 +58,11 @@ public class Especialidades extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al eliminar la sancion.");
                     }
                     if(request.getParameter("ci")!=null){
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     }
                     else{
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("s1-sanciones.jsp");
                     }
                 }

@@ -50,6 +50,7 @@ public class Documento extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al agregar el documento.");
                     }
+                    mp.CerrarConexionManejador();
                     response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     
                 }
@@ -60,7 +61,7 @@ public class Documento extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al modificar el documento.");
                     }
-                    
+                    mp.CerrarConexionManejador();
                     response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                 }
             }
@@ -73,6 +74,7 @@ public class Documento extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al eliminar el documento.");
                     }
+                    mp.CerrarConexionManejador();
                     response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                 }
             }

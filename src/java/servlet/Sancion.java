@@ -54,9 +54,11 @@ public class Sancion extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al agregar la sancion.");
                     }
                     if(request.getParameter("ci")!=null){
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     }
                     else{
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("s1-sanciones.jsp");
                     }
                     
@@ -69,9 +71,11 @@ public class Sancion extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al modificar la Sancion.");
                     }
                     if(request.getParameter("ci")!=null){
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     }
                     else{
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("s1-sanciones.jsp");
                     }
                 }
@@ -86,9 +90,11 @@ public class Sancion extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al eliminar la sancion.");
                     }
                     if(request.getParameter("ci")!=null){
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     }
                     else{
+                        mp.CerrarConexionManejador();
                         response.sendRedirect("s1-sanciones.jsp");
                     }
                 }

@@ -34,6 +34,7 @@
             <%
                
                 ArrayList<Especialidad> a = mp.getEspecialidadesListar(ci);
+                mp.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Especialidad</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");

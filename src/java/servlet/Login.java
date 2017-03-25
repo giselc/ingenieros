@@ -44,10 +44,12 @@ public class Login extends HttpServlet {
             Usuario u = mc.getUsuario(usu, pass);
             if (u!=null){
                 sesion.setAttribute("usuario", u);
+                mc.CerrarConexionManejador();
                 response.sendRedirect("index2.jsp");
             }
             else{
                 sesion.setAttribute("login", "incorrecto");
+                mc.CerrarConexionManejador();
                 response.sendRedirect("index.jsp");
             }
         }

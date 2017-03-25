@@ -155,6 +155,8 @@
                                     }
                                     out.print("<option " + selected +" value='"+p.getCi()+"'>"+ mostrarNombre +"</option>");
                                 }
+                                mp.CerrarConexionManejador();
+                                mc.CerrarConexionManejador();
                                 %>
                             </select>
                         </td>
