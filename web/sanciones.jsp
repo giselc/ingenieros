@@ -28,8 +28,7 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Personal:</h3></td>
-            <td style="width: 15%"><a href="index2.jsp"><img src="images/atras.png" width="100%"/></a></td>
+            <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Sanciones:</h3></td>
             <td style="width: 15%"><a href="sancion.jsp?ci=<%=ci%>" title="Agregar"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir" src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>

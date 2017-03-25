@@ -5,11 +5,9 @@
  */
 package servlet;
 
-import Manejadores.ManejadorClases;
-import Manejadores.ManejadorCodigos;
+import Manejadores.ManejadorPersonal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Gisel
  */
-public class Listar extends HttpServlet {
+public class Especialidades extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,27 +33,37 @@ public class Listar extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        Classes.Usuario u = (Classes.Usuario) sesion.getAttribute("usuario");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String tipo = request.getParameter("tipo");
-            if(tipo.equals("usuarios")){
-                ManejadorClases mc = new ManejadorClases();
-                mc.imprimirUsuarios(out, u);
-            }
-            else{
-                ManejadorCodigos mc = new ManejadorCodigos();
-                if(tipo.equals("unidadesMilitares")){
-                    mc.imprimirUnidadesMilitares(out);
+            ManejadorPersonal mp = new ManejadorPersonal();
+            int ci=Integer.valueOf(request.getParameter("ci"));
+            if(request.getParameter("elim")== null){ //alta
+                int id= Integer.valueOf(request.getParameter("idEspecialidad"));
+                if(mp.agregarEspecialidad(id, ci)){
+                    sesion.setAttribute("mensaje", "Especialidad agregada correctamente.");
                 }
                 else{
-                    if(tipo.equals("tipos")){
-                        String codigos = request.getParameter("codigo");
-                        mc.imprmirTipo(out, codigos);
+                    sesion.setAttribute("mensaje", "ERROR al agregar la especialidad.");
+                }
+                response.sendRedirect("personal.jsp?id="+ci);
+            }
+            else{
+                if(request.getParameter("elim")!= null){
+                    int id=Integer.valueOf(request.getParameter("elim"));
+                    if(mp.eliminarEspecialidad(id, ci)){
+                        sesion.setAttribute("mensaje", "Sancion eliminada correctamente.");
+                    }
+                    else{
+                        sesion.setAttribute("mensaje", "ERROR al eliminar la sancion.");
+                    }
+                    if(request.getParameter("ci")!=null){
+                        response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
+                    }
+                    else{
+                        response.sendRedirect("s1-sanciones.jsp");
                     }
                 }
             }
-            
         }
     }
 

@@ -30,6 +30,7 @@
              });
          })();
      </script>
+     <p align="left"><a href="s1-personal.jsp"><img src="images/atras.png" width="15%"/></a></p>
      <ul id="tabs">
         <li><a href="#" title="Datos-Personales">Datos Personales</a></li>
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Apoderado">Apoderado</a></li>
@@ -44,7 +45,6 @@
          <div id="Especialidades"><%@include file="especialidades.jsp" %></div>
          <div id="Sanciones"><%@include file="sanciones.jsp" %></div>
      </div>
-     <a href="s1-personal.jsp">Atr&aacute;s</a>
 <% 
     }
     else{

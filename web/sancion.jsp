@@ -25,14 +25,26 @@
     
     ManejadorPersonal mp= new ManejadorPersonal();
     ManejadorCodigos mc= new ManejadorCodigos();
+    int ci=-1;
     if(request.getParameter("id")!=null){ //si es alta o si es ver
         int id= Integer.valueOf(request.getParameter("id"));
         s= mp.getSancion(id);
+        ci=s.getA().getCi();
     }
 %>
-<h1 align="center"><u><% if (s!=null){out.print("Editar sanción");}else{out.print("Alta sanción");}%></u></h1>
 
-
+    <%
+        if(request.getParameter("ci")!=null){
+            ci= Integer.valueOf(request.getParameter("ci"));
+        }
+        if(ci!=-1){
+            %>
+            <p align="left"><a href="personal.jsp?id=<%=ci%>"><img src="images/atras.png" width="15%"/></a></p>
+            <%
+            
+        }
+    %>
+    <h1 align="center"><u><% if (s!=null){out.print("Editar sanción");}else{out.print("Alta sanción");}%></u></h1>
     <table  width='70%' style="font-size: 130%; text-align: left" >
         <tr>
             <td valign='top' width='40%'>

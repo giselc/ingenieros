@@ -40,6 +40,14 @@
         <servlet-name>Documento</servlet-name>
         <servlet-class>servlet.Documento</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Especialidades</servlet-name>
+        <servlet-class>servlet.Especialidades</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Apoderado</servlet-name>
+        <servlet-class>servlet.Apoderado</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>Documento</servlet-name>
         <url-pattern>/Documento</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Especialidades</servlet-name>
+        <url-pattern>/Especialidades</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Apoderado</servlet-name>
+        <url-pattern>/Apoderado</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

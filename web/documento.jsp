@@ -111,6 +111,7 @@ else{
 }
 
 %>
+<p align="left"><a href="personal.jsp?id=<%=request.getParameter("ci")%>"><img src="images/atras.png" width="15%"/></a></p>
 <form method="post" name="formulario" id="formulario" onsubmit="return finalizar(this,'<% if(request.getParameter("id")!=null){out.print("S");}else{out.print("N");}%>');" action="Documento?id=<%if (d!=null){out.print(d.getId());}else{out.print("-1");} %>" >
     <table  width='70%' align='center' style="text-align: left">
         <tr>

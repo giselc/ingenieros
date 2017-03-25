@@ -13,7 +13,6 @@ import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
 import Classes.TipoSancion;
 import Classes.UnidadMilitar;
-import com.sun.org.apache.xalan.internal.utils.SecuritySupport;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,7 +21,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.print.PrinterJobWrapper;
 
 /**
  *

@@ -541,7 +541,7 @@ public class ManejadorPersonal {
     }
     public boolean agregarEspecialidad(int idEspecialidad, int idPersonal){
         try {
-            String sql= "insert into personal-especialidad (idPersonal, idEspecialidad) values ("+idPersonal+","+idEspecialidad+")";
+            String sql= "insert into `personal-especialidad` (idPersonal, idEspecialidad) values ("+idPersonal+","+idEspecialidad+")";
             Statement s= connection.createStatement();
             int result = s.executeUpdate(sql);
             if(result>0){
@@ -552,10 +552,9 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    
     public boolean eliminarEspecialidad(int idEspecialidad, int idPersonal){
         try {
-            String sql= "delete from personal-especialidad where idPersonal="+idPersonal+" and idEspecialidad="+idEspecialidad;
+            String sql= "delete from `personal-especialidad` where idPersonal="+idPersonal+" and idEspecialidad="+idEspecialidad;
             Statement s= connection.createStatement();
             int result = s.executeUpdate(sql);
             if(result>0){
@@ -570,7 +569,7 @@ public class ManejadorPersonal {
     
     //retorna una Apoderado con los datos obtenidos y persiste en la base de datos la relacion apoderado-personal
     //retorna null si se produce algun error en la escritura de la base de datos.
-    public Apoderado crearApoderado(int ciPersonal, int ci,String nombres, String apellidos,int idvinculo,String domicilio,String celular,String telefono){
+    public boolean crearApoderado(int ciPersonal, int ci,String nombres, String apellidos,int idvinculo,String domicilio,String celular,String telefono){
         try {
             Statement s= connection.createStatement();
             String sql="Select * from apoderados where ci="+ci;
@@ -587,15 +586,15 @@ public class ManejadorPersonal {
             }
             if(i>0){
                 sql="update personal set idApoderado="+ci+", idVinculo="+idvinculo+" where ci="+ciPersonal;
-                s.executeUpdate(sql);
+                i = s.executeUpdate(sql);
                 ManejadorCodigos mc= new ManejadorCodigos();
-                return (new Apoderado(ci, nombres, apellidos, mc.getTipoFamiliar(idvinculo) , domicilio, celular, telefono));
+                return i>0;
             }
             
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return false;
     }
     
     //retorna el apoderado que tiene la relacion apoderado-personal segun los parametros
@@ -604,11 +603,14 @@ public class ManejadorPersonal {
     public Apoderado getApoderado(int ciPersonal){
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from personal left join apoderados on personal.idApoderado=apoderados.ci where Personal.ci="+ciPersonal;
+            String sql="Select apoderados.ci, apoderados.nombres, apoderados.apellidos, apoderados.domicilio,personal.idVinculo, apoderados.domicilio, apoderados.celular, apoderados.telefono from personal left join apoderados on personal.idApoderado=apoderados.ci where Personal.ci="+ciPersonal;
             ResultSet rs= s.executeQuery(sql);
             if (rs.next()){
                 ManejadorCodigos mc= new ManejadorCodigos();
-                return new Apoderado(rs.getInt("idApoderado"), rs.getString("nombres"), rs.getString("apellidos"), mc.getTipoFamiliar(rs.getInt("idVinculo")), rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
+                if(rs.getInt("ci")==0){
+                    return null;
+                }
+                return new Apoderado(rs.getInt("ci"), rs.getString("nombres"), rs.getString("apellidos"), mc.getTipoFamiliar(rs.getInt("idVinculo")), rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
