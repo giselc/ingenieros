@@ -19,7 +19,7 @@
         apoderado= mp.getApoderado(ci);
         if(apoderado!=null){
             %>
-            <p align="left"><a href="Apoderado?elim=<%=apoderado.getCi() %>&idPersonal=<%=ci %>"><img src="images/desvincular.png" width="15%"/></a></p>
+            <p align="left"><a href="Apoderado?elim=<%=apoderado.getCi() %>&idPersonal=<%=ci %>"><img src="images/desvincular.png" width="5%"/></a></p>
             <%
         }
     }
@@ -27,7 +27,7 @@
 <h1 align="center"><u><% if (apoderado!=null){out.print("Apoderado: "+apoderado.getNombre()+" "+apoderado.getApellido());}else{out.print("Apoderado");}%></u></h1>
 
 
-<form method="post" name="formulario" id="formulario" onsubmit="return finalizar(this);" action="Apoderado?id=<%if (apoderado!=null){out.print(apoderado.getCi());}else{out.print("-1");} %>&idPersonal=<%=request.getParameter("id")%>" >
+<form method="post" name="formulario1" id="formulario1" onsubmit="return finalizar(this);" action="Apoderado?id=<%if (apoderado!=null){out.print(apoderado.getCi());}else{out.print("-1");} %>&idPersonal=<%=request.getParameter("id")%>" >
     
     <table>
         <tr>
@@ -59,7 +59,7 @@
                 <p><b>V&iacute;nculo:</b></p>
             </td>
             <td>
-                <select name="idVinculo" form="formulario">
+                <select name="idVinculo" form="formulario1">
                     <%
                     ag = mc.getTiposFamiliares();
                     for(Tipo g: ag ){

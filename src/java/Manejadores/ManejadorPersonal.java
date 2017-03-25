@@ -639,10 +639,10 @@ public class ManejadorPersonal {
     public int desvincularApoderado(int idPersonal, int idApod){
         try {
             Statement s= connection.createStatement();
-            String sql="update form personal set idApoderado=-1, idVinculo=-1 where  ci="+idPersonal;
+            String sql="update personal set idApoderado=-1, idVinculo=-1 where  ci="+idPersonal;
             int i= s.executeUpdate(sql);
             if (i>0){
-                sql="select form personal where idApoderado="+idApod;
+                sql="select * form personal where idApoderado="+idApod;
                 ResultSet rs= s.executeQuery(sql);
                 if(rs.next()){
                     return 1;
