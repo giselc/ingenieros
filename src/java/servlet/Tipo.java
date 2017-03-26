@@ -81,7 +81,6 @@ public class Tipo extends HttpServlet {
                     else{
                         if(codigo.equals("Grados")){
                             String abreviacion = request.getParameter("abreviacion");
-                            System.out.print(abreviacion);
                             ok= mc.modificarGrado(id, descripcion,abreviacion);
                         }
                         else{

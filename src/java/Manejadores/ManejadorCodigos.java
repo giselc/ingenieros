@@ -90,7 +90,6 @@ public class ManejadorCodigos {
     }
     public boolean modificarGrado(int id, String desc, String abr){
         try {
-            System.out.print("abr:"+abr);
             Statement s= connection.createStatement();
             String sql="update grado set descripcion='"+desc+"',abreviacion='"+abr+"' where id="+id;
             int i= s.executeUpdate(sql);
