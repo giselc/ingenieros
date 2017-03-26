@@ -20,8 +20,9 @@ public class Familiar {
     private String telefono;
     private String celular;
     private Boolean discapacidad; //Boolean con mayuscula porque permite valor NULL
+    private String descDiscapacidad;
 
-    public Familiar( int ci, TipoFamiliar tipo, String nombre, int edad,String apellido, String domicilio, String ocupacion, String telefono, String celular, Boolean discapacidad) {
+    public Familiar( int ci, TipoFamiliar tipo, String nombre, int edad,String apellido, String domicilio, String ocupacion, String telefono, String celular, Boolean discapacidad, String descDiscapacidad) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -32,6 +33,11 @@ public class Familiar {
         this.telefono = telefono;
         this.celular = celular;
         this.discapacidad = discapacidad;
+        this.descDiscapacidad = descDiscapacidad;
+    }
+
+    public String getDescDiscapacidad() {
+        return descDiscapacidad;
     }
 
     public int getEdad() {
