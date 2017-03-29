@@ -65,9 +65,6 @@
                 <li>
                     <a href="s1-sanciones.jsp">Sanciones</a>
                 </li>
-                <li>
-                    <a href="s1-historial.jsp">Historial</a>
-                </li>
             </ul>
         </li>
         <li style="width: 25%">

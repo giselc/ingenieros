@@ -44,7 +44,7 @@
             
         }
     %>
-    <h1 align="center"><u><% if (s!=null){out.print("Editar sanción");}else{out.print("Alta sanción");}%></u></h1>
+    <h1 align="center"><u><% if (s!=null){out.print("Ver sanción");}else{out.print("Alta sanción");}%></u></h1>
     <table  width='70%' style="font-size: 130%; text-align: left" >
         <tr>
             <td valign='top' width='40%'>
@@ -61,7 +61,19 @@
                             <p><b>Fecha:</b></p>
                         </td>
                         <td>
-                            <input type=date name="fecha" <%if( s!=null){out.print("value="+s.getFecha());} %> required="required"/>
+                            <% 
+                                java.util.Date hoy = new java.util.Date(); 
+                                String m="";
+                                if(hoy.getMonth()+1 <= 9 ){
+                                    m= "0"+(hoy.getMonth()+1);
+                                }
+                                String d="";
+                                if(hoy.getDate() <= 9 ){
+                                    d= "0"+(hoy.getDate());
+                                }
+                                String fecha= (hoy.getYear()+1900) +"-"+ m +"-"+hoy.getDate();
+                              %>
+                              <input type=date name="fecha" <%=fecha%> <%if( s!=null){out.print("value="+s.getFecha());}else{out.print("value="+fecha);} %> required="required"/>
                         </td>
                     </tr>
                     <tr>
@@ -69,7 +81,8 @@
                             <p><b>Hora:</b></p>
                         </td>
                         <td>
-                            <input type=time name="hora" <%if( s!=null){out.print("value="+s.getHora());} %> required="required"/>
+                            <input type=time step="60"  name="hora" <%if( s!=null){out.print("value=\""+s.getHora()+"\"");}else{out.print("value=\"00:00\"");}; %> required="required"/>
+                            Los minutos no son tomados en cuanta por el sistema.
                         </td>
                     </tr>
                     <tr>
@@ -162,7 +175,17 @@
                         </td>
                     </tr>
                 </table>
-                        <p align='right'><input type="submit"  value="Aceptar" /></p>
+                            <%
+                            if(request.getParameter("id")!=null && Integer.valueOf(request.getParameter("id"))!=-1){
+                                out.print("Las sanciones no se pueden modificar.");
+                            }
+                            else{
+                            
+                            %>
+                                <p align='right'><input type="submit"  value="Aceptar" /></p>
+                            <%
+                            }
+                            %>
                 </form>
             </td>
         </tr>

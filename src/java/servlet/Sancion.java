@@ -63,22 +63,7 @@ public class Sancion extends HttpServlet {
                     }
                     
                 }
-                else{ //modificacion
-                    if(mp.modificarSancion(id, a, tipoSancion, orden, parte, dias, fecha,hora)){
-                       sesion.setAttribute("mensaje", "Sancion modificada correctamente.");
-                    }
-                    else{
-                        sesion.setAttribute("mensaje", "ERROR al modificar la Sancion.");
-                    }
-                    if(request.getParameter("ci")!=null){
-                        mp.CerrarConexionManejador();
-                        response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
-                    }
-                    else{
-                        mp.CerrarConexionManejador();
-                        response.sendRedirect("s1-sanciones.jsp");
-                    }
-                }
+                //no se permite modificar
             }
             else{
                 if(request.getParameter("elim")!= null){

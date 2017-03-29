@@ -90,7 +90,7 @@
                     out.print("<td style='width: 30%' align='center'>"+s.getParte()+"</td>");
                     out.print("<td style='width: 5%' align='center'>"+s.getDias()+"</td>");
                     out.print("<td style='width: 15%' align='center'>"+s.getOrden().getGrado().getAbreviacion()+" "+s.getOrden().getNombre()+s.getOrden().getApellido()+"</td>");
-                    out.print("<td style='width: 10%' align='center'><a href='sancion.jsp?id="+String.valueOf(s.getId())+"' ><img title='Editar' src='images/ver.png' width='25%' /></a></td>");
+                    out.print("<td style='width: 10%' align='center'><a href='sancion.jsp?id="+String.valueOf(s.getId())+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
                     out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='Sancion?elim="+s.getId()+"&ci="+ci+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     out.print("</tr>");
                 }
