@@ -21,9 +21,8 @@ public class Sancion {
     private Date fecha;
     private Personal orden;
     private Time hora;
-    private boolean vigente;
 
-    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Time hora,Personal orden, Personal a, boolean vigente) {
+    public Sancion(int id, TipoSancion tipo, String parte, int dias, Date fecha, Time hora,Personal orden, Personal a) {
         this.id = id;
         this.tipo = tipo;
         this.parte = parte;
@@ -32,12 +31,8 @@ public class Sancion {
         this.fecha = fecha;
         this.orden = orden;
         this.a = a;
-        this.vigente= vigente;
     }
 
-    public boolean isVigente() {
-        return vigente;
-    }
 
     public Time getHora() {
         return hora;

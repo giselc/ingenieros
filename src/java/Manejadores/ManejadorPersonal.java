@@ -13,6 +13,7 @@ import Classes.Familiar;
 import Classes.Personal;
 import Classes.RecordPersonal;
 import Classes.Sancion;
+import Classes.Tipo;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import static java.sql.Types.NULL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
@@ -272,62 +274,55 @@ public class ManejadorPersonal {
     }
     
     //Sanciones
-    public int diferenciasDiasDesdeHoy(Sancion s) {
-
+    public int diferenciasDiasDesdeHoy(Date s, Time h) {
         final int MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
         java.util.Date hoy = new java.util.Date();
-        long deltaDays = ( hoy.getTime() - s.getFecha().getTime())/MILLSECS_PER_DAY;
-        int diasCumplidos =0;
-        if(hoy.getHours()>=18){
-            diasCumplidos= (int)deltaDays + 1;
+        long deltaDays = ( hoy.getTime() - (s.getTime()))/MILLSECS_PER_DAY;
+        int diasCumplidos =(int)deltaDays;
+        System.out.print("hora:"+h.getHours());
+        System.out.print("delta:"+deltaDays);
+        if((int)deltaDays==0){
+            if(hoy.getHours()>=18 && h.getHours()<18){
+                diasCumplidos= (int)deltaDays + 1;
+            }
         }
         else{
-            diasCumplidos= (int)deltaDays;
+            if(hoy.getHours()<18){
+                if(h.getHours()>18){
+                    diasCumplidos= (int)deltaDays -1;
+                }
+            }
+            else{
+                if(h.getHours()<18){
+                    diasCumplidos= (int)deltaDays +1;
+                }
+            }
         }
         return diasCumplidos;
     }
     public HashMap<Integer,Integer> getListaDiasPortipoSancion(int idPersonal){
         HashMap<Integer,Integer> hm= new HashMap<>();
         try {
-            String sql= "Select * from sanciones where vigente=1 and idPersonal="+idPersonal + " order by fecha asc, hora asc";
-            String sql2= "Select sum(dias) as suma from sanciones where vigente=1 and idPersonal="+idPersonal;
+            ManejadorCodigos mc= new ManejadorCodigos();
+            ArrayList<Tipo> tipoSancion = mc.getTiposSanciones();
+            mc.CerrarConexionManejador();
+            ResultSet rs = null;
             Statement s= connection.createStatement();
-            Statement s2= connection.createStatement();
-            ResultSet rs = s.executeQuery(sql);
-            ResultSet rs2 = s2.executeQuery(sql2);
-            Sancion sancion;
-            int diasAcumplir=0;
-            if(rs2.next()){
-                diasAcumplir=rs2.getInt("suma");
-            }
-            System.out.print(diasAcumplir);
-            ManejadorCodigos mc = new ManejadorCodigos();
-            int diasCumplidos;
-            int diasRestantes=0;
-            while(rs.next()){
-                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getBoolean("vigente"));
-                if(hm.get(sancion.getTipo().getId())==null){ //si es primero de su tipo
-                    diasCumplidos = diferenciasDiasDesdeHoy(sancion);
-                    System.out.print(diasCumplidos);
-                    if(diasCumplidos - sancion.getDias() >=0){ //cumpli mas dias
-                        this.modificarSancionVigente(false, sancion.getId());
-                        hm.put(sancion.getTipo().getId(), diasAcumplir- diasCumplidos);
-                    }
-                    else{ //me quedan dias por cumplir
-                        hm.put(sancion.getTipo().getId(), diasRestantes);
-                    }
-                    diasRestantes = diasCumplidos - sancion.getDias();
-                    System.out.print(diasRestantes);
-                }
-                else{ // ya pase los calculos debo colocar vigente a lo que me resta
-                    if(diasRestantes-sancion.getDias()>0){
-                        this.modificarSancionVigente(false, sancion.getId());
-                        diasRestantes -=sancion.getDias();
+            int diasCumplidos =0;
+            String sql="";
+            for (Tipo t: tipoSancion){
+                sql= "Select * from sancionados where ciPersonal="+idPersonal + " and idTipoSancion="+t.getId();
+                rs = s.executeQuery(sql);
+                if(rs.next()){
+                    diasCumplidos = diferenciasDiasDesdeHoy(rs.getDate("fechaInicial"), rs.getTime("horaInicial"));
+                    if (diasCumplidos>=rs.getInt("cantTotalDias")){
+                        sql="delete from sancionados where ciPersonal="+idPersonal + " and idTipoSancion="+t.getId();
+                        s.executeUpdate(sql);
                     }
                     else{
-                        diasRestantes -=sancion.getDias();
+                        System.out.print(diasCumplidos);
+                        hm.put(t.getId(),rs.getInt("cantTotalDias")-diasCumplidos);
                     }
-                     System.out.print(diasRestantes);
                 }
             }
         } catch (SQLException ex) {
@@ -335,30 +330,16 @@ public class ManejadorPersonal {
         }
         return hm;
     }
-    public boolean modificarSancionVigente(boolean vigente, int id){
-        try{
-             String sql= "update sanciones set vigente=? where id="+id;
-                PreparedStatement s= connection.prepareStatement(sql);
-                s.setBoolean(1, vigente);
-                int result = s.executeUpdate();
-                if(result>0){
-                    return true;
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        return false;
-    }
     public ArrayList<Sancion> getSanciones(int idPersonal){
         ArrayList<Sancion> as= new ArrayList<>();
         try {
-            String sql= "Select * from sanciones where idPersonal="+idPersonal + " order by vigente desc, fecha desc, hora desc";
+            String sql= "Select * from sanciones where idPersonal="+idPersonal + " order by fecha desc, hora desc";
             Statement s= connection.createStatement();
             ResultSet rs = s.executeQuery(sql);
             Sancion sancion;
             ManejadorCodigos mc = new ManejadorCodigos();
             while(rs.next()){
-                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getBoolean("vigente"));
+                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")));
                 as.add(sancion);
             }
         } catch (SQLException ex) {
@@ -375,7 +356,7 @@ public class ManejadorPersonal {
             Sancion sancion;
             ManejadorCodigos mc = new ManejadorCodigos();
             while(rs.next()){
-                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")), this.getPersonalBasico(rs.getInt("idPersonal")),rs.getBoolean("vigente"));
+                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")), this.getPersonalBasico(rs.getInt("idPersonal")));
                 return sancion;
             }
         } catch (SQLException ex) {
@@ -397,6 +378,32 @@ public class ManejadorPersonal {
             s.setString(7, hora);
             int result = s.executeUpdate();
             if(result>0){
+                sql= "Select * from sancionados where ciPersonal="+ci + " and idTipoSancion="+tipoSancion;
+                ResultSet rs = null;
+                Statement s1= connection.createStatement();
+                rs= s1.executeQuery(sql);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date fecha1= sdf.parse(fecha);
+                java.sql.Date fecha2= new Date(fecha1.getTime());
+                if(rs.next()){
+                    int totalDias= rs.getInt("cantTotalDias")+dias;
+                    sdf = new SimpleDateFormat("HH:mm");
+                    java.util.Date hora1= sdf.parse(hora);
+                    System.out.print("hora1:"+hora1.getHours());
+                    if(((rs.getDate("fechaInicial").getTime()-fecha2.getTime())>0)||((rs.getDate("fechaInicial").getTime()-fecha2.getTime())==0 && rs.getTime("horaInicial").getHours()> hora1.getHours() )){
+                        sql= "update sancionados set fechaInicial='"+fecha+"', horaInicial='"+hora+"', cantTotalDias="+totalDias+" where ciPersonal="+ci+" and idTipoSancion="+tipoSancion;
+                         System.out.print("sql1:"+sql);
+                        s1.executeUpdate(sql);
+                    }
+                    else{
+                        sql= "update sancionados set cantTotalDias="+totalDias+" where ciPersonal="+ci+" and idTipoSancion="+tipoSancion;
+                        s1.executeUpdate(sql);
+                    }
+                }
+                else{
+                    sql= "insert into sancionados (ciPersonal,idTipoSancion,fechaInicial,cantTotalDias,horaInicial) values("+ci+","+tipoSancion+",'"+fecha+"',"+dias+",'"+hora+"')";
+                    s1.executeUpdate(sql);
+                }
                 return true;
             }
         } catch (Exception ex) {
@@ -428,7 +435,7 @@ public class ManejadorPersonal {
     public boolean eliminarSancion(int id){
         try {
             Statement s= connection.createStatement();
-            String sql="delete from sanciones where id="+id;
+            String sql="delete from sanciones where id="+id; //si esta sancionado, me fijo la fecha de la sancion eliminada, si es mayor resto dias, si igual me guardo la fecha, la elimino y despues busco la sancion de fecha >= y resto dias, si menor la elimino solo
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -732,7 +739,6 @@ public class ManejadorPersonal {
                 disc=1;
             }
             String sql="Update  familiares left join `personal-familiar` on idFamiliar=ci set idVinculo="+ familiar.getTipo().getId() +",discapacidad="+ disc +", nombres='"+ familiar.getNombre() +"', ocupacion='"+ familiar.getOcupacion() +"', edad="+ familiar.getEdad() +",apellidos='"+ familiar.getApellido() +"', celular='"+ familiar.getCelular() +"', domicilio='"+ familiar.getDomicilio() +"', telefono='"+ familiar.getTelefono() +"', descDiscapacidad='"+ familiar.getDescDiscapacidad() +"' where ci="+familiar.getCi() +" and idPersonal="+ciPersonal;
-            System.out.print(sql);
             int rs= s.executeUpdate(sql);
             return (rs>0);
         } catch (SQLException ex) {
