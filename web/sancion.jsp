@@ -78,15 +78,6 @@
                     </tr>
                     <tr>
                         <td>
-                            <p><b>Hora:</b></p>
-                        </td>
-                        <td>
-                            <input type=time step="60"  name="hora" <%if( s!=null){out.print("value=\""+s.getHora()+"\"");}else{out.print("value=\"00:00\"");}; %> required="required"/>
-                            Los minutos no son tomados en cuanta por el sistema.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             <p><b>Para:</b></p>
                         </td>
                         <td>

@@ -12,6 +12,7 @@ import Classes.Especialidad;
 import Classes.Familiar;
 import Classes.Personal;
 import Classes.RecordPersonal;
+import Classes.RecordRecalculo;
 import Classes.Sancion;
 import Classes.Tipo;
 import java.sql.Blob;
@@ -277,27 +278,8 @@ public class ManejadorPersonal {
     public int diferenciasDiasDesdeHoy(Date s, Time h) {
         final int MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
         java.util.Date hoy = new java.util.Date();
-        long deltaDays = ( hoy.getTime() - (s.getTime()))/MILLSECS_PER_DAY;
+        long deltaDays = ( hoy.getTime() - s.getTime() - h.getTime())/MILLSECS_PER_DAY;
         int diasCumplidos =(int)deltaDays;
-        System.out.print("hora:"+h.getHours());
-        System.out.print("delta:"+deltaDays);
-        if((int)deltaDays==0){
-            if(hoy.getHours()>=18 && h.getHours()<18){
-                diasCumplidos= (int)deltaDays + 1;
-            }
-        }
-        else{
-            if(hoy.getHours()<18){
-                if(h.getHours()>=18){
-                    diasCumplidos= (int)deltaDays -1;
-                }
-            }
-            else{
-                if(h.getHours()<18){
-                    diasCumplidos= (int)deltaDays +1;
-                }
-            }
-        }
         return diasCumplidos;
     }
     public HashMap<Integer,Integer> getListaDiasPortipoSancion(int idPersonal){
@@ -320,7 +302,6 @@ public class ManejadorPersonal {
                         s.executeUpdate(sql);
                     }
                     else{
-                        System.out.print(diasCumplidos);
                         hm.put(t.getId(),rs.getInt("cantTotalDias")-diasCumplidos);
                     }
                 }
@@ -365,6 +346,59 @@ public class ManejadorPersonal {
         
         return null;
     }
+    public ArrayList<Sancion> getSancionesDelTipo(int idPersonal, int idTipoSancion){
+        ArrayList<Sancion> as= new ArrayList<>();
+        try {
+            String sql= "Select * from sanciones where idPersonal="+idPersonal + " and idTipoSancion = "+idTipoSancion + " order by fecha asc, hora asc";
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            Sancion sancion;
+            ManejadorCodigos mc = new ManejadorCodigos();
+            while(rs.next()){
+                sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")));
+                as.add(sancion);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return as;
+    }
+    public Date sumarRestarDiasFecha(Date fecha, int dias){
+      Calendar calendar = Calendar.getInstance();
+      java.util.Date fecha1 = new java.util.Date(fecha.getTime());
+      calendar.setTime(fecha1); // Configuramos la fecha que se recibe
+      calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
+      return new Date(calendar.getTime().getTime()); // Devuelve el objeto Date con los nuevos días añadidos	
+    }
+    public RecordRecalculo recalcularDias(int ciPersonal, int idTipoSancion){
+        ArrayList<Sancion> sanciones = this.getSancionesDelTipo(ciPersonal,idTipoSancion);
+        int dias=0;
+        Sancion sancionInicial = null;
+        for(Sancion s : sanciones){
+            if(sancionInicial == null){
+                dias= s.getDias();
+                sancionInicial = s;
+            }
+            else{
+                if(sumarRestarDiasFecha(sancionInicial.getFecha(), dias).getTime()-s.getFecha().getTime()<0){
+                    dias= s.getDias();
+                    sancionInicial = s;
+                }
+                else{
+                    dias+=s.getDias();
+                    
+                }
+            }
+            if(sancionInicial!=null){
+                System.out.println(sancionInicial.getFecha()+": "+dias);
+            }
+        }
+        RecordRecalculo rr= new RecordRecalculo();
+        rr.dias = dias;
+        rr.sancion=sancionInicial;
+        return rr;
+    }
     public boolean crearSancion(int ci, int tipoSancion, int orden, String parte, int dias, String fecha, String hora){
         String sql= "insert into sanciones (idPersonal, idOrden, parte,fecha, idTipoSancion,dias, hora) values(?,?,?,?,?,?,?)";
         try{
@@ -385,12 +419,13 @@ public class ManejadorPersonal {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date fecha1= sdf.parse(fecha);
                 java.sql.Date fecha2= new Date(fecha1.getTime());
-                if(rs.next()){
+                if(rs.next()){ //si ya estaba sancionado
                     int totalDias= rs.getInt("cantTotalDias")+dias;
-                    sdf = new SimpleDateFormat("HH:mm");
-                    java.util.Date hora1= sdf.parse(hora);
-                    if(((rs.getDate("fechaInicial").getTime()-fecha2.getTime())>0)||((rs.getDate("fechaInicial").getTime()-fecha2.getTime())==0 && rs.getTime("horaInicial").getHours()> hora1.getHours() )){
-                        sql= "update sancionados set fechaInicial='"+fecha+"', horaInicial='"+hora+"', cantTotalDias="+totalDias+" where ciPersonal="+ci+" and idTipoSancion="+tipoSancion;
+                    if(((rs.getDate("fechaInicial").getTime()-fecha2.getTime())>0)){
+                        System.out.println("Recalculando..");
+                        RecordRecalculo rc = recalcularDias(ci, tipoSancion);
+                        System.out.println("Fin recalculo..");
+                        sql= "update sancionados set fechaInicial='"+rc.sancion.getFecha().toString()+"', cantTotalDias="+ rc.dias +" where ciPersonal="+ci+" and idTipoSancion="+tipoSancion;
                         s1.executeUpdate(sql);
                     }
                     else{
@@ -398,8 +433,9 @@ public class ManejadorPersonal {
                         s1.executeUpdate(sql);
                     }
                 }
-                else{
-                    sql= "insert into sancionados (ciPersonal,idTipoSancion,fechaInicial,cantTotalDias,horaInicial) values("+ci+","+tipoSancion+",'"+fecha+"',"+dias+",'"+hora+"')";
+                else{ //si no estaba sancionado
+                    RecordRecalculo rc = recalcularDias(ci, tipoSancion);
+                    sql= "insert into sancionados (ciPersonal,idTipoSancion,fechaInicial,cantTotalDias,horaInicial) values("+ci+","+tipoSancion+",'"+rc.sancion.getFecha()+"',"+rc.dias+",'"+hora+"')";
                     s1.executeUpdate(sql);
                 }
                 return true;
@@ -414,19 +450,27 @@ public class ManejadorPersonal {
     public boolean eliminarSancion(int id){
         try {
             Sancion s = this.getSancion(id);
-            String sql= "Select * from sancionados where ciPersonal="+s.getA().getCi() + " and idTipoSancion="+s.getTipo().getId();
-            ResultSet rs = null;
+            String sql="delete from sanciones where id="+id; //si esta sancionado, me fijo la fecha y hora de la sancion eliminada, si es mayor resto dias, si igual me guardo la fecha y hora, la elimino y despues busco la sancion de fecha >= y resto dias, si menor la elimino solo
             Statement s1= connection.createStatement();
+            int i= s1.executeUpdate(sql);
+            
+            
+            sql= "Select * from sancionados where ciPersonal="+s.getA().getCi() + " and idTipoSancion="+s.getTipo().getId();
+            ResultSet rs = null;
+            
             rs= s1.executeQuery(sql);
             if(rs.next()){ // esta sacionado
                 int cantTotalDias= rs.getInt("cantTotalDias");
-                if(((rs.getDate("fechaInicial").getTime()-s.getFecha().getTime())<0)||((rs.getDate("fechaInicial").getTime()-s.getFecha().getTime())==0 && rs.getTime("horaInicial").getHours()<s.getHora().getHours())){ //fecha de sancionado menor a la que elimino
-                    sql= "update sancionados set cantTotalDias="+(cantTotalDias-s.getDias())+" where ciPersonal="+s.getA().getCi()+" and idTipoSancion="+s.getTipo().getId();
+                if(((rs.getDate("fechaInicial").getTime()-s.getFecha().getTime())<0)){ //fecha de sancionado menor a la que elimino
+                    System.out.println("Recalculando..");
+                    RecordRecalculo rc = recalcularDias(s.getA().getCi(), s.getTipo().getId());
+                    System.out.println("Fin recalculo..");
+                    sql= "update sancionados set fechaInicial='"+rc.sancion.getFecha().toString()+"', cantTotalDias="+ rc.dias +" where ciPersonal="+s.getA().getCi()+" and idTipoSancion="+s.getTipo().getId();
                     s1.executeUpdate(sql);
                 }
                 else{
-                    if((rs.getDate("fechaInicial").getTime()-s.getFecha().getTime())==0 && rs.getTime("horaInicial").getHours()==s.getHora().getHours()){
-                        sql= "Select * from sanciones where idPersonal="+s.getA().getCi() + " and fecha >='"+s.getFecha().toString()+"' and hora >='"+s.getHora().toString()+"' and id<>"+s.getId()+" order by fecha desc, hora desc";
+                    if((rs.getDate("fechaInicial").getTime()-s.getFecha().getTime())==0){
+                        sql= "Select * from sanciones where idPersonal="+s.getA().getCi() + " and fecha >='"+s.getFecha().toString()+"' and hora >='"+s.getHora().toString()+"' order by fecha asc, hora asc";
                         rs = s1.executeQuery(sql);
                         if(rs.next()){
                             sql= "update sancionados set fechaInicial='"+rs.getDate("fecha").toString()+"', horaInicial='"+rs.getTime("hora").toString()+"', cantTotalDias="+(cantTotalDias-s.getDias())+" where ciPersonal="+s.getA().getCi()+" and idTipoSancion="+s.getTipo().getId();
@@ -440,8 +484,6 @@ public class ManejadorPersonal {
                 }
                 
             }
-            sql="delete from sanciones where id="+id; //si esta sancionado, me fijo la fecha y hora de la sancion eliminada, si es mayor resto dias, si igual me guardo la fecha y hora, la elimino y despues busco la sancion de fecha >= y resto dias, si menor la elimino solo
-            int i= s1.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);

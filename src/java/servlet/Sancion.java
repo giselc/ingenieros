@@ -44,7 +44,7 @@ public class Sancion extends HttpServlet {
                 int dias= Integer.valueOf(request.getParameter("dias"));
                 String parte = request.getParameter("parte");
                 String fecha = request.getParameter("fecha");
-                String hora = request.getParameter("hora");
+                String hora = "18:00";
                 
                 if(id==-1){ //alta
                     if(mp.crearSancion(a, tipoSancion, orden, parte, dias, fecha, hora)){

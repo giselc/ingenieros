@@ -64,9 +64,8 @@
                         
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Hora</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Tipo Sancion</h3></td>");
-                            out.print("<td style='width: 30%' align='center'><h3 style='margin:2%;'>Parte</h3></td>");
+                            out.print("<td style='width: 15%' align='center'><h3 style='margin:2%;'>Tipo Sancion</h3></td>");
+                            out.print("<td style='width: 35%' align='center'><h3 style='margin:2%;'>Parte</h3></td>");
                             out.print("<td style='width: 5%' align='center'><h3 style='margin:2%;'>Dias</h3></td>");
                             out.print("<td style='width: 15%' align='center'><h3 style='margin:2%;'>Orden</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
@@ -85,9 +84,8 @@
 
                     out.print("<tr style='background-color:"+color+"'>");
                     out.print("<td style='width: 10%' align='center'>"+s.getFecha()+"</td>"); 
-                    out.print("<td style='width: 10%' align='center'>"+s.getHora()+"</td>"); 
-                    out.print("<td style='width: 10%' align='center'>"+s.getTipo().getDescripcion()+"</td>");
-                    out.print("<td style='width: 30%' align='center'>"+s.getParte()+"</td>");
+                    out.print("<td style='width: 15%' align='center'>"+s.getTipo().getDescripcion()+"</td>");
+                    out.print("<td style='width: 35%' align='center'>"+s.getParte()+"</td>");
                     out.print("<td style='width: 5%' align='center'>"+s.getDias()+"</td>");
                     out.print("<td style='width: 15%' align='center'>"+s.getOrden().getGrado().getAbreviacion()+" "+s.getOrden().getNombre()+s.getOrden().getApellido()+"</td>");
                     out.print("<td style='width: 10%' align='center'><a href='sancion.jsp?id="+String.valueOf(s.getId())+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
