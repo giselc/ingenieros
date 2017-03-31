@@ -7,6 +7,7 @@ package servlet;
 
 import Manejadores.ManejadorClases;
 import Manejadores.ManejadorCodigos;
+import Manejadores.ManejadorPersonal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -48,11 +49,37 @@ public class Listar extends HttpServlet {
                 ManejadorCodigos mc = new ManejadorCodigos();
                 if(tipo.equals("unidadesMilitares")){
                     mc.imprimirUnidadesMilitares(out);
+                    mc.CerrarConexionManejador();
                 }
                 else{
                     if(tipo.equals("tipos")){
                         String codigos = request.getParameter("codigo");
                         mc.imprmirTipo(out, codigos);
+                        mc.CerrarConexionManejador();
+                    }
+                    else{
+                        if(tipo.equals("sanciones")){
+                            int ci=-1;
+                            if(request.getParameter("ci")!=null){
+                                ci=Integer.valueOf(request.getParameter("ci"));
+                            }
+                            ManejadorPersonal mp = new ManejadorPersonal();
+                            int tipoSancion= -1;
+                            if(!request.getParameter("tipoSancion").equals("TODOS")){
+                                tipoSancion = Integer.valueOf(request.getParameter("tipoSancion"));
+                            }
+                            mp.imprimirSanciones(ci, request.getParameter("fechaDesde"), request.getParameter("fechaHasta"), tipoSancion,out);
+                            
+                        }
+                        if(tipo.equals("personal")){
+                            int ci=Integer.valueOf(request.getParameter("ci"));
+                            boolean basico=request.getParameter("datosBasicos")!=null;
+                            boolean familiares=request.getParameter("familiares")!=null;
+                            boolean apoderado=request.getParameter("apoderado")!=null;
+                            boolean especialidades=request.getParameter("especialidades")!=null;
+                            
+                            
+                        }
                     }
                 }
                 mc.CerrarConexionManejador();

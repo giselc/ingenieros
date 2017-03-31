@@ -74,7 +74,7 @@ public class Sancion extends HttpServlet {
                     else{
                         sesion.setAttribute("mensaje", "ERROR al eliminar la sancion.");
                     }
-                    if(request.getParameter("ci")!=null){
+                    if(request.getParameter("ci")!=null && Integer.valueOf(request.getParameter("ci"))!=-1){
                         mp.CerrarConexionManejador();
                         response.sendRedirect("personal.jsp?id="+request.getParameter("ci"));
                     }

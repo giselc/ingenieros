@@ -21,7 +21,7 @@
         return false;
     };
     function confirmar(f,um){
-        var s="¿Seguro que desea eliminar el personal: ";
+        var s="¿Seguro que desea eliminar: ";
         var s1= s.concat(um,"?");
         var r=confirm(s1);
         if (r==true)

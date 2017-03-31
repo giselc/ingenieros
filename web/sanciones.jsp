@@ -4,6 +4,8 @@
     Author     : Gisel
 --%>
 
+<%@page import="Classes.Tipo"%>
+<%@page import="Classes.RecordSancionados"%>
 <%@page import="Manejadores.ManejadorCodigos"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
@@ -11,13 +13,50 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="Manejadores.ManejadorPersonal"%>
 <!DOCTYPE html>
+
 <%
+
     if(request.getParameter("id")!=null){
         int ci=Integer.valueOf(request.getParameter("id"));
         ManejadorPersonal mp = new ManejadorPersonal();
+        java.util.Date hoy = new java.util.Date(); 
+        String m="";
+        if(hoy.getMonth()+1 <= 9 ){
+            m= "0"+(hoy.getMonth()+1);
+        }
+        String d="";
+        if(hoy.getDate() <= 9 ){
+            d= "0"+(hoy.getDate());
+        }
+        String fecha= (hoy.getYear()+1900) +"-"+ m +"-"+hoy.getDate();
 %>
-<form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=sanciones&ci=<%=ci%>'>
-    
+
+    <div id='dialog1' style="display:none" title="Imprimir sanciones">
+        <form method="post" id="formulario2" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=sanciones&ci=<%=ci%>'>
+            <p>
+                <b>Desde:</b>
+                <input type="date" name="fechaDesde"/>
+            </p>
+            <p>
+                <b>Hasta:</b>
+                <input type="date" name="fechaHasta" <%out.print("value='"+fecha+"'");%> required="required"/>
+            </p>
+            <p>
+                <b>Tipo de Sanci&oacute;n:</b>
+                <select name="tipoSancion" form="formulario2">
+                    <%
+                    mc= new ManejadorCodigos();
+                    ArrayList<Tipo> at = mc.getTiposSanciones();
+                    out.print("<option selected value='TODOS'>TODOS</option>");
+                    for(Tipo t: at ){
+                        out.print("<option value='"+t.getId()+"'>"+ t.getDescripcion() +"</option>");
+                    }
+                    %>
+                </select>
+            </p>
+            <input type="submit" value="Imprimir"/>
+        </form>
+    </div>
     <table style="float: right">
         <tr>
             <td>
@@ -30,26 +69,39 @@
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Sanciones:</h3></td>
             <td style="width: 15%"><a href="sancion.jsp?ci=<%=ci%>" title="Agregar"><img width="30%" src='images/agregarLista.png' /></a> </td>
-            <td style="width: 15%"><input type="image" width="30%" title="Imprimir" src="images/imprimir.png" alt="Submit Form" /></td>
+            <td style="width: 15%"><img src="images/imprimir.png" width="30%" onclick="abrir_dialog(dialog1)" /> </td>
         </tr>
     </table>
-</form>    
+    
             <table  align='center'>
                 <tr>
-                    <td colspan="2" style="border: #000000 1px solid">
+                    <td colspan="3" style="border: #000000 1px solid">
                         Resumen de d&iacute;as por cumplir por tipo de sanci&oacute;n
                     </td>
                 </tr>
                 <%
-                    HashMap<Integer,Integer> listaSanciones = mp.getListaDiasPortipoSancion(ci);
-                    mc= new ManejadorCodigos();
-                    for (Map.Entry<Integer, Integer> entry : listaSanciones.entrySet()) {
-                        out.print("<tr>");
-                            out.print("<td style=\"border: #000000 1px solid\" width='50%'>");
-                                out.print(mc.getTipoSancion(entry.getKey()).getDescripcion());
+                    ArrayList<RecordSancionados> listaSanciones = mp.getListaDiasPortipoSancion(ci);
+                    out.print("<tr>");
+                            out.print("<td style=\"border: #000000 1px solid\" width='30%'>");
+                                out.print("Tipo");
                             out.print("</td>");
-                            out.print("<td style=\"border: #000000 1px solid\" width='50%'>");
-                                 out.print(entry.getValue());
+                            out.print("<td style=\"border: #000000 1px solid\" width='30%'>");
+                                 out.print("Días");
+                            out.print("</td>");
+                            out.print("<td style=\"border: #000000 1px solid\" width='30%'>");
+                                 out.print("Fecha inicial");
+                            out.print("</td>");
+                        out.print("</tr>");
+                    for (RecordSancionados entry : listaSanciones) {
+                        out.print("<tr>");
+                            out.print("<td style=\"border: #000000 1px solid\" width='30%'>");
+                                out.print(entry.tipo.getDescripcion());
+                            out.print("</td>");
+                            out.print("<td style=\"border: #000000 1px solid\" width='30%'>");
+                                 out.print(entry.dias);
+                            out.print("</td>");
+                            out.print("<td style=\"border: #000000 1px solid\" width='30%'>");
+                                 out.print(entry.fecha);
                             out.print("</td>");
                         out.print("</tr>");
                     }

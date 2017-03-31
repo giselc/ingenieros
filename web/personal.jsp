@@ -15,6 +15,14 @@
 %>
 
     <script>
+        function abrir_dialog(dialog) {
+          $( dialog ).dialog({
+              modal: true
+          });
+        };
+        function cerrar_dialog(dialog) {
+          $( dialog ).dialog('close');
+        };
          $(document).ready(function() {
                  $("#content div").hide();
                  $("#tabs li:first").attr("id","current");
@@ -30,7 +38,39 @@
              });
          })();
      </script>
-     <p align="left"><a href="s1-personal.jsp"><img src="images/atras.png" width="15%"/></a></p>
+    <div id='dialog2' style="display:none" title="Imprimir ficha personal">
+       <form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=personal&ci=<%=request.getParameter("id")%>'>
+           <p>
+               <b>Datos Basicos:</b>
+               <input type="checkbox" name="datosBasicos" checked="checked"/>
+           </p>
+           <p>
+               <b>Familiares:</b>
+               <input type="checkbox" name="familiares" checked="checked"/>
+           </p>
+           <p>
+               <b>Apoderado:</b>
+               <input type="checkbox" name="apoderado" checked="checked"/>
+           </p>
+           <p>
+               <b>Especialidades:</b>
+               <input type="checkbox" name="especialidades" checked="checked"/>
+           </p>
+           <input type="submit" value="Imprimir"/>
+       </form>
+    </div>
+           <table style="width: 100%">
+               <tr>
+                   <td>
+                       <p align="left"><a href="s1-personal.jsp"><img src="images/atras.png" width="20%"/></a></p>
+                   </td>
+                   <td>
+                       <img src="images/imprimir.png" width="20%" onclick="abrir_dialog(dialog2)" />
+                   </td>
+               </tr>
+           </table>
+     
+     
      <ul id="tabs">
         <li><a href="#" title="Datos-Personales">Datos Personales</a></li>
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Familiares">Familiares</a></li>
