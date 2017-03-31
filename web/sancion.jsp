@@ -39,7 +39,7 @@
         }
         if(ci!=-1){
             %>
-            <p align="left"><a href="personal.jsp?id=<%=ci%>"><img src="images/atras.png" width="15%"/></a></p>
+            <p align="left"><a <% if (request.getParameter("ci")!=null){out.print("href='personal.jsp?id="+ci+"'");}else{out.print("href='s1-sanciones.jsp'");}%>><img src="images/atras.png" width="15%"/></a></p>
             <%
             
         }

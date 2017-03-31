@@ -384,6 +384,11 @@ public class ManejadorPersonal {
     }
     public void imprimirSanciones(int idPersonal,String fechaDesde, String fechaHasta, int tipoSancion, PrintWriter out){
         ArrayList<Sancion> as = this.getSancionesListar(idPersonal, fechaDesde, fechaHasta, tipoSancion);
+        out.print("<h1 align='center'>Sanciones</h1>");
+        if(!fechaDesde.equals("")){
+            out.print("<h2 align='center'>Desde: "+fechaDesde+"</h2>");
+        }
+         out.print("<h2 align='center'>Hasta: "+fechaHasta+"</h2>");
         out.print("<table style=\"width: 100%;\">");
         out.print("<tr style='background-color:#ffcc66' align='center'>");
                 out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>A</h3></td>");
@@ -956,9 +961,275 @@ public class ManejadorPersonal {
     }
 
     public void imprimirPersonal(int ci, boolean basico, boolean familiar, boolean apoderado, boolean especialidades, PrintWriter out ){
+        try{
+            Personal p= this.getPersonalBasico(ci);
+            String foto="images/silueta.jpg";
+            if(p.getFoto()!=null){
+                Blob b= p.getFoto();
+                if (b!=null && (int)b.length()!= 0){
+                    byte[] by=b.getBytes(1,(int)b.length());
+                    String imgDataBase64=new String(Base64.getEncoder().encode(by));
+                    foto = "data:image/jpg;base64,"+imgDataBase64;
+
+                }
+            }
+            out.print("<h1 align='center'>FICHA PERSONAL</h1>");
+            out.print("<p align=\"center\"><img src="+foto+" style=\"width: 25%\" /></p>\n");
+            
         
+            if(basico){
+                imprimirDatosBasicos(p, out);
+            }
+            if(familiar){
+                imprimirFamiliares(ci, out);
+            }
+        }
+        catch(Exception e){
+            
+        }
     }
-    public void imprimirDatosBasicos(int ci){
+    public void imprimirDatosBasicos(Personal p, PrintWriter out) throws SQLException{
         
+            String datos =    "<h3 align='center'>DATOS BASICOS</h3>"+
+"               <table  width='50%' align='center' >\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>C.I.:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ p.getCi()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Grado:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ p.getGrado().getDescripcion()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                           <b>Nombre:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ p.getNombre()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Apellido:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ p.getApellido()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Unidad:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ p.getUnidadPerteneciente().getNombre()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>Fecha de Nacimiento:</b>\n" +
+"            </td>\n" +
+"            <td>\n" ;
+                    if(p.getFechaNac()!=null){
+                        datos+=p.getFechaNac();
+                     };
+                     datos+="</td>\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>Vencimiento C.I.:</b>\n" +
+"            </td>\n" +
+"            <td>\n" ;
+                    if(p.getVtoCI()!=null){
+                        datos+=p.getVtoCI();
+                     };
+                     datos+="</td>\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>Pasaporte:</b>\n" +
+"            </td>\n" +
+"            <td>\n" +
+"                "+ p.getPasaporte()+"\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>Vencimiento pasaporte:</b>\n" +
+"            </td>\n" +
+"            <td>\n" ;
+                    if(p.getVtoPas()!=null){
+                        datos+=p.getVtoPas();
+                     };
+                     datos+="</td>\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>C.C.:</b>\n" +
+"            </td>\n" +
+"            <td>\n" +
+"                "+ p.getCc()+"\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>C.C. Nro.:</b>\n" +
+"            </td>\n" +
+"            <td>\n" +
+"                "+ p.getCcNro()+"\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" ;
+        if(p.getLicenciaConducir()){
+            datos+="<td>\n" +
+"                <b>Licencia de Conducir</b>\n" +
+"            </td>\n" +
+"            <td>\n" +
+"                "+ p.getCatLicCond()+" "+p.getNroLicCond()+"\n" +
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>Vencimiento Licencia:</b>\n" +
+"            </td>\n" +
+"            <td>\n" ;
+                    if(p.getVtoLicCond()!=null){
+                        datos+=p.getLicenciaConducir();
+                     };
+                     datos+="</td>\n" +
+"        </tr>\n" ;
+        }
+        if(p.getCarneSalud()){
+            datos+="<tr>\n" +
+"            <td>\n" +
+"                <b>Vencimiento carn&eacute;:</b>\n" +
+"            </td>\n" +
+"            <td>\n" ;
+                    if(p.getVtoCarneSalud()!=null){
+                        datos+=p.getVtoCarneSalud();
+                     };
+                     datos+="</td>\n" +
+"            </td>\n" +
+"        </tr>\n" ;          
+        }
+
+        if(p.getExpMision()){
+            datos+="<tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <b>Lugar experiencia misi&oacuote;n:</b>\n" +
+"            </td>\n" +
+"            <td>\n" +
+"                 "+ p.getLugarExpMision()+"\n" +
+"            </td>\n" +
+"        </tr>\n";                    
+        }
+
+        datos+="</table> <h1 style='page-break-after:always' > </h1>";
+
+        out.print(datos);
+    }
+    public void imprimirFamiliares(int ci, PrintWriter out){
+        ArrayList<Familiar> af= this.getFamiliares(ci);
+        String datos =    "<h3 align='center'>FAMILIARES</h3>";
+        for(Familiar f: af){
+            datos+="<table  width='50%' align='center' >\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Vínculo:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getTipo().getDescripcion()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>C.I.:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getCi()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                           <b>Nombre:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getNombre()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Apellido:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getApellido()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Edad:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getEdad()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +    
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Domicilio:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getDomicilio()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +        
+
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Ocupacion:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getOcupacion()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Teléfono:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getTelefono()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +
+
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>Celular:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+ f.getCelular()+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" ;
+            if(f.getDiscapacidad()){
+                datos+="<tr><td>\n" +
+"                <b>Discapacidad:</b>\n" +
+"            </td>\n" +
+"            <td>\n" +
+"                "+ f.getDescDiscapacidad()+"\n" +
+"            </td>\n" +
+"        </tr>\n" ;
+                datos+="</table> <h1 style='page-break-after:always' > </h1>";
+            }
+        }
+        out.print(datos);
     }
 }

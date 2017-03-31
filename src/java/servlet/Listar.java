@@ -69,7 +69,7 @@ public class Listar extends HttpServlet {
                                 tipoSancion = Integer.valueOf(request.getParameter("tipoSancion"));
                             }
                             mp.imprimirSanciones(ci, request.getParameter("fechaDesde"), request.getParameter("fechaHasta"), tipoSancion,out);
-                            
+                            mp.CerrarConexionManejador();
                         }
                         if(tipo.equals("personal")){
                             int ci=Integer.valueOf(request.getParameter("ci"));
@@ -77,7 +77,9 @@ public class Listar extends HttpServlet {
                             boolean familiares=request.getParameter("familiares")!=null;
                             boolean apoderado=request.getParameter("apoderado")!=null;
                             boolean especialidades=request.getParameter("especialidades")!=null;
-                            
+                            ManejadorPersonal mp = new ManejadorPersonal();
+                            mp.imprimirPersonal(ci, basico, familiares, apoderado, especialidades, out);
+                            mp.CerrarConexionManejador();
                             
                         }
                     }
