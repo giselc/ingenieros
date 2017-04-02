@@ -11,6 +11,7 @@ import Classes.Documento;
 import Classes.Especialidad;
 import Classes.Familiar;
 import Classes.Personal;
+import Classes.RecordListarPersonal;
 import Classes.RecordPersonal;
 import Classes.RecordRecalculo;
 import Classes.RecordSancionados;
@@ -535,7 +536,6 @@ public class ManejadorPersonal {
 
         return false;
     }
-   
     public boolean eliminarSancion(int id){
         try {
             Sancion s = this.getSancion(id);
@@ -579,6 +579,7 @@ public class ManejadorPersonal {
         }
         return false;
     }
+    
     //documentos
     public ArrayList<Documento> getDocumentosListar(int idPersonal){ //sin la imagen
         ArrayList<Documento> as= new ArrayList<>();
@@ -715,10 +716,8 @@ public class ManejadorPersonal {
         }
         return false;
     }
-//APODERADOOO
     
-    //retorna una Apoderado con los datos obtenidos y persiste en la base de datos la relacion apoderado-personal
-    //retorna null si se produce algun error en la escritura de la base de datos.
+    //APODERADOOO
     public boolean crearApoderado(int ciPersonal, int ci,String nombres, String apellidos,int idvinculo,String domicilio,String celular,String telefono){
         try {
             Statement s= connection.createStatement();
@@ -746,10 +745,6 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    
-    //retorna el apoderado que tiene la relacion apoderado-personal segun los parametros
-    //retorna null si no hay relacion
-    //retorna null si se produjo un error con la base de datos
     public Apoderado getApoderado(int ciPersonal){
         try {
             Statement s= connection.createStatement();
@@ -781,8 +776,6 @@ public class ManejadorPersonal {
         }
         return null;
     }
-    
-    //modifica atributos de un apoderado y su vinculo con idPersonal
     public boolean modificarApoderado(int idPersonal, Apoderado apod){
         try {
             Statement s= connection.createStatement();
@@ -794,12 +787,6 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    
-    //desvincula el apoderado con ci=idApod con el personal con ci=idPersonal
-    //los datos del apoderado son eliminados de la base de datos si no hay ningun otro vinculo con idApod
-    //retorna 0 si se produjo error con base de datos
-    // 1 si se desvinculo y no se borro los datos
-    // 2 si se desvinculo y se borro los datos 
     public int desvincularApoderado(int idPersonal, int idApod){
         try {
             Statement s= connection.createStatement();
@@ -831,8 +818,7 @@ public class ManejadorPersonal {
         }
     }
     
-    
-    //familiares
+    //FAMILIARES
     public ArrayList<Familiar> getFamiliares(int ciPersonal){
         ArrayList<Familiar> as= new ArrayList<>();
         try {
@@ -960,6 +946,7 @@ public class ManejadorPersonal {
         return false;
     }
 
+    //IMPRESIONES
     public void imprimirPersonal(int ci, boolean basico, boolean familiar, boolean apoderado, boolean especialidades, PrintWriter out ){
         try{
             Personal p= this.getPersonalBasico(ci);
@@ -982,6 +969,12 @@ public class ManejadorPersonal {
             }
             if(familiar){
                 imprimirFamiliares(ci, out);
+            }
+            if(apoderado){
+                imprimirApoderado(ci, out);
+            }
+            if(especialidades){
+                imprimirEspecialidades(ci, out);
             }
         }
         catch(Exception e){
@@ -1142,6 +1135,9 @@ public class ManejadorPersonal {
     public void imprimirFamiliares(int ci, PrintWriter out){
         ArrayList<Familiar> af= this.getFamiliares(ci);
         String datos =    "<h3 align='center'>FAMILIARES</h3>";
+        if(af.size()==0){
+            datos +=    "<h4 align='center'>No hay datos ingresados en el sistema.</h4>";
+        }
         for(Familiar f: af){
             datos+="<table  width='50%' align='center' >\n" +
 "                    <tr>\n" +
@@ -1230,6 +1226,96 @@ public class ManejadorPersonal {
                 datos+="</table> <h1 style='page-break-after:always' > </h1>";
             }
         }
+        if(af.size()==0){
+            datos+="</table> <h1 style='page-break-after:always' > </h1>";
+        }
         out.print(datos);
+    }
+    public void imprimirApoderado(int ciPersonal, PrintWriter out){
+        Apoderado a= this.getApoderado(ciPersonal);
+        
+        if(a!=null){
+        String datos =    "<h3 align='center'>APODERADO</h3>"+
+        "<table  width='50%' align='center' >\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>V&iacute;nculo:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" + a.getVinculo().getDescripcion()+
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>C.I.:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" +
+                a.getCi()+
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>Nombres:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" +
+                a.getNombre()+
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>Apellidos:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" +
+                a.getApellido()+
+"            </td>\n" +
+"        </tr>\n" +
+"        \n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>Domicilio:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" +
+                a.getDomicilio()+
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>Tel&eacute;fono:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" +
+                a.getTelefono()+
+"            </td>\n" +
+"        </tr>\n" +
+"        <tr>\n" +
+"            <td>\n" +
+"                <p><b>Celular:</b></p>\n" +
+"            </td>\n" +
+"            <td>\n" +
+                a.getCelular()+
+"            </td>\n" +
+"        </tr>\n" +
+"    </table>";
+        out.print(datos);
+        }
+    }
+    public void imprimirEspecialidades(int ciPersonal, PrintWriter out){
+        ArrayList<Especialidad> ae= this.getEspecialidadesListar(ciPersonal);
+        String datos =    "<h3 align='center'>ESPECIALIDADES</h3>";
+        if(ae.size()==0){
+            datos +=    "<h4 align='center'>No hay datos ingresados en el sistema.</h4>";
+        }
+        datos+="<table  width='50%' align='center' >\n" ;
+
+        for(Especialidad e : ae){
+datos+="                        <tr>\n" +
+"                            <td>\n" +
+                e.getDescripcion()+
+"                            </td>\n" +
+"                        </tr>\n";
+        }
+        datos+= "</table>  \n" ;
+        out.print(datos);
+    }
+    public void imprimirTodoElPersonal(RecordListarPersonal rl,PrintWriter out){
+        ArrayList<Personal> ap = this.getListaPersonalBasico();
     }
 }

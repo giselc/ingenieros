@@ -92,6 +92,5 @@
     else{
          response.sendRedirect("");
     }
-
 %>
 <%@ include file="footer.jsp" %>

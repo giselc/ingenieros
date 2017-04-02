@@ -17,7 +17,13 @@
 
 <script>
     function listar(form) {//Funcion creada para no perder la sesion luego del submit
-        form.submit();
+        if(document.getElementById("nombreCompleto").checked || document.getElementById("ci").checked){
+            form.submit();
+            return false;
+        }
+        else{
+            alert("Debe seleccionar nombre y/o cédula.")
+        }
         return false;
     };
     function confirmar(f,um){
@@ -45,7 +51,77 @@
         }
     };
 </script>
-<form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=personal'>
+<script>
+        function abrir_dialog(dialog) {
+          $( dialog ).dialog({
+              modal: true
+          });
+        };
+        function cerrar_dialog(dialog) {
+          $( dialog ).dialog('close');
+        };
+         $(document).ready(function() {
+                 $("#content div").hide();
+                 $("#tabs li:first").attr("id","current");
+                 $("#content div:first").fadeIn();
+                 $("#loader").fadeOut();
+             $('#tabs a').click(function(e) {
+                 document.getElementById("mensaje").innerHTML="";
+                 e.preventDefault();
+                 $("#content div").hide();
+                 $("#tabs li").attr("id","");
+                 $(this).parent().attr("id","current");
+                 $('#' + $(this).attr('title')).fadeIn();
+             });
+         })();
+     </script>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<div id='dialog2' style="display:none" title="Imprimir personal">
+    <form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=todoElPersonal'>
+        <p>
+            <b>Nombre Completo:</b>
+            <input type="checkbox" id="nombreCompleto" name="nombreCompleto" checked="checked"/>
+        </p>
+        <p>
+            <b>CI</b>
+            <input type="checkbox" id="ci" name="CI" checked="checked"/>
+            <b>Vto.:</b>
+            <input type="checkbox" name="vtoCI" checked="checked"/>
+        </p>
+        <p>
+            <b>Fecha de Nacimiento:</b>
+            <input type="checkbox" name="fechaNac" checked="checked"/>
+        </p>
+        <p>
+            <b>Pasaporte:</b>
+            <input type="checkbox" name="pasaporte" checked="checked"/>
+            <b>Vto.:</b>
+            <input type="checkbox" name="vtoPas" checked="checked"/>
+        </p>
+         <p>
+            <b>Credencial:</b>
+            <input type="checkbox" name="credencial" checked="checked"/>
+        </p>
+        <p>
+            <b>Misiones anteriores:</b>
+            <input type="checkbox" name="misiones" checked="checked"/>
+        </p>
+        <p>
+            <b>Licencia de Conducir:</b>
+            <input type="checkbox" name="licencia" checked="checked"/>
+            <b>Vto.:</b>
+            <input type="checkbox" name="vtoLic" checked="checked"/>
+        </p>
+        <p>
+            <b>Carné de Salud:</b>
+            <input type="checkbox" name="carneSalud" checked="checked"/>
+            <b>Vto.:</b>
+            <input type="checkbox" name="vtoCarne" checked="checked"/>
+        </p>
+        <input type="submit" value="Imprimir"/>
+    </form>
+ </div>
     
     <table style="float: right">
         <tr>
@@ -60,10 +136,9 @@
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Personal:</h3></td>
             <td style="width: 15%"><a href="index2.jsp"><img src="images/atras.png" width="100%"/></a></td>
             <td style="width: 15%"><a href="personal.jsp" title="Agregar personal"><img width="30%" src='images/agregarLista.png' /></a> </td>
-            <td style="width: 15%"><input type="image" width="30%" title="Imprimir personal"src="images/imprimir.png" alt="Submit Form" /></td>
+            <td style="width: 15%"><img src="images/imprimir.png" width="30%" onclick="abrir_dialog(dialog2)" /></td>
         </tr>
     </table>
-</form>    
     <table style="width: 100%;">
             <%
                 ManejadorPersonal  mc = new ManejadorPersonal();

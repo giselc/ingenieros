@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import Classes.RecordListarPersonal;
 import Manejadores.ManejadorClases;
 import Manejadores.ManejadorCodigos;
 import Manejadores.ManejadorPersonal;
@@ -81,6 +82,26 @@ public class Listar extends HttpServlet {
                             mp.imprimirPersonal(ci, basico, familiares, apoderado, especialidades, out);
                             mp.CerrarConexionManejador();
                             
+                        }
+                        else{
+                            if(tipo.equals("todoElPersonal")){
+                                RecordListarPersonal rl= new RecordListarPersonal();
+                                rl.nombreCompleto = request.getParameter("nombreCompleto")!=null;
+                                rl.carneSalud = request.getParameter("carneSalud")!=null;
+                                rl.ciVto = request.getParameter("ciVto")!=null;
+                                rl.ci = request.getParameter("ci")!=null;
+                                rl.credencial = request.getParameter("credencial")!=null;
+                                rl.fechaNac = request.getParameter("fechaNac")!=null;
+                                rl.liciencia = request.getParameter("licencia")!=null;
+                                rl.misiones = request.getParameter("misiones")!=null;
+                                rl.pasaporte = request.getParameter("pasaporte")!=null;
+                                rl.vtoCarne = request.getParameter("vtoCarne")!=null;
+                                rl.vtoLic = request.getParameter("vtoLic")!=null;
+                                rl.vtoPas = request.getParameter("vtoPas")!=null;
+                                ManejadorPersonal mp = new ManejadorPersonal();
+                                mp.imprimirTodoElPersonal(rl, out);
+                                mp.CerrarConexionManejador();
+                            }
                         }
                     }
                 }

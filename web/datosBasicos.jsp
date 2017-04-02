@@ -339,7 +339,7 @@ else{
         </tr>
         <tr id="lugarExpMision" <% if ((p!=null && !p.getExpMision())||(p==null)){out.print("style='display: none'");}%>>
             <td>
-                <p  style="color: #333333"><b>Lugar experiencia:</b></p>
+                <p  style="color: #333333"><b>Misiones anteriores:</b></p>
             </td>
             <td>
                 <input type=text  name="lugarExpMision" <%if( p!=null){out.print("value='"+p.getLugarExpMision()+"'");} %> />
