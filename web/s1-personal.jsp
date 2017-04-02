@@ -85,9 +85,9 @@
         </p>
         <p>
             <b>CI</b>
-            <input type="checkbox" id="ci" name="CI" checked="checked"/>
+            <input type="checkbox" id="ci" name="ci" checked="checked"/>
             <b>Vto.:</b>
-            <input type="checkbox" name="vtoCI" checked="checked"/>
+            <input type="checkbox" name="ciVto" checked="checked"/>
         </p>
         <p>
             <b>Fecha de Nacimiento:</b>

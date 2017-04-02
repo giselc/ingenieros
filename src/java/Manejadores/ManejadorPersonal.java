@@ -1317,5 +1317,124 @@ datos+="                        <tr>\n" +
     }
     public void imprimirTodoElPersonal(RecordListarPersonal rl,PrintWriter out){
         ArrayList<Personal> ap = this.getListaPersonalBasico();
+        String datos="<h3 align='center'>PERSONAL DEL SISTEMA</h3>";
+        datos+="<table style=\"width: 100%;\">"+
+        "<tr style='background-color:#ffcc66'>";
+        if(rl.nombreCompleto){
+            datos+="<td align='center'><h3 style='margin:2%;'>Nombre Completo</h3></td>";
+        }
+        if(rl.ci){
+            datos+="<td align='center'><h3 style='margin:2%;'>CI</h3></td>";
+        }
+        if(rl.ciVto){
+            datos+="<td align='center'><h3 style='margin:2%;'>Vto. CI</h3></td>";
+        }
+        if(rl.fechaNac){
+            datos+="<td align='center'><h3 style='margin:2%;'>Fecha Nac.</h3></td>";
+        }
+        if(rl.pasaporte){
+            datos+="<td align='center'><h3 style='margin:2%;'>Pasaporte</h3></td>";
+        }
+        if(rl.vtoPas){
+            datos+="<td align='center'><h3 style='margin:2%;'>Vto. Pas</h3></td>";
+        }
+        if(rl.credencial){
+            datos+="<td align='center'><h3 style='margin:2%;'>Credencial</h3></td>";
+        }
+        if(rl.liciencia){
+            datos+="<td align='center'><h3 style='margin:2%;'>Lic. Conducir</h3></td>";
+        }
+        if(rl.vtoLic){
+            datos+="<td align='center'><h3 style='margin:2%;'>Vto. Licencia</h3></td>";
+        }
+        if(rl.carneSalud){
+            datos+="<td align='center'><h3 style='margin:2%;'>Carné de Salud</h3></td>";
+        }
+        if(rl.vtoCarne){
+            datos+="<td align='center'><h3 style='margin:2%;'>Vto. Carné</h3></td>";
+        }
+        if(rl.misiones){
+            datos+="<td align='center'><h3 style='margin:2%;'>Misiones Ant.</h3></td>";
+        }
+        datos+="</tr>";
+        int i=0;
+        String color;
+        for (Personal p: ap){
+            if ((i%2)==0){
+                color=" #ccccff";
+            }
+            else{
+                color=" #ffff99";
+            }
+            i++;
+
+            datos+="<tr style='background-color:"+color+"'>";
+            if(rl.nombreCompleto){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+this.obtenerNombreCompleto(p)+"</h3></td>";
+            }
+            if(rl.ci){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+p.getCi()+"</h3></td>";
+            }
+            if(rl.ciVto){
+                datos+="<td align='center'><h3 style='margin:2%;'>";
+                if(p.getVtoCI()!=null){
+                    datos+=p.getVtoCI();
+                }
+                datos+="</h3></td>";
+            }
+            if(rl.fechaNac){
+                datos+="<td align='center'><h3 style='margin:2%;'>";
+                if(p.getFechaNac()!=null){
+                    datos+=p.getFechaNac();
+                }
+                datos+="</h3></td>";
+            }
+            if(rl.pasaporte){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+p.getPasaporte()+"</h3></td>";
+            }
+            if(rl.vtoPas){
+                datos+="<td align='center'><h3 style='margin:2%;'>";
+                if(p.getVtoPas()!=null){
+                    datos+=p.getVtoPas();
+                }
+                datos+="</h3></td>";
+            }
+            if(rl.credencial){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+p.getCc()+" "+p.getCcNro()+"</h3></td>";
+            }
+            if(rl.liciencia){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+p.getNroLicCond()+"</h3></td>";
+            }
+            if(rl.vtoLic){
+                datos+="<td align='center'><h3 style='margin:2%;'>";
+                if(p.getVtoLicCond()!=null){
+                    datos+=p.getVtoLicCond();
+                }
+                datos+="</h3></td>";
+            }
+            if(rl.carneSalud){
+                datos+="<td align='center'><h3 style='margin:2%;'>";
+                if(p.getCarneSalud()){
+                    datos+="S";
+                }
+                else{
+                    datos+="N";
+                }
+                datos+="</h3></td>";
+            }
+            if(rl.vtoCarne){
+                datos+="<td align='center'><h3 style='margin:2%;'>";
+                if(p.getVtoCarneSalud()!=null){
+                    datos+=p.getVtoCarneSalud();
+                }
+                datos+="</h3></td>";
+            }
+            if(rl.misiones){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+p.getLugarExpMision()+"</h3></td>";
+            }
+            datos+="</tr>";
+        }
+        datos+="</table>";
+        out.print(datos);
     }
 }
