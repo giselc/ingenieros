@@ -342,7 +342,7 @@ else{
                 <p  style="color: #333333"><b>Misiones anteriores:</b></p>
             </td>
             <td>
-                <input type=text  name="lugarExpMision" <%if( p!=null){out.print("value='"+p.getLugarExpMision()+"'");} %> />
+                <textarea rows="4" cols="50" name="lugarExpMision" form="formulario"><%if( p!=null){out.print(p.getLugarExpMision());} %></textarea>
             </td>
         </tr>
     </table>

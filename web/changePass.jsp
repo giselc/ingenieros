@@ -24,6 +24,10 @@
             <td>
                 <form method="post" action="Usuario?pass=<%= request.getParameter("id") %>" onsubmit="return validarContrasena(this);">
                     <table>
+                        <% 
+                            if(!u.isAdmin()){
+
+                        %>
                         <tr>
                             <td>
                                 <p><b>Contrase&ntilde;a anterior:</b></p>
@@ -32,6 +36,10 @@
                                 <p align="center"><input name="contraAnt" type="password" /></p>
                             </td>
                         </tr>
+                        <% 
+                            }
+
+                        %>
                         <tr>
                             <td>
                                 <p><b>Nueva contrase&ntilde;a:</b></p>

@@ -5,10 +5,6 @@
 --%>
 
 <%@ include file="header.jsp" %>
-<% 
-    if(u.isAdmin()){
-
-%>
 <style type="text/css">
                         
 			.nav2 > li {
@@ -55,7 +51,14 @@
 			}
 			
     </style> 
+    <p id="mensaje" style="color: #990000"><% if(session.getAttribute("mensaje")!=null){out.print("<img src='images/icono-informacion.png' width='3%' /> &nbsp;&nbsp;"+session.getAttribute("mensaje"));}%></p>
+            <%
+                session.setAttribute("mensaje",null);
+            %>
 <ul  class="nav2" style="text-align: center; width: 100%; padding-left:12%">
+    <%
+        if(u.isAdmin() || u.isS1()){
+    %>
         <li style="width: 25%">
             <a><img src="images/button_s1.png" width="80%" /></a>
             <ul>
@@ -65,11 +68,22 @@
                 <li>
                     <a href="s1-sanciones.jsp">Sanciones</a>
                 </li>
+                <li>
+                    <a href="s1-historiaClinica.jsp">Consultas M&eacute;dicas</a>
+                </li>
             </ul>
         </li>
+    <%
+        }
+        if(u.isAdmin() || u.isS4()){
+    %>
         <li style="width: 25%">
             <a href="s4.jsp"><img src="images/button_s4.png" width="80%" /></a>
         </li>
+    <%
+        }
+        if(u.isAdmin()){
+    %>
         <li style="width: 25%">
             <a><img src="images/CONFIG.png" width="80%" /></a>
             <ul>
@@ -99,12 +113,8 @@
                 </li>
             </ul>
         </li>
+        <%
+        }
+        %>
 </ul>
-<% 
-    }
-    else{
-         response.sendRedirect("");
-    }
-
-%>
 <%@ include file="footer.jsp" %>

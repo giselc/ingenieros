@@ -78,6 +78,7 @@
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Especialidades">Especialidades</a></li>
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Documentos">Documentos</a></li>
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Sanciones">Sanciones</a></li>
+        <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="HistoriaClinica">Historia Cl&iacute;nica</a></li>
     </ul>
     <div id="content">
          <div id="Datos-Personales"><%@include file="datosBasicos.jsp" %></div>
@@ -86,6 +87,7 @@
          <div id="Apoderado"><%@include file="apoderado.jsp" %></div>
          <div id="Especialidades"><%@include file="especialidades.jsp" %></div>
          <div id="Sanciones"><%@include file="sanciones.jsp" %></div>
+         <div id="HistoriaClinica"><%@include file="historiaClinica.jsp" %></div>
      </div>
 <% 
     }

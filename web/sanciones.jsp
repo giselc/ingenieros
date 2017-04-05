@@ -15,20 +15,20 @@
 <!DOCTYPE html>
 
 <%
-
+    java.util.Date hoy = new java.util.Date(); 
+    String m=""+hoy.getMonth()+1;
+    if(hoy.getMonth()+1 <= 9 ){
+        m= "0"+(hoy.getMonth()+1);
+    }
+    String d=""+hoy.getDate();
+    if(hoy.getDate() <= 9 ){
+        d= "0"+(hoy.getDate());
+    }
+    String fecha= (hoy.getYear()+1900) +"-"+ m +"-"+d;
     if(request.getParameter("id")!=null){
         int ci=Integer.valueOf(request.getParameter("id"));
         ManejadorPersonal mp = new ManejadorPersonal();
-        java.util.Date hoy = new java.util.Date(); 
-        String m="";
-        if(hoy.getMonth()+1 <= 9 ){
-            m= "0"+(hoy.getMonth()+1);
-        }
-        String d="";
-        if(hoy.getDate() <= 9 ){
-            d= "0"+(hoy.getDate());
-        }
-        String fecha= (hoy.getYear()+1900) +"-"+ m +"-"+hoy.getDate();
+        
 %>
 
     <div id='dialog1' style="display:none" title="Imprimir sanciones">
@@ -121,7 +121,9 @@
                             out.print("<td style='width: 5%' align='center'><h3 style='margin:2%;'>Dias</h3></td>");
                             out.print("<td style='width: 15%' align='center'><h3 style='margin:2%;'>Orden</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
-                            out.print("<td style='width: 10%' align='center'></td>");
+                            if(u.isAdmin()){
+                                out.print("<td style='width: 10%' align='center'></td>");
+                            }
                        out.print("</tr>" );
                 int i=0;
                 String color;
@@ -141,7 +143,9 @@
                     out.print("<td style='width: 5%' align='center'>"+s.getDias()+"</td>");
                     out.print("<td style='width: 15%' align='center'>"+s.getOrden().getGrado().getAbreviacion()+" "+s.getOrden().getNombre()+s.getOrden().getApellido()+"</td>");
                     out.print("<td style='width: 10%' align='center'><a href='sancion.jsp?id="+String.valueOf(s.getId())+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
-                    out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='Sancion?elim="+s.getId()+"&ci="+ci+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                   if(u.isAdmin()){
+                        out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='Sancion?elim="+s.getId()+"&ci="+ci+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                    }
                     out.print("</tr>");
                 }
             %> 

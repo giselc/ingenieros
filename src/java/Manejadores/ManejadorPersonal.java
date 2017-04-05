@@ -10,6 +10,7 @@ import Classes.ConexionBD;
 import Classes.Documento;
 import Classes.Especialidad;
 import Classes.Familiar;
+import Classes.ConsultaMedica;
 import Classes.Personal;
 import Classes.RecordListarPersonal;
 import Classes.RecordPersonal;
@@ -17,6 +18,8 @@ import Classes.RecordRecalculo;
 import Classes.RecordSancionados;
 import Classes.Sancion;
 import Classes.Tipo;
+import Classes.TipoFamiliar;
+import com.sun.faces.util.CollectionsUtils;
 import java.io.PrintWriter;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -31,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -288,6 +290,14 @@ public class ManejadorPersonal {
         if(diasCumplidos!=0 && (hoy.getHours())<=18){
             diasCumplidos--;
         }
+        return diasCumplidos;
+    }
+    public int diferenciasDiasDesdeHoy2(Date s, Time h) {
+        final int MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
+        java.util.Date hoy = new java.util.Date();
+        long deltaDays = ( hoy.getTime() - s.getTime())/MILLSECS_PER_DAY;
+        int diasCumplidos =(int)deltaDays;
+        //System.out.println(diasCumplidos+ " " +(diasCumplidos!=0 && (hoy.getHours())>18));
         return diasCumplidos;
     }
     public ArrayList<RecordSancionados> getListaDiasPortipoSancion(int idPersonal){
@@ -580,7 +590,136 @@ public class ManejadorPersonal {
         return false;
     }
     
-    //documentos
+    //historial clinico
+    public ConsultaMedica getConsultaMedica(int id){
+        try {
+            String sql= "Select * from historiaclinica where id="+id;
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            ConsultaMedica h;
+            while(rs.next()){
+                h=new ConsultaMedica(rs.getInt("id"),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getDate("fechaInicio"),rs.getDate("fechaFin"),rs.getString("diagnostico"),this.getPersonalBasico(rs.getInt("idMedico")),rs.getString("tratamiento"));
+                return h;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public HashMap<Integer,ArrayList<ConsultaMedica>> getHistoriaClinica(int idPersonal){
+        HashMap<Integer,ArrayList<ConsultaMedica>> hm = new HashMap<>();
+        ArrayList<ConsultaMedica> ah1= new ArrayList<>();
+        ArrayList<ConsultaMedica> ah2= new ArrayList<>();
+        try {
+            String id="";
+            if(idPersonal!=-1){
+                id= "where idPersonal="+idPersonal;
+            }
+            String sql= "Select * from historiaclinica "+id+" order by fechaInicio desc";
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            ConsultaMedica h;
+            while(rs.next()){
+                h=new ConsultaMedica(rs.getInt("id"),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getDate("fechaInicio"),rs.getDate("fechaFin"),rs.getString("diagnostico"),this.getPersonalBasico(rs.getInt("idMedico")),rs.getString("tratamiento"));
+                if(diferenciasDiasDesdeHoy2(rs.getDate("fechaInicio"), null)>=0 && diferenciasDiasDesdeHoy2(rs.getDate("fechaFin"), null)<=0){
+                    ah1.add(h);
+                }
+                else{
+                    ah2.add(h);
+                }
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        hm.put(1, ah1);
+        hm.put(2, ah2);
+        return hm;
+    }
+    public HashMap<Integer,ArrayList<ConsultaMedica>> getHistoriaClinicaListar(int idPersonal,String fechaDesde, String fechaHasta){
+        HashMap<Integer,ArrayList<ConsultaMedica>> hm= new HashMap<>();
+        ArrayList<ConsultaMedica> ah1= new ArrayList<>();
+        ArrayList<ConsultaMedica> ah2= new ArrayList<>();
+        try {
+            String id="";
+            if(idPersonal!=-1){
+                id="idPersonal="+idPersonal+" and ";
+            }
+            String fecha="";
+            if(!fechaDesde.equals("")){
+                fecha="fechaInicio>= '"+fechaDesde + "' and ";
+            }
+            String sql="Select * from historiaClinica where "+id+fecha+" fechaInicio<= '"+fechaHasta + "'  order by fechaInicio desc";     
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            ConsultaMedica h;
+            while(rs.next()){
+                h=new ConsultaMedica(rs.getInt("id"),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getDate("fechaInicio"),rs.getDate("fechaFin"),rs.getString("diagnostico"),this.getPersonalBasico(rs.getInt("idMedico")),rs.getString("tratamiento"));
+                if(diferenciasDiasDesdeHoy2(rs.getDate("fechaInicio"), null)>=0 && diferenciasDiasDesdeHoy2(rs.getDate("fechaFin"), null)<=0){
+                    ah1.add(h);
+                }
+                else{
+                    ah2.add(h);
+                }
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        hm.put(1, ah1);
+        hm.put(2, ah2);
+        return hm;
+    }
+    public boolean agregarConsultaMedica(int idPersonal, String fechaInicio, String fechaFin, String diagnostico, int idMedico, String tratamiento){
+        try {
+            String sql= "insert into historiaClinica (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) values(?,?,?,?,?,?)";
+            PreparedStatement s= connection.prepareStatement(sql);
+            s.setInt(1,idPersonal);
+            s.setString(2, fechaInicio);
+            s.setString(3, fechaFin);
+            s.setString(4, diagnostico);
+            s.setString(5, tratamiento);
+            s.setInt(6,idMedico);
+            int result = s.executeUpdate();
+            if(result>0){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarConsultaMedica(int id){
+        try {
+            Statement s= connection.createStatement();
+            String sql="delete from historiaClinica where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean modificarConsultaMedica(int id, int idPersonal, String fechaInicio, String fechaFin, String diagnostico, int idMedico, String tratamiento){
+        try {
+            String sql= "update historiaClinica set idPersonal=?, fechaInicio=?, fechaFin=?, diagnostico=?, tratamiento=?, idMedico=? where id="+id;
+            PreparedStatement s= connection.prepareStatement(sql);
+            s.setInt(1,idPersonal);
+            s.setString(2, fechaInicio);
+            s.setString(3, fechaFin);
+            s.setString(4, diagnostico);
+            s.setString(5, tratamiento);
+            s.setInt(6,idMedico);
+            int result = s.executeUpdate();
+            if(result>0){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+//documentos
     public ArrayList<Documento> getDocumentosListar(int idPersonal){ //sin la imagen
         ArrayList<Documento> as= new ArrayList<>();
         try {
@@ -736,7 +875,6 @@ public class ManejadorPersonal {
             if(i>0){
                 sql="update personal set idApoderado="+ci+", idVinculo="+idvinculo+" where ci="+ciPersonal;
                 i = s.executeUpdate(sql);
-                ManejadorCodigos mc= new ManejadorCodigos();
                 return i>0;
             }
             
@@ -755,7 +893,9 @@ public class ManejadorPersonal {
                 if(rs.getInt("ci")==0){
                     return null;
                 }
-                return new Apoderado(rs.getInt("ci"), rs.getString("nombres"), rs.getString("apellidos"), mc.getTipoFamiliar(rs.getInt("idVinculo")), rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
+                TipoFamiliar tf = mc.getTipoFamiliar(rs.getInt("idVinculo"));
+                mc.CerrarConexionManejador();
+                return new Apoderado(rs.getInt("ci"), rs.getString("nombres"), rs.getString("apellidos"), tf, rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
@@ -768,7 +908,6 @@ public class ManejadorPersonal {
             String sql="Select * from apoderados where ci="+ciApoderado;
             ResultSet rs= s.executeQuery(sql);
             if (rs.next()){
-                ManejadorCodigos mc= new ManejadorCodigos();
                 return new Apoderado(rs.getInt("ci"), rs.getString("nombres"), rs.getString("apellidos"), null, rs.getString("domicilio"), rs.getString("celular"), rs.getString("telefono"));
             }
         } catch (SQLException ex) {
@@ -828,7 +967,9 @@ public class ManejadorPersonal {
             Familiar f;
             ManejadorCodigos mc = new ManejadorCodigos();
             while(rs.next()){
-                f=new Familiar(rs.getInt("ci"),mc.getTipoFamiliar(rs.getInt("idVinculo")),rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
+                TipoFamiliar tf = mc.getTipoFamiliar(rs.getInt("idVinculo"));
+                mc.CerrarConexionManejador();
+                f=new Familiar(rs.getInt("ci"),tf,rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
                 as.add(f);
             }
         } catch (SQLException ex) {
@@ -845,12 +986,13 @@ public class ManejadorPersonal {
             ResultSet rs = s.executeQuery(sql);
             ManejadorCodigos mc = new ManejadorCodigos();
             if(rs.next()){
-                f=new Familiar(rs.getInt("ci"),mc.getTipoFamiliar(rs.getInt("idVinculo")),rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
+                TipoFamiliar tf = mc.getTipoFamiliar(rs.getInt("idVinculo"));
+                mc.CerrarConexionManejador();
+                f=new Familiar(rs.getInt("ci"),tf,rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return f;
     }
     public boolean modificarFamiliar(int ciPersonal, Familiar familiar){
@@ -904,7 +1046,6 @@ public class ManejadorPersonal {
             String sql= "Select * from familiares where ci="+ciFamiliar;
             Statement s= connection.createStatement();
             ResultSet rs = s.executeQuery(sql);
-            ManejadorCodigos mc = new ManejadorCodigos();
             if(rs.next()){
                 f=new Familiar(rs.getInt("ci"),null,rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
             }
@@ -933,11 +1074,10 @@ public class ManejadorPersonal {
                 i= s.executeUpdate(sql);
             }
             if(i>0){
-                    s= connection.createStatement();
-                    sql="insert into `personal-familiar` (idPersonal, idFamiliar, idVinculo) values ("+ciPersonal+","+ciFamiliar+","+idvinculo+")";
-                    i = s.executeUpdate(sql);
-                    return i>0;
-                }
+                sql="insert into `personal-familiar` (idPersonal, idFamiliar, idVinculo) values ("+ciPersonal+","+ciFamiliar+","+idvinculo+")";
+                i = s.executeUpdate(sql);
+                return i>0;
+            }
         }
         catch(SQLException ex){
             return false;
@@ -1436,5 +1576,78 @@ datos+="                        <tr>\n" +
         }
         datos+="</table>";
         out.print(datos);
+    }
+    public void imprimirHistoriaClinica(int idPersonal,String fechaDesde, String fechaHasta,PrintWriter out){
+        HashMap<Integer,ArrayList<ConsultaMedica>> hm= this.getHistoriaClinicaListar(idPersonal, fechaDesde, fechaHasta);
+        ArrayList<ConsultaMedica> a1 = hm.get(1);
+        ArrayList<ConsultaMedica> a2 = hm.get(2);
+        String datos="<h1 align='center'> Historia Clínica <h1>";
+        if(!fechaDesde.equals("")){
+            datos+= "        <h2 align='center'>Fecha Desde: "+fechaDesde+"</h2>";
+        }
+        if(!fechaHasta.equals("")){
+            datos+= "        <h2 align='center'>Fecha Hasta: "+fechaHasta+"</h2>";
+        }
+        datos+= "        <h2>Consultas activas:</h2>" +
+"    <table style=\"width: 100%;\">" +
+"       <tr style='background-color:#ffcc66'>" +
+    "       <td style='width: 10%' align='center'><h3 style='margin:2%;'>Paciente</h3></td>" +
+    "       <td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha Inicio</h3></td>" +
+    "       <td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha Fin</h3></td>" +
+    "       <td style='width: 20%' align='center'><h3 style='margin:2%;'>Diagnóstico</h3></td>" +
+    "       <td style='width: 10%' align='center'><h3 style='margin:2%;'>Médico</h3></td>" +
+    "       <td style='width: 20%' align='center'><h3 style='margin:2%;'>Tratamiento</h3></td>" +
+"      </tr>" ;
+                int i=0;
+                String color;
+                boolean imprimirSalto=true;
+                for (ConsultaMedica c: a1){
+                    if ((i%2)==0){
+                        color="#ccccff";
+                    }
+                    else{
+                        color="#ffff99";
+                    }
+                    i++;
+datos+="<tr style='background-color:"+color+"'>" +
+"                    <td style='width: 10%' align='center'>"+this.obtenerNombreCompleto(c.getIdPersonal())+"</td>" +
+"                    <td style='width: 10%' align='center'>"+c.getFechaInicio()+"</td>" +
+"                    <td style='width: 10%' align='center'>"+c.getFechaFin()+"</td>" +
+"                    <td style='width: 20%' align='center'>"+c.getDiagnostico()+"</td>" +
+"                    <td style='width: 10%' align='center'>"+this.obtenerNombreCompleto(c.getIdMedico())+"</td>" +
+"                    <td style='width: 20%' align='center'>"+c.getTratamiento()+"</td>" +
+"       </tr>" ;
+                }
+datos+="       </table>" +
+"              <h2>Historial de Consultas:</h2>" +
+"              <table style=\"width: 100%;\">" +
+"                   <tr style='background-color:#ffcc66'>" +
+"                        <td style='width: 10%' align='center'><h3 style='margin:2%;'>Paciente</h3></td>" +
+    "                    <td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha Inicio</h3></td>" +
+    "                    <td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha Fin</h3></td>" +
+    "                    <td style='width: 20%' align='center'><h3 style='margin:2%;'>Diagnóstico</h3></td>" +
+    "                    <td style='width: 10%' align='center'><h3 style='margin:2%;'>Médico</h3></td>" +
+    "                    <td style='width: 20%' align='center'><h3 style='margin:2%;'>Tratamiento</h3></td>" +
+"                   </tr>" ;
+
+               for (ConsultaMedica c: a2){
+                    if ((i%2)==0){
+                        color="#ccccff";
+                    }
+                    else{
+                        color="#ffff99";
+                    }
+                    i++;
+datos+="        <tr style='background-color:"+color+"'>"+
+"                    <td style='width: 10%' align='center'>"+this.obtenerNombreCompleto(c.getIdPersonal())+"</td>" +
+"                    <td style='width: 10%' align='center'>"+c.getFechaInicio()+"</td>" +
+"                    <td style='width: 10%' align='center'>"+c.getFechaFin()+"</td>" +
+"                    <td style='width: 20%' align='center'>"+c.getDiagnostico()+"</td>" +
+"                    <td style='width: 10%' align='center'>"+this.obtenerNombreCompleto(c.getIdMedico())+"</td>" +
+"                    <td style='width: 20%' align='center'>"+c.getTratamiento()+"</td>" +
+"               </tr>";
+               }
+datos+="    </table>";
+    out.print(datos);
     }
 }

@@ -78,7 +78,7 @@
                                     %></p>
                                 <form action="Logout" method="POST" style="font-size: 100%">
                                     <ul class="nav" style="padding: 0px;margin: 0px">
-                                        <li><a <% if(u.isAdmin()){out.print("href='index2.jsp'");}else{out.print("href=''");} %>><table><tr><td align="center"><img src="images/home.png" width="80%" /></td><td>Inicio</td></tr></table> </a></li>
+                                        <li><a href='index2.jsp'><table><tr><td align="center"><img src="images/home.png" width="80%" /></td><td>Inicio</td></tr></table> </a></li>
                                         <li><a > <table><tr><td align="center"><img src="images/menu.png" width="80%" /></td><td>Cuenta</td></tr></table> </a>
                                             <ul>
                                                         <li><a href="changePass.jsp?id=<%= u.getId() %>">Cambiar contrase&ntilde;a </a></li>
@@ -89,7 +89,7 @@
                                 </form>
                             </td>
                             <td style="width: 60%; vertical-align: top">
-                                <p align="center" ><img src="images/LOGO.png" title="INICIO" <% if(u.isAdmin()){out.print("onclick=location.href='/index2.jsp'");}else{out.print("onclick=location.href='/index.jsp'");} %> style="height: 15%; width: 100%"/></p>
+                                <p align="center" ><img src="images/LOGO.png" title="INICIO" onclick="location.href='/index2.jsp'" style="height: 15%; width: 100%"/></p>
                             </td>
                             
                             <td style="width: 20%">

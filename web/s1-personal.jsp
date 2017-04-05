@@ -150,7 +150,9 @@
                             out.print("<td style='width: 35%' align='center'><h3 style='margin:2%;'>Apellidos</h3></td>");
                             out.print("<td style='width: 15%' align='center'><h3 style='margin:2%;'>CI</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
-                            out.print("<td style='width: 10%' align='center'></td>");
+                            if(u.isAdmin()){
+                                out.print("<td style='width: 10%' align='center'></td>");
+                            }
                        out.print("</tr>" );
                 int i=0;
                 String color;
@@ -169,7 +171,9 @@
                     out.print("<td style='width: 30%' align='center'>"+u1.getApellido()+"</td>");
                     out.print("<td style='width: 15%' align='center'>"+u1.getCi()+"</td>");
                     out.print("<td style='width: 10%' align='center'><a href='personal.jsp?id="+String.valueOf(u1.getCi())+"'><img src='images/ver.png' width='25%' /></a></td>");
-                    out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'"+u1.getNombre()+"')\" action='Personal?elim="+u1.getCi()+"'><input type='image' width='25%' title='Eliminar personal' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                    if(u.isAdmin()){
+                        out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'"+u1.getNombre()+"')\" action='Personal?elim="+u1.getCi()+"'><input type='image' width='25%' title='Eliminar personal' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                    }
                     out.print("</tr>");
                 }
             %> 

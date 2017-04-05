@@ -52,6 +52,10 @@
         <servlet-name>Familiar</servlet-name>
         <servlet-class>servlet.Familiar</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ConsultaMedica</servlet-name>
+        <servlet-class>servlet.ConsultaMedica</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -103,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>Familiar</servlet-name>
         <url-pattern>/Familiar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConsultaMedica</servlet-name>
+        <url-pattern>/ConsultaMedica</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

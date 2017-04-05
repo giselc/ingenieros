@@ -123,9 +123,9 @@ public class ManejadorClases {
     
     //retorna false si 'creador' no es admin(o no es contrasena propia) o su contrasena anterior es incorrecta o se produjo algun error en la escritura de la base de datos.
     public boolean cambiarContrasena(Usuario creador, int id, String contrasenaNueva, String contrasenaAnterior){
-        if(creador.isAdmin() || creador.getId()== id){
+        if(creador.isAdmin()){
             try {
-                String sql= "Update usuarios set contrasena=MD5('"+contrasenaNueva+"') where id="+id + " and contrasena=MD5('"+contrasenaAnterior+"')";
+                String sql= "Update usuarios set contrasena=MD5('"+contrasenaNueva+"') where id="+id;
                 Statement s= connection.createStatement();
                 int result = s.executeUpdate(sql);
                 if(result>0){
@@ -133,6 +133,20 @@ public class ManejadorClases {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            if(creador.getId()== id){
+                try {
+                    String sql= "Update usuarios set contrasena=MD5('"+contrasenaNueva+"') where id="+id + " and contrasena=MD5('"+contrasenaAnterior+"')";
+                    Statement s= connection.createStatement();
+                    int result = s.executeUpdate(sql);
+                    if(result>0){
+                        return true;
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         return false;

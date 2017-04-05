@@ -83,7 +83,10 @@ public class Usuario extends HttpServlet {
             else{
                 if(request.getParameter("pass")!= null){
                     int id= Integer.valueOf(request.getParameter("pass"));
-                    String contraAnt= request.getParameter("contraAnt");
+                    String contraAnt = "";
+                    if(request.getParameter("contraAnt")!=null){
+                        contraAnt= request.getParameter("contraAnt");
+                    }
                     String contraNue= request.getParameter("contraNue");
                     if(mc.cambiarContrasena(u, id, contraNue, contraAnt)){
                         sesion.setAttribute("mensaje", "Contraseña modificada sastifactoriamente.");
@@ -92,7 +95,13 @@ public class Usuario extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al modificar la contraseña.");
                     }
                     mc.CerrarConexionManejador();
-                    response.sendRedirect("usuarios.jsp"); 
+                    if(request.getParameter("contraAnt")!=null){
+                        response.sendRedirect("index2.jsp");
+                    }
+                    else{
+                        response.sendRedirect("usuarios.jsp"); 
+                    }
+                    
                 }
                 else{
                     if(request.getParameter("elim")!= null){
