@@ -70,7 +70,10 @@
                </tr>
            </table>
      
-     
+    <p id="mensaje" style="color: #990000"><% if(session.getAttribute("mensaje")!=null){out.print("<img src='images/icono-informacion.png' width='3%' /> &nbsp;&nbsp;"+session.getAttribute("mensaje"));}%></p>
+    <%
+        session.setAttribute("mensaje",null);
+    %>
      <ul id="tabs">
         <li><a href="#" title="Datos-Personales">Datos Personales</a></li>
         <li <% if (request.getParameter("id")==null){ out.print("hidden='hidden'");} %>><a href="#" title="Familiares">Familiares</a></li>

@@ -4,6 +4,7 @@
     Author     : Gisel
 --%>
 
+<%@page import="Classes.PeriodoDesplegado"%>
 <%@page import="Classes.UnidadMilitar"%>
 <%@page import="Classes.Tipo"%>
 <%@page import="Classes.Grado"%>
@@ -111,10 +112,12 @@
 </script>
 <% 
     Personal p=null;    
+    ArrayList<PeriodoDesplegado> apd = null;
     if(request.getParameter("id")!=null){
         int ci = Integer.valueOf(request.getParameter("id"));
         ManejadorPersonal mp = new ManejadorPersonal();
         p= mp.getPersonalBasico(ci);
+        apd= mp.getPeriodosDesplegado(ci);
         mp.CerrarConexionManejador();
     }
 %>
@@ -227,6 +230,7 @@ else{
                             </select>
                         </td>
                     </tr>
+                
                 </table>
             </td>
         </tr>
@@ -346,6 +350,46 @@ else{
             </td>
         </tr>
     </table>
+        <%    
+                if(apd!=null){
+                    out.print(" <h3>Periodos anteriores desplegado:</h3>"+
+                        "<table width='100%'>"
+                            + "<tr tr style='background-color:#ffcc66'>"
+                            +"<td>"
+                            + "Fecha Desde"
+                            + "</td>"
+                            + "<td>"
+                            + "Fecha Hasta</td>"
+                            + "<td>Observaciones</td>"
+                            + "</tr>");
+                    int i=0;
+                    String color;
+                    for(PeriodoDesplegado pd: apd){
+                        if ((i%2)==0){
+                            color=" #ccccff";
+                        }
+                        else{
+                            color=" #ffff99";
+                        }
+                        i++;
+                        %>
+                        <tr style='background-color:<%= color %>'>
+                            <td>
+                                <%= pd.getFechaDesde() %>
+                            </td>
+                            <td>
+                                <%= pd.getFechaHasta()%>
+                            </td>
+                            <td>
+                                <%= pd.getObservaciones()%>
+                            </td>
+                        </tr>
+                        <%
+                    }
+                    out.print("</table>");
+                }
+                    
+        %>
     <p align='right'><input type="submit"  value="Aceptar" /></p>
 </form>       
 

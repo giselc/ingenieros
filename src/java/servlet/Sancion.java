@@ -51,7 +51,7 @@ public class Sancion extends HttpServlet {
                         sesion.setAttribute("mensaje", "Sancion agregada correctamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al agregar la sancion.");
+                        sesion.setAttribute("mensaje", "ERROR al agregar la sanción. Si la sanción fue creada, elimine y cree la sanción nuevamente.");
                     }
                     if(request.getParameter("ci")!=null){
                         mp.CerrarConexionManejador();
@@ -72,7 +72,7 @@ public class Sancion extends HttpServlet {
                         sesion.setAttribute("mensaje", "Sancion eliminada correctamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al eliminar la sancion.");
+                        sesion.setAttribute("mensaje", "ERROR al eliminar la sancion. Verifique el conteo de los días por cumplir.");
                     }
                     if(request.getParameter("ci")!=null && Integer.valueOf(request.getParameter("ci"))!=-1){
                         mp.CerrarConexionManejador();

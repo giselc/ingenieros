@@ -11,6 +11,7 @@ import Classes.Documento;
 import Classes.Especialidad;
 import Classes.Familiar;
 import Classes.ConsultaMedica;
+import Classes.PeriodoDesplegado;
 import Classes.Personal;
 import Classes.RecordListarPersonal;
 import Classes.RecordPersonal;
@@ -86,6 +87,7 @@ public class ManejadorPersonal {
                 rp.unidadMilitar=mc.getUnidadMilitar(rs.getInt("unidadMilitar"));
                 rp.apoderado=this.getApoderado(rs.getInt("ci"));
                 p=new Personal(rp);
+                mc.CerrarConexionManejador();
             }
             else{
                 System.out.print("errorSQL"+sql);
@@ -94,6 +96,93 @@ public class ManejadorPersonal {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
         return p;
+    }
+    public boolean existePersonalHistorial(int ci){
+        Personal p=null;
+        try {
+            String sql= "Select * from `personal-historial` where ci="+ci;
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean recuperarDatosHistorial(int ci){
+        try{
+            Statement s = connection.createStatement();
+            String sql= "insert into historiaClinica (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) select (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) from `historiaClinica-historial` where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "insert into sanciones (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) select (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) from `sanciones-historial` where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "insert into personal select * from `personal-historial` where ci="+ci;
+            s.addBatch(sql);
+            s.executeBatch();
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+    public boolean eliminarPersonal(int ci, boolean guardarHistorial, String fechaArribo, String fechaRegreso, String observaciones){
+        try {
+            Statement s = connection.createStatement();
+            Statement s1 = connection.createStatement();
+            String sql="";
+            ResultSet rs = null;
+            Apoderado a = this.getApoderado(ci);
+            if(a!=null){
+                sql="update personal set idApoderado=-1, idVinculo=-1 where  ci="+ci;
+                s.addBatch(sql);
+                sql= "select * from personal where idPersonal<>"+ci+" and idApoderado="+a.getCi();
+                rs = s1.executeQuery(sql);
+                if(!rs.next()){
+                    sql= "delete * from apoderados where ci="+a.getCi();
+                    s.addBatch(sql);
+                }
+            }
+            ArrayList<Familiar> familiares = this.getFamiliares(ci);
+            for(Familiar familiar: familiares){
+                sql= "select * from `personal-familiar` where idPersonal<>"+ci+" and idFamiliar="+familiar.getCi();
+                rs = s1.executeQuery(sql);
+                if(!rs.next()){
+                    sql= "delete * from familiares where ci="+familiar.getCi();
+                    s.addBatch(sql);
+                }
+            }
+            sql= "delete * from documentos where idPersonal="+ci;
+            s.addBatch(sql);
+            if(guardarHistorial){
+                sql= "insert into `historiaClinica-historial` (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) select (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) from historiaClinica where idPersonal="+ci;
+                s.addBatch(sql);
+                sql= "insert into `sanciones-historial` (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) select (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) from sanciones where idPersonal="+ci;
+                s.addBatch(sql);
+                sql= "insert into `personal-historial` select * from personal where ci="+ci;
+                s.addBatch(sql);
+                sql= "insert into periodosDesplegado (idPersonal,fechaInicio, fechaFin, observaciones) value ("+ci+",'"+fechaArribo+"','"+fechaRegreso+"','"+observaciones+"')";
+                s.addBatch(sql);
+                
+            }
+            sql= "delete * from historiaClinica where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "delete * from personal-especialidad where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "delete * from sanciones where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "delete * from sancionados where ciPersonal="+ci;
+            s.addBatch(sql);
+            sql= "delete * from personal where ci="+ci;
+            s.addBatch(sql);
+            s.executeBatch();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorPersonal.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
     }
     
     //retorna una lista del personal de la tabla Personal de la BD.
@@ -131,6 +220,7 @@ public class ManejadorPersonal {
                 p=new Personal(rp);
                 ap.add(p);
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -279,7 +369,23 @@ public class ManejadorPersonal {
             }
         return false;
     }
-    
+    public ArrayList<PeriodoDesplegado> getPeriodosDesplegado(int idPersonal){
+        ArrayList<PeriodoDesplegado> as= new ArrayList<>();
+        try {
+            String sql= "Select * from periodosDesplegado where idPersonal="+idPersonal + " order by fechaInicio asc";
+            Statement s= connection.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            PeriodoDesplegado periodo;
+            while(rs.next()){
+                periodo=new PeriodoDesplegado(rs.getInt("id"),this.getPersonalBasico(rs.getInt("idPersonal")),rs.getDate("fechaInicio"),rs.getDate("fechaFin"),rs.getString("observaciones"));
+                as.add(periodo);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return as;
+    }
     //Sanciones
     public int diferenciasDiasDesdeHoy(Date s, Time h) {
         final int MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -351,6 +457,7 @@ public class ManejadorPersonal {
                 sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")));
                 as.add(sancion);
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -442,6 +549,7 @@ public class ManejadorPersonal {
                 sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")), this.getPersonalBasico(rs.getInt("idPersonal")));
                 return sancion;
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -460,6 +568,7 @@ public class ManejadorPersonal {
                 sancion=new Sancion(rs.getInt("id"),mc.getTipoSancion(rs.getInt("idTipoSancion")),rs.getString("parte"),rs.getInt("dias"),rs.getDate("fecha"),rs.getTime("hora"),this.getPersonalBasico(rs.getInt("idorden")),this.getPersonalBasico(rs.getInt("idPersonal")));
                 as.add(sancion);
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -733,6 +842,7 @@ public class ManejadorPersonal {
                 documento=new Documento(rs.getInt("id"),p,mc.getTipoDocumento(rs.getInt("idTipoDocumento")),null);
                 as.add(documento);
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -749,6 +859,7 @@ public class ManejadorPersonal {
             if(rs.next()){
                 p= new Documento(id, this.getPersonalBasico(rs.getInt("idPersonal")), mc.getTipoDocumento(rs.getInt("idTipoDocumento")), rs.getBlob("imagen"));
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -823,6 +934,7 @@ public class ManejadorPersonal {
                 especialidad=mc.getEspecialidad(rs.getInt("idEspecialidad"));
                 as.add(especialidad);
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -865,23 +977,21 @@ public class ManejadorPersonal {
             int i;
             if (!rs.next()){
                 sql="insert into apoderados (ci, nombres, apellidos, domicilio, celular,telefono) values("+ci+",'"+nombres+"','"+apellidos+"','"+domicilio+"','"+celular+"','"+telefono+"')";
-                i= s.executeUpdate(sql);
+                s.addBatch(sql);
                 
             }
             else{
                 sql="update apoderados set nombres='"+nombres+"',apellidos='"+apellidos+"',domicilio='"+domicilio+"',celular='"+celular+"',telefono='"+telefono+"' where ci="+ci;
-                i= s.executeUpdate(sql);
+                s.addBatch(sql);
             }
-            if(i>0){
-                sql="update personal set idApoderado="+ci+", idVinculo="+idvinculo+" where ci="+ciPersonal;
-                i = s.executeUpdate(sql);
-                return i>0;
-            }
-            
+            sql="update personal set idApoderado="+ci+", idVinculo="+idvinculo+" where ci="+ciPersonal;
+            s.addBatch(sql);
+            s.executeBatch();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        return false;
     }
     public Apoderado getApoderado(int ciPersonal){
         try {
@@ -926,34 +1036,22 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    public int desvincularApoderado(int idPersonal, int idApod){
+    public boolean desvincularApoderado(int idPersonal, int idApod){
         try {
             Statement s= connection.createStatement();
             String sql="update personal set idApoderado=-1, idVinculo=-1 where  ci="+idPersonal;
-            int i= s.executeUpdate(sql);
-            if (i>0){
-                sql="select * from personal where idApoderado="+idApod;
-                ResultSet rs= s.executeQuery(sql);
-                if(rs.next()){
-                    return 1;
-                }
-                else{
-                    sql="delete from apoderados where ci="+idApod;
-                    i= s.executeUpdate(sql);
-                    if(i>0){
-                        return 2;
-                    }
-                    else{
-                        return 0;
-                    }
-                }
+            s.addBatch(sql);
+            sql="select * from personal where ci<>"+idPersonal+" and idApoderado="+idApod;
+            ResultSet rs= s.executeQuery(sql);
+            if(!rs.next()){
+                sql="delete from apoderados where ci="+idApod;
+                s.addBatch(sql);
             }
-            else{
-                return 0;
-            }
+            s.executeBatch();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
+            return false;
         }
     }
     
@@ -972,6 +1070,7 @@ public class ManejadorPersonal {
                 f=new Familiar(rs.getInt("ci"),tf,rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
                 as.add(f);
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -990,6 +1089,7 @@ public class ManejadorPersonal {
                 mc.CerrarConexionManejador();
                 f=new Familiar(rs.getInt("ci"),tf,rs.getString("nombres"),rs.getInt("edad"),rs.getString("apellidos"),rs.getString("domicilio"),rs.getString("ocupacion"),rs.getString("telefono"),rs.getString("celular"),rs.getBoolean("discapacidad"),rs.getString("descDiscapacidad"));
             }
+            mc.CerrarConexionManejador();
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1010,34 +1110,22 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    public int desvincularFamiliar(int ciPersonal, int ciFamiliar){
+    public boolean desvincularFamiliar(int ciPersonal, int ciFamiliar){
         try {
             Statement s= connection.createStatement();
             String sql="delete from `personal-familiar` where idPersonal="+ciPersonal+" and idFamiliar="+ciFamiliar;
-            int i= s.executeUpdate(sql);
-            if (i>0){
-                sql="select * from `personal-familiar` where idFamiliar="+ciFamiliar;
-                ResultSet rs= s.executeQuery(sql);
-                if(rs.next()){
-                    return 1;
-                }
-                else{
-                    sql="delete from familiares where ci="+ciFamiliar;
-                    i= s.executeUpdate(sql);
-                    if(i>0){
-                        return 2;
-                    }
-                    else{
-                        return 0;
-                    }
-                }
+            s.addBatch(sql);
+            sql="select * from `personal-familiar` where idFamiliar="+ciFamiliar+"and idPersonal<>"+ciPersonal;
+            ResultSet rs= s.executeQuery(sql);
+            if(!rs.next()){
+                sql="delete from familiares where ci="+ciFamiliar;
+                s.addBatch(sql);
             }
-            else{
-                return 0;
-            }
+            s.executeBatch();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
+            return false;
         }
     }
     public Familiar getFamiliar2(int ciFamiliar){
@@ -1066,24 +1154,21 @@ public class ManejadorPersonal {
             }
             if (!rs.next()){
                 sql="insert into familiares (ci, nombres, apellidos, domicilio, celular,telefono, ocupacion, descDiscapacidad, edad, discapacidad) values("+ciFamiliar+",'"+nombres+"','"+apellidos+"','"+domicilio+"','"+celular+"','"+telefono+"','"+ocupacion+"','"+descDiscapacidad+"',"+edad+",'"+intDiscapacidad+"')";
-                i= s.executeUpdate(sql);
+                s.addBatch(sql);
                 
             }
             else{
                 sql="update familiares set nombres='"+nombres+"',apellidos='"+apellidos+"',domicilio='"+domicilio+"',celular='"+celular+"',telefono='"+telefono+"',edad="+edad+",ocupacion='"+ocupacion+"',descDiscapacidad='"+descDiscapacidad+"',discapacidad='"+intDiscapacidad+"' where ci="+ciFamiliar;
-                i= s.executeUpdate(sql);
+                s.addBatch(sql);
             }
-            if(i>0){
-                sql="insert into `personal-familiar` (idPersonal, idFamiliar, idVinculo) values ("+ciPersonal+","+ciFamiliar+","+idvinculo+")";
-                i = s.executeUpdate(sql);
-                return i>0;
-            }
+            sql="insert into `personal-familiar` (idPersonal, idFamiliar, idVinculo) values ("+ciPersonal+","+ciFamiliar+","+idvinculo+")";
+            s.addBatch(sql);
+            s.executeBatch();
+            return true;
         }
         catch(SQLException ex){
             return false;
         }
-
-        return false;
     }
 
     //IMPRESIONES

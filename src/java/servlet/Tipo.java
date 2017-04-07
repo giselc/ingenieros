@@ -135,7 +135,7 @@ public class Tipo extends HttpServlet {
                         sesion.setAttribute("mensaje", "Eliminado sastifactoriamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al eliminar.");
+                        sesion.setAttribute("mensaje", "ERROR al eliminar. Personal actual o de historial vinculado.");
                     }
                     
                 }

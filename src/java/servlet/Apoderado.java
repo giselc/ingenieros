@@ -79,15 +79,8 @@ public class Apoderado extends HttpServlet {
                 else{
                     if(request.getParameter("elim")!= null){
                         int id=Integer.valueOf(request.getParameter("elim"));
-                        int resultado=mp.desvincularApoderado(idPersonal, id);
-                        if(resultado!=0){
-                            if(resultado==1){
+                        if(mp.desvincularApoderado(idPersonal, id)){
                                 sesion.setAttribute("mensaje", "Apoderado desvinculado correctamente.");
-                            }
-                            else{
-                                sesion.setAttribute("mensaje", "Apoderado eliminado correctamente.");
-                            }
-
                         }
                         else{
                             sesion.setAttribute("mensaje", "ERROR al eliminar el documento.");

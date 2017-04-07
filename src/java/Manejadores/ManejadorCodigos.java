@@ -102,9 +102,23 @@ public class ManejadorCodigos {
     public boolean eliminarGrado(int id){
         try {
             Statement s= connection.createStatement();
-            String sql="delete from grado where id="+id;
-            int i= s.executeUpdate(sql);
-            return (i>0);
+            String sql="select * from personal where grado="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="select * from `personal-historial` where grado="+id;
+                rs= s.executeQuery(sql);
+                if(rs.next()){
+                    return false;
+                }
+                else{
+                    sql="delete from grado where id="+id;
+                    int i= s.executeUpdate(sql);
+                    return (i>0);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -171,10 +185,17 @@ public class ManejadorCodigos {
     }
     public boolean eliminarEspecialidad(int id){
         try {
-            Statement s= connection.createStatement();
-            String sql="delete from especialidades where id="+id;
-            int i= s.executeUpdate(sql);
-            return (i>0);
+            Statement s = connection.createStatement();
+            String sql="select * from `personal-especialidad` where idEspecialidad="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="delete from especialidades where id="+id;
+                int i= s.executeUpdate(sql);
+                return (i>0);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -240,10 +261,17 @@ public class ManejadorCodigos {
     }
     public boolean eliminarTipoDocumento(int id){
         try {
-            Statement s= connection.createStatement();
-            String sql="delete from TipoDocumento where id="+id;
-            int i= s.executeUpdate(sql);
-            return (i>0);
+            Statement s = connection.createStatement();
+            String sql="select * from documentos where idTipoDocumento="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="delete from TipoDocumento where id="+id;
+                int i= s.executeUpdate(sql);
+                return (i>0);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -310,9 +338,23 @@ public class ManejadorCodigos {
     public boolean eliminarTipoFamiliar(int id){
         try {
             Statement s= connection.createStatement();
-            String sql="delete from TipoFamiliar where id="+id;
-            int i= s.executeUpdate(sql);
-            return (i>0);
+            String sql="select * from personal where idVinculo="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="select * from `personal-familiar` where idVinculo="+id;
+                rs= s.executeQuery(sql);
+                if(rs.next()){
+                    return false;
+                }
+                else{
+                    sql="delete from TipoFamiliar where id="+id;
+                    int i= s.executeUpdate(sql);
+                    return (i>0);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -380,9 +422,23 @@ public class ManejadorCodigos {
     public boolean eliminarTipoSancion(int id){
         try {
             Statement s= connection.createStatement();
-            String sql="delete from TipoSancion where id="+id;
-            int i= s.executeUpdate(sql);
-            return (i>0);
+            String sql="select * from sanciones where idTipoSancion="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="select * from `sanciones-historial` where idTipoSancion="+id;
+                rs= s.executeQuery(sql);
+                if(rs.next()){
+                    return false;
+                }
+                else{
+                    sql="delete from TipoSancion where id="+id;
+                    int i= s.executeUpdate(sql);
+                    return (i>0);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -449,9 +505,23 @@ public class ManejadorCodigos {
     public boolean eliminarUnidadMilitar(int id){
         try {
             Statement s= connection.createStatement();
-            String sql="delete from UnidadesMilitares where id="+id;
-            int i= s.executeUpdate(sql);
-            return (i>0);
+            String sql="select * from personal where unidadMilitar="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="select * from `personal-historial` where unidadMilitar="+id;
+                rs= s.executeQuery(sql);
+                if(rs.next()){
+                    return false;
+                }
+                else{
+                    sql="delete from UnidadesMilitares where id="+id;
+                    int i= s.executeUpdate(sql);
+                    return (i>0);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -39,8 +39,8 @@ public class Personal extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             ManejadorPersonal mp = new ManejadorPersonal();
-            int id = Integer.valueOf(request.getParameter("id"));
             if(request.getParameter("id")!= null){ //alta o modficacion
+                int id = Integer.valueOf(request.getParameter("id"));
                 RecordPersonal rp = new RecordPersonal();
                 rp.foto = request.getParameter("foto2");
                 rp.ci= Integer.valueOf(request.getParameter("ci"));
@@ -101,6 +101,16 @@ public class Personal extends HttpServlet {
                     }
                     mp.CerrarConexionManejador();
                     response.sendRedirect("s1-personal.jsp");
+                }
+            }
+            else{
+                if(request.getParameter("elim")!=null){
+                    if(request.getParameter("historial").equals("S")){
+                        out.print("Guardo en historial");
+                    }
+                    else{
+                        out.print("elimino");
+                    }
                 }
             }
                     

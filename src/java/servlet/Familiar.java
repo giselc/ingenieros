@@ -89,15 +89,8 @@ public class Familiar extends HttpServlet {
                 else{
                     if(request.getParameter("elim")!= null){
                         int ciFamiliar=Integer.valueOf(request.getParameter("elim"));
-                        int resultado=mp.desvincularFamiliar(idPersonal, ciFamiliar);
-                        if(resultado!=0){
-                            if(resultado==1){
-                                sesion.setAttribute("mensaje", "Familiar desvinculado correctamente.");
-                            }
-                            else{
-                                sesion.setAttribute("mensaje", "Familiar eliminado correctamente.");
-                            }
-
+                        if(mp.desvincularFamiliar(idPersonal, ciFamiliar)){
+                            sesion.setAttribute("mensaje", "Familiar desvinculado correctamente.");
                         }
                         else{
                             sesion.setAttribute("mensaje", "ERROR al eliminar el familiar.");

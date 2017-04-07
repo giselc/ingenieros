@@ -14,7 +14,32 @@
     if(u.isAdmin() || u.isS1()){
 
 %>
-
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script>
+    function abrir_dialog(dialog) {
+      $( dialog ).dialog({
+          modal: true
+      });
+    };
+    function cerrar_dialog(dialog) {
+      $( dialog ).dialog('close');
+    };
+     $(document).ready(function() {
+             $("#content div").hide();
+             $("#tabs li:first").attr("id","current");
+             $("#content div:first").fadeIn();
+             $("#loader").fadeOut();
+         $('#tabs a').click(function(e) {
+             document.getElementById("mensaje").innerHTML="";
+             e.preventDefault();
+             $("#content div").hide();
+             $("#tabs li").attr("id","");
+             $(this).parent().attr("id","current");
+             $('#' + $(this).attr('title')).fadeIn();
+         });
+     })();
+</script>
 <script>
     function listar(form) {//Funcion creada para no perder la sesion luego del submit
         if(document.getElementById("nombreCompleto").checked || document.getElementById("ci").checked){
@@ -26,57 +51,32 @@
         }
         return false;
     };
-    function confirmar(f,um){
-        var s="¿Seguro que desea eliminar: ";
-        var s1= s.concat(um,"?");
+    function confirmar(f,um,ci){
+        var s1="¿Desea pasar los datos al historial?";
         var r=confirm(s1);
         if (r==true)
         {
-            s="¿Desea pasar los datos al historial?";
-            r=confirm(s1);
-            var input = document.createElement('input');input.type = 'hidden';input.name = 'historial';
-            if (r==true)
-            {
-                input.value = "S";
-            }
-            else{
-                input.value = "N";
-            }
-            f.appendChild(input);
-            f.submit();
+            f.action = "pasajeHistorial.jsp?ci="+ci
             return true;
         }
         else{
-            return false;
+            var s2= "¿Desea eliminar los datos del sistema?";
+            var r1=confirm(s2);
+            if (r1==true){
+                var input = document.createElement('input');input.type = 'hidden';input.name = 'historial';
+                input.value = "N";
+                f.appendChild(input);
+                f.submit();
+                return true;
+            }
+            else{
+                return false;
+            }
         }
     };
 </script>
-<script>
-        function abrir_dialog(dialog) {
-          $( dialog ).dialog({
-              modal: true
-          });
-        };
-        function cerrar_dialog(dialog) {
-          $( dialog ).dialog('close');
-        };
-         $(document).ready(function() {
-                 $("#content div").hide();
-                 $("#tabs li:first").attr("id","current");
-                 $("#content div:first").fadeIn();
-                 $("#loader").fadeOut();
-             $('#tabs a').click(function(e) {
-                 document.getElementById("mensaje").innerHTML="";
-                 e.preventDefault();
-                 $("#content div").hide();
-                 $("#tabs li").attr("id","");
-                 $(this).parent().attr("id","current");
-                 $('#' + $(this).attr('title')).fadeIn();
-             });
-         })();
-     </script>
-<script src="js/jquery-1.9.1.min.js"></script>
-<script src="js/jquery-ui.js"></script>
+
+
 <div id='dialog2' style="display:none" title="Imprimir personal">
     <form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=todoElPersonal'>
         <p>
@@ -172,7 +172,7 @@
                     out.print("<td style='width: 15%' align='center'>"+u1.getCi()+"</td>");
                     out.print("<td style='width: 10%' align='center'><a href='personal.jsp?id="+String.valueOf(u1.getCi())+"'><img src='images/ver.png' width='25%' /></a></td>");
                     if(u.isAdmin()){
-                        out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'"+u1.getNombre()+"')\" action='Personal?elim="+u1.getCi()+"'><input type='image' width='25%' title='Eliminar personal' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                        out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'"+u1.getNombre()+"','"+u1.getCi()+"')\" action='Personal?elim="+u1.getCi()+"'><input type='image' width='25%' title='Eliminar personal' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     }
                     out.print("</tr>");
                 }
