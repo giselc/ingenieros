@@ -10,6 +10,9 @@ import Manejadores.ManejadorPersonal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -106,10 +109,55 @@ public class Personal extends HttpServlet {
             else{
                 if(request.getParameter("elim")!=null){
                     if(request.getParameter("historial").equals("S")){
-                        out.print("Guardo en historial");
+                        if(mp.eliminarPersonal(Integer.valueOf(request.getParameter("elim")),true, request.getParameter("arribo"), request.getParameter("regreso"),  request.getParameter("observaciones"))){
+                            sesion.setAttribute("mensaje", "Personal guardado en historial sastifactoriamente.");
+                        }else{
+                            sesion.setAttribute("mensaje", "ERROR al guardar el personal en el historial.");
+                        };
                     }
                     else{
-                        out.print("elimino");
+                        if(mp.eliminarPersonal(Integer.valueOf(request.getParameter("elim")),false,"", "",  "")){
+                            sesion.setAttribute("mensaje", "Personal eliminado sastifactoriamente.");
+                        }else{
+                            sesion.setAttribute("mensaje", "ERROR al eliminar el personal.");
+                        };
+                    }
+                    mp.CerrarConexionManejador();
+                    response.sendRedirect("s1-personal.jsp");
+                }
+                if(request.getParameter("json")!=null){
+                    if(request.getParameter("json")!=""){
+                        JsonObjectBuilder json = Json.createObjectBuilder(); 
+                        JsonArrayBuilder jab= Json.createArrayBuilder();
+                        if(mp.existePersonalHistorial(Integer.valueOf(request.getParameter("json")))){
+                            jab.add(Json.createObjectBuilder()
+                                .add("existeEnHistorial", "S")
+                            );
+                        }
+                        else{
+                            jab.add(Json.createObjectBuilder()
+                                .add("existeEnHistorial", "N")
+                            );
+                        }
+                        json.add("existe", jab);
+                        mp.CerrarConexionManejador();
+                        out.print(json.build());
+                    }
+                }
+                else{
+                    if(request.getParameter("existe")!=null){
+                        int ci= Integer.valueOf(request.getParameter("existe"));
+                        if(mp.existePersonalHistorial(ci)){
+                            if(mp.recuperarDatosHistorial(ci)){
+                                sesion.setAttribute("mensaje", "Personal recuperado correctamente.");
+                                mp.CerrarConexionManejador();
+                                response.sendRedirect("personal.jsp?id="+ci);
+                            }else{
+                                sesion.setAttribute("mensaje", "ERROR al recuperar el personal.");
+                                mp.CerrarConexionManejador();
+                                response.sendRedirect("personal.jsp");
+                            };
+                        }
                     }
                 }
             }

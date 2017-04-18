@@ -19,6 +19,22 @@
 <!DOCTYPE html>
 
 <script type="text/javascript">
+    function existePersonal(ciInput){
+        var ci= ciInput.value;
+        xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                var obj = jQuery.parseJSON( xmlhttp.responseText );
+                var listado = obj.existe;
+                if (listado[0].existeEnHistorial=="S"){
+                    alert("El personal existe en el historial. A continuación se levantarán los datos del historial.");
+                    location.href="Personal?existe="+ci;
+                }
+            };
+         };
+         xmlhttp.open("POST","Personal?json="+ci);
+         xmlhttp.send();
+    }
         function PreviewImage() {
             var oFReader = new FileReader();
             oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
@@ -171,7 +187,7 @@ else{
                             <p><b>C.I.:</b></p>
                         </td>
                         <td>
-                            <input type=number name="ci" <%if( p!=null){ out.print("value='"+Integer.valueOf(p.getCi())+"'"); out.print("readonly=\"readonly\"");} %> required="required" />
+                            <input type=number name="ci" onblur="existePersonal(this)"<%if( p!=null){ out.print("value='"+Integer.valueOf(p.getCi())+"'"); out.print("readonly=\"readonly\"");} %> required="required" />
                         </td>
                     </tr>
                     <tr>

@@ -114,11 +114,21 @@ public class ManejadorPersonal {
     public boolean recuperarDatosHistorial(int ci){
         try{
             Statement s = connection.createStatement();
-            String sql= "insert into historiaClinica (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) select (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) from `historiaClinica-historial` where idPersonal="+ci;
+            String sql= "insert into historiaClinica (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) select idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico from `historiaClinica-historial` where idPersonal="+ci;
             s.addBatch(sql);
-            sql= "insert into sanciones (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) select (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) from `sanciones-historial` where idPersonal="+ci;
+            sql= "delete from `historiaClinica-historial` where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "insert into sanciones (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) select idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias from `sanciones-historial` where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "delete from `sanciones-historial` where idPersonal="+ci;
+            s.addBatch(sql);
+            sql= "insert into sancionados select * from `sancionados-historial` where ciPersonal="+ci;
+            s.addBatch(sql);
+            sql= "delete from `sancionados-historial` where ciPersonal="+ci;
             s.addBatch(sql);
             sql= "insert into personal select * from `personal-historial` where ci="+ci;
+            s.addBatch(sql);
+            sql= "delete from `personal-historial` where ci="+ci;
             s.addBatch(sql);
             s.executeBatch();
             return true;
@@ -137,10 +147,10 @@ public class ManejadorPersonal {
             if(a!=null){
                 sql="update personal set idApoderado=-1, idVinculo=-1 where  ci="+ci;
                 s.addBatch(sql);
-                sql= "select * from personal where idPersonal<>"+ci+" and idApoderado="+a.getCi();
+                sql= "select * from personal where ci<>"+ci+" and idApoderado="+a.getCi();
                 rs = s1.executeQuery(sql);
                 if(!rs.next()){
-                    sql= "delete * from apoderados where ci="+a.getCi();
+                    sql= "delete from apoderados where ci="+a.getCi();
                     s.addBatch(sql);
                 }
             }
@@ -149,32 +159,34 @@ public class ManejadorPersonal {
                 sql= "select * from `personal-familiar` where idPersonal<>"+ci+" and idFamiliar="+familiar.getCi();
                 rs = s1.executeQuery(sql);
                 if(!rs.next()){
-                    sql= "delete * from familiares where ci="+familiar.getCi();
+                    sql= "delete from familiares where ci="+familiar.getCi();
                     s.addBatch(sql);
                 }
             }
-            sql= "delete * from documentos where idPersonal="+ci;
+            sql= "delete from documentos where idPersonal="+ci;
             s.addBatch(sql);
             if(guardarHistorial){
-                sql= "insert into `historiaClinica-historial` (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) select (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) from historiaClinica where idPersonal="+ci;
+                sql= "insert into `historiaClinica-historial` (idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico) select idPersonal, fechaInicio, fechaFin, diagnostico, tratamiento, idMedico from historiaClinica where idPersonal="+ci;
                 s.addBatch(sql);
-                sql= "insert into `sanciones-historial` (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) select (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) from sanciones where idPersonal="+ci;
+                sql= "insert into `sanciones-historial` (idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias) select idPersonal, idTipoSancion, idOrden, parte, fecha, hora, dias from sanciones where idPersonal="+ci;
                 s.addBatch(sql);
                 sql= "insert into `personal-historial` select * from personal where ci="+ci;
+                s.addBatch(sql);
+                sql= "insert into `sancionados-historial` select * from sancionados where ciPersonal="+ci;
                 s.addBatch(sql);
                 sql= "insert into periodosDesplegado (idPersonal,fechaInicio, fechaFin, observaciones) value ("+ci+",'"+fechaArribo+"','"+fechaRegreso+"','"+observaciones+"')";
                 s.addBatch(sql);
                 
             }
-            sql= "delete * from historiaClinica where idPersonal="+ci;
+            sql= "delete from historiaClinica where idPersonal="+ci;
             s.addBatch(sql);
-            sql= "delete * from personal-especialidad where idPersonal="+ci;
+            sql= "delete from `personal-especialidad` where idPersonal="+ci;
             s.addBatch(sql);
-            sql= "delete * from sanciones where idPersonal="+ci;
+            sql= "delete from sanciones where idPersonal="+ci;
             s.addBatch(sql);
-            sql= "delete * from sancionados where ciPersonal="+ci;
+            sql= "delete from sancionados where ciPersonal="+ci;
             s.addBatch(sql);
-            sql= "delete * from personal where ci="+ci;
+            sql= "delete from personal where ci="+ci;
             s.addBatch(sql);
             s.executeBatch();
             return true;
@@ -405,6 +417,46 @@ public class ManejadorPersonal {
         int diasCumplidos =(int)deltaDays;
         //System.out.println(diasCumplidos+ " " +(diasCumplidos!=0 && (hoy.getHours())>18));
         return diasCumplidos;
+    }
+    public HashMap<Integer,ArrayList<RecordSancionados>> getListaSancionadosConDias(){
+        HashMap<Integer,ArrayList<RecordSancionados>> hm= new HashMap<>();
+        try {
+            ResultSet rs = null;
+            Statement s= connection.createStatement();
+            int diasCumplidos =0;
+            String sql="";
+            RecordSancionados r=null;
+            sql= "Select * from sancionados";
+            rs = s.executeQuery(sql);
+            ManejadorCodigos mc = new ManejadorCodigos();
+            while (rs.next()){
+                    diasCumplidos = diferenciasDiasDesdeHoy(rs.getDate("fechaInicial"), rs.getTime("horaInicial"));
+                    if (diasCumplidos>=rs.getInt("cantTotalDias")){
+                        sql="delete from sancionados where ciPersonal="+rs.getInt("ciPersonal") + " and idTipoSancion="+rs.getInt("idTipoSancion");
+                        s.executeUpdate(sql);
+                    }
+                    else{
+                        //System.out.print(rs.getInt("cantTotalDias")+" "+ diasCumplidos);
+                        r =new RecordSancionados();
+                        r.dias=rs.getInt("cantTotalDias")-diasCumplidos;
+                        r.tipo = mc.getTipoSancion(rs.getInt("idTipoSancion"));
+                        r.fecha = rs.getDate("fechaInicial");
+                        if(hm.containsKey(rs.getInt("ciPersonal"))){
+                            hm.get(rs.getInt("ciPersonal")).add(r);
+                        }
+                        else{
+                            hm.put(rs.getInt("ciPersonal"), new ArrayList<>());
+                            hm.get(rs.getInt("ciPersonal")).add(r);
+                        }
+                        
+                    }
+                
+            }
+            mc.CerrarConexionManejador();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return hm;
     }
     public ArrayList<RecordSancionados> getListaDiasPortipoSancion(int idPersonal){
         ArrayList<RecordSancionados> as= new ArrayList<RecordSancionados>();
