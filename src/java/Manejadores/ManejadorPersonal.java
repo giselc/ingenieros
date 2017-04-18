@@ -163,6 +163,8 @@ public class ManejadorPersonal {
                     s.addBatch(sql);
                 }
             }
+            sql= "delete from `personal-familiar` where idPersonal="+ci;
+            s.addBatch(sql);
             sql= "delete from documentos where idPersonal="+ci;
             s.addBatch(sql);
             if(guardarHistorial){
