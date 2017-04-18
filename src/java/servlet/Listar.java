@@ -112,6 +112,13 @@ public class Listar extends HttpServlet {
                                     mp.imprimirHistoriaClinica(ci, request.getParameter("fechaDesde"), request.getParameter("fechaHasta"),out);
                                     mp.CerrarConexionManejador();
                                 }
+                                else{
+                                    if(tipo.equals("sancionados")){
+                                        ManejadorPersonal mp = new ManejadorPersonal();
+                                        mp.imprimirSancionados(out);
+                                        mp.CerrarConexionManejador();
+                                    }
+                                }
                             }
                         }
                     }

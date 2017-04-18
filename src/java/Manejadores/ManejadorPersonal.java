@@ -1789,4 +1789,38 @@ datos+="        <tr style='background-color:"+color+"'>"+
 datos+="    </table>";
     out.print(datos);
     }
+    public void imprimirSancionados(PrintWriter out){
+        HashMap<Integer,ArrayList<RecordSancionados>> hm= this.getListaSancionadosConDias();
+        String datos="<h1 align='center'> Sancionados <h1>"+
+"    <table style=\"width: 100%;\">" +
+"       <tr style='background-color:#ffcc66'>" +
+    "       <td style='width: 40%' align='center'><h3 style='margin:2%;'>Personal</h3></td>" +
+    "       <td style='width: 30%' align='center'><h3 style='margin:2%;'>Tipo Sanción</h3></td>" +
+    "       <td style='width: 10%' align='center'><h3 style='margin:2%;'>Días restantes</h3></td>" +
+    "       <td style='width: 20%' align='center'><h3 style='margin:2%;'>Fecha Inicial</h3></td>" +
+"      </tr>" ;
+        int i=0;
+        String color;
+        Personal p;
+        for (HashMap.Entry<Integer,ArrayList<RecordSancionados>> entry: hm.entrySet()){
+            p= getPersonalBasico(entry.getKey());
+            for(RecordSancionados r: entry.getValue()){
+                if ((i%2)==0){
+                    color="#ccccff";
+                }
+                else{
+                    color="#ffff99";
+                }
+                i++;
+                datos+="<tr style='background-color:"+color+"'>" +
+"                    <td style='width: 40%' align='center'>"+this.obtenerNombreCompleto(p)+"</td>" +
+"                    <td style='width: 30%' align='center'>"+r.tipo.getDescripcion()+"</td>" +
+"                    <td style='width: 10%' align='center'>"+r.dias+"</td>" +
+"                    <td style='width: 20%' align='center'>"+r.fecha+"</td>" +
+"       </tr>" ;
+            }
+        }
+        datos+="       </table>" ;
+        out.print(datos);
+    }
 }
