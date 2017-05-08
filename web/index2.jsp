@@ -55,7 +55,7 @@
             <%
                 session.setAttribute("mensaje",null);
             %>
-<ul  class="nav2" style="text-align: center; width: 100%; padding-left:12%">
+<ul  class="nav2" style="text-align: center; width: 100%;padding-left: 0px;">
     <%
         if(u.isAdmin() || u.isS1()){
     %>
@@ -112,6 +112,20 @@
                     <a href="Backup">Respaldo</a>
                 </li>
             </ul>
+        </li>
+        <li style="width: 25%">
+            <a><img src="images/button_escribiente.png" width="80%" /></a>
+            <ul>
+                <li>
+                    <a href="verNovedades.jsp">Ver Novedades</a>
+                </li>
+                <li>
+                    <a  href="subirNovedades.jsp">Subir Novedades</a>
+                </li>
+            </ul>
+        </li>
+        <li style="width: 25%">
+            
         </li>
         <%
         }

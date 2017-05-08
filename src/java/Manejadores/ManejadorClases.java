@@ -58,10 +58,10 @@ public class ManejadorClases {
     //Retorna un Usuario con los parametros indicados persistiendolo en la base de datos si 'creador' es Admin.
     //retorna null si creador no es admin o se produjo algun error en la escritura de la base de datos.
     //PRECONDICIONES: - existeUsuario(usuario)==false
-    public boolean crarUsuario(Usuario creador, String usuario, String nombreMostrar, String contrasena, boolean admin, boolean s1, boolean s4){
+    public boolean crarUsuario(Usuario creador, String usuario, String nombreMostrar, String contrasena, boolean admin, boolean s1, boolean s4, boolean escribiente){
         if (creador.isAdmin()){
             try {
-                String sql= "insert into usuarios (usuario, nombreMostrar, contrasena,admin, s1, s4) values(?,?,MD5(?),?,?,?)";
+                String sql= "insert into usuarios (usuario, nombreMostrar, contrasena,admin, s1, s4, escribiente) values(?,?,MD5(?),?,?,?,?)";
                 PreparedStatement s= connection.prepareStatement(sql);
                 s.setString(1, usuario);
                 s.setString(2, nombreMostrar);
@@ -69,6 +69,7 @@ public class ManejadorClases {
                 s.setBoolean(4, admin);
                 s.setBoolean(5, s1);
                 s.setBoolean(6, s4);
+                s.setBoolean(7, escribiente);
                 int result = s.executeUpdate();
                 if(result>0){
                     return true;
@@ -83,16 +84,17 @@ public class ManejadorClases {
     //retorna false si 'creador' no es admin o se produjo algun error en la escritura de la base de datos.
     //atributo usuario no es modificable.
     //atributo contrasena modificable con la funcion cambiarContrasena
-    public boolean ModificarUsuario(Usuario creador, int id, String nombreMostrar, boolean admin, boolean s1, boolean s4){
+    public boolean ModificarUsuario(Usuario creador, int id, String nombreMostrar, boolean admin, boolean s1, boolean s4, boolean escribiente){
         if (creador.isAdmin()){
             try {
-                String sql= "Update usuarios set nombreMostrar=?, admin=?, s1=?, s4=? where id=?";
+                String sql= "Update usuarios set nombreMostrar=?, admin=?, s1=?, s4=?, escribiente=? where id=?";
                 PreparedStatement s= connection.prepareStatement(sql);
                 s.setString(1, nombreMostrar);
                 s.setBoolean(2, admin);
                 s.setBoolean(3, s1);
                 s.setBoolean(4, s4);
-                s.setInt(5, id);
+                s.setBoolean(5, escribiente);
+                s.setInt(6, id);
                 int result = s.executeUpdate();
                 if(result>0){
                     return true;
@@ -162,7 +164,7 @@ public class ManejadorClases {
                 ResultSet rs = s.executeQuery(sql);
                 Usuario u;
                 while(rs.next()){
-                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"));
+                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"), rs.getBoolean("escribiente"));
                     al.add(u);
                 }
             } catch (SQLException ex) {
@@ -181,7 +183,7 @@ public class ManejadorClases {
                 Statement s= connection.createStatement();
                 ResultSet rs = s.executeQuery(sql);
                 while(rs.next()){
-                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"));
+                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"), rs.getBoolean("escribiente"));
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,7 +200,7 @@ public class ManejadorClases {
                 Statement s= connection.createStatement();
                 ResultSet rs = s.executeQuery(sql);
                 while(rs.next()){
-                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"));
+                    u=new Usuario(rs.getInt("id"), rs.getString("usuario"), rs.getString("nombreMostrar"), rs.getBoolean("admin"), rs.getBoolean("s1"), rs.getBoolean("s4"), rs.getBoolean("escribiente"));
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
@@ -216,6 +218,7 @@ public class ManejadorClases {
                 out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Admin</h3></td>");
                 out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S1</h3></td>");
                 out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S4</h3></td>");
+                 out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Escribiente</h3></td>");
         out.print("</tr></table>  <table style=\"width: 100%;\">" );
         int i=0;
         String color;
@@ -234,6 +237,7 @@ public class ManejadorClases {
                 out.print("<td style='width: 10%' align='center'>"+u1.isAdmin()+"</td>");
                 out.print("<td style='width: 10%' align='center'>"+u1.isS1()+"</td>"); 
                 out.print("<td style='width: 10%' align='center'>"+u1.isS4()+"</td>"); 
+                out.print("<td style='width: 10%' align='center'>"+u1.isEscribiente()+"</td>"); 
             out.print("</tr>");
         }
         out.print("</table>");

@@ -45,6 +45,10 @@ public class Usuario extends HttpServlet {
                 if (request.getParameter("admin")!=null){
                     admin = request.getParameter("admin").equals("on");
                 }
+                boolean escribiente = false;
+                if (request.getParameter("escribiente")!=null){
+                    escribiente = request.getParameter("escribiente").equals("on");
+                }
                 boolean s1 = false;
                 if (request.getParameter("s1")!=null){
                     s1 = request.getParameter("s1").equals("on");
@@ -56,7 +60,7 @@ public class Usuario extends HttpServlet {
                 if(id==-1){ //alta
                     if(!mc.existeUsuario(usuario)){
                         String pass = request.getParameter("pass");
-                        if(mc.crarUsuario(u, usuario, nombreMostrar, pass, admin, s1, s4)){
+                        if(mc.crarUsuario(u, usuario, nombreMostrar, pass, admin, s1, s4, escribiente)){
                             sesion.setAttribute("mensaje", "Usuario creado sastifactoriamente.");
                         }
                         else{
@@ -70,7 +74,7 @@ public class Usuario extends HttpServlet {
                     response.sendRedirect("usuarios.jsp");
                 }
                 else{ //modificacion
-                    if( mc.ModificarUsuario(u, id, nombreMostrar, admin, s1, s4)){
+                    if( mc.ModificarUsuario(u, id, nombreMostrar, admin, s1, s4, escribiente)){
                        sesion.setAttribute("mensaje", "Usuario modificado sastifactoriamente.");
                     }
                     else{

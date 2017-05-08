@@ -17,7 +17,7 @@
         return validarPermisos(f);
     };
     function validarPermisos(f){
-        if (document.getElementById("admin").checked || document.getElementById("s1").checked || document.getElementById("s4").checked){
+        if (document.getElementById("admin").checked || document.getElementById("s1").checked || document.getElementById("s4").checked || document.getElementById("escribiente").checked){
             return true;
         }
         document.getElementById("textocontrasena").innerHTML = "Debe darle un rol al usuario.";
@@ -102,6 +102,14 @@
                                         <input type=checkbox id="s4" name="s4" <% if(u1!=null && u1.isS4()){out.print("checked='checked'");} %>/>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <b>Escribiente:</b>
+                                    </td>
+                                    <td>
+                                        <input type=checkbox id="escribiente" name="escribiente" <% if(u1!=null && u1.isEscribiente()){out.print("checked='checked'");} %>/>
+                                    </td>
+                                </tr>
                             </table>
                         </td>
                     </tr>
@@ -120,11 +128,6 @@
                         <td>
                             <p><input type=password name="pass1" <% if(u1!=null && u1.isS4()){out.print("checked='checked'");} %>/></p>
 
-                        </td>
-                    </tr>
-                    <tr <% if (u1!=null){out.print("hidden='hidden'");}%>>
-                        <td colspan="2">
-                            *La contrase&ntilde;a debe tener un largo m&iacute;nimio de 6
                         </td>
                     </tr>
                     <tr <% if (u1!=null){out.print("hidden='hidden'");}%>>

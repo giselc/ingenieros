@@ -16,17 +16,22 @@ public class Usuario {
     private boolean admin;
     private boolean s1;
     private boolean s4;
+    private boolean escribiente;
 
-    public Usuario(int id, String usuario, String nombreMostrar, Boolean admin, Boolean s1, Boolean s4) {
+    public Usuario(int id, String usuario, String nombreMostrar, Boolean admin, Boolean s1, Boolean s4, Boolean escribiente) {
         this.id = id;
         this.usuario = usuario;
         this.nombreMostrar = nombreMostrar;
         this.admin = admin;
         this.s1 = s1;
         this.s4 = s4;
+        this.escribiente = escribiente;
     }
 
-    
+    public boolean isEscribiente() {
+        return escribiente;
+    }
+
     public int getId() {
         return id;
     }

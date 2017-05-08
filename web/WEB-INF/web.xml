@@ -56,6 +56,10 @@
         <servlet-name>ConsultaMedica</servlet-name>
         <servlet-class>servlet.ConsultaMedica</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Novedades</servlet-name>
+        <servlet-class>servlet.Novedades</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -111,6 +115,10 @@
     <servlet-mapping>
         <servlet-name>ConsultaMedica</servlet-name>
         <url-pattern>/ConsultaMedica</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Novedades</servlet-name>
+        <url-pattern>/Novedades</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -65,8 +65,9 @@
                             out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Usuario</h3></td>");
                             out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Nombre para mostrar</h3></td>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Admin</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S1</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>S4</h3></td>");
+                            out.print("<td style='width: 5%' align='center'><h3 style='margin:2%;'>S1</h3></td>");
+                            out.print("<td style='width: 5%' align='center'><h3 style='margin:2%;'>S4</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Escribiente</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
@@ -86,8 +87,9 @@
                     out.print("<td style='width: 20%' align='center'>"+u1.getUsuario()+"</td>");
                     out.print("<td style='width: 20%' align='center'>"+u1.getNombreMostrar()+"</td>");
                     out.print("<td style='width: 10%' align='center'>"+u1.isAdmin()+"</td>");
-                    out.print("<td style='width: 10%' align='center'>"+u1.isS1()+"</td>"); 
-                    out.print("<td style='width: 10%' align='center'>"+u1.isS4()+"</td>"); 
+                    out.print("<td style='width: 5%' align='center'>"+u1.isS1()+"</td>"); 
+                    out.print("<td style='width: 5%' align='center'>"+u1.isS4()+"</td>"); 
+                    out.print("<td style='width: 10%' align='center'>"+u1.isEscribiente()+"</td>"); 
                     out.print("<td style='width: 10%' align='center'><a href='usuario.jsp?id="+String.valueOf(u1.getId())+"'><img src='images/ver.png' width='25%' /></a></td>");
                     out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'"+u1.getUsuario()+"')\" action='Usuario?elim="+u1.getId()+"'><input type='image' width='25%' title='Eliminar Usuario' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     out.print("<td style='width: 10%' align='center'><a href='changePass.jsp?id="+String.valueOf(u1.getId())+"'><img src='images/pass.png' width='25%' /></a></td>");
