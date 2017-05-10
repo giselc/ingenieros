@@ -113,22 +113,30 @@
                 </li>
             </ul>
         </li>
+        <%
+        }
+        %>
         <li style="width: 25%">
             <a><img src="images/button_escribiente.png" width="80%" /></a>
             <ul>
                 <li>
                     <a href="verNovedades.jsp">Ver Novedades</a>
                 </li>
+                <%
+        
+                    if(u.isAdmin()||u.isEscribiente()){
+                %>
                 <li>
                     <a  href="subirNovedades.jsp">Subir Novedades</a>
                 </li>
+                <%
+        
+                    }
+                %>
             </ul>
         </li>
         <li style="width: 25%">
             
         </li>
-        <%
-        }
-        %>
 </ul>
 <%@ include file="footer.jsp" %>

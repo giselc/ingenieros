@@ -18,6 +18,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -53,13 +57,14 @@ public class Novedades extends HttpServlet {
 
                 //InputStream fileContent = filePart.getInputStream(); //Lo transforma en InputStream
                 String fecha = request.getParameter("fecha");
-                fecha=fecha.replace("-", "");
+                String fecha1=fecha.replace("-", "");
                 FileOutputStream output = null;
                 for (Part part : fileParts) {
                     if(this.getFileName(part)!=null){
                         InputStream input = part.getInputStream();
                         try {
-                            output = new FileOutputStream("C:/Novedades/"+fecha+"-"+this.getFileName(part));
+                            System.out.print(getServletContext().getRealPath("/"));
+                            output = new FileOutputStream(getServletContext().getRealPath("/")+"/Novedades/"+fecha1+"-"+this.getFileName(part));
                             int leido = 0;
                             leido = input.read();
                             while (leido != -1) {
@@ -84,8 +89,25 @@ public class Novedades extends HttpServlet {
                response.sendRedirect("verNovedades.jsp?fecha="+fecha);
             }
             else{
-                if(request.getParameter("ver")!= null){
-                    System.out.print("ver");
+                if(request.getParameter("ver")!= null && request.getParameter("ver")!="1"){
+                    String fecha = request.getParameter("ver");
+                    fecha=fecha.replace("-", "");
+                    
+                    File dir = new File(getServletContext().getRealPath("/")+"/Novedades");
+                    String[] ficheros = dir.list();
+                    JsonObjectBuilder json = Json.createObjectBuilder(); 
+                    JsonArrayBuilder jab= Json.createArrayBuilder();
+                    
+                    if (ficheros != null){
+                        for (int x=0;x<ficheros.length;x++)
+                            if(ficheros[x].startsWith(fecha)){
+                                jab.add(Json.createObjectBuilder()
+                                      .add("nombre", ficheros[x])
+                                  );
+                            }
+                    }
+                    json.add("novedad", jab);
+                    out.print(json.build());
                 }
             }
         }

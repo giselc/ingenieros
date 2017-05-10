@@ -14,7 +14,9 @@
     function novedadesSubmit(form){
         //var file = document.getElementById("file").files[0];
         //document.getElementById("nombre").value = file.name;
+        document.getElementById("enviando").style.display = "block";
         form.submit();
+        //document.getElementById("enviando").style.display = "none";
         return true;
 
     }
@@ -33,6 +35,7 @@
     }
 </script>
 <form id="novedades" enctype="multipart/form-data" method="post" action="Novedades?subir=1" onsubmit=" return novedadesSubmit(this);">
+    
     <table style="text-align: left" align="center">
         <tr>
             <td style="width: 30%">
@@ -42,6 +45,9 @@
                 <table>
                     <tr>
                         <td>
+                            <div id="enviando" style="display: none; z-index: 5; position: absolute">
+                                <img src="images/cargando (1).gif" />
+                            </div>
                             <b>Seleccione la fecha:</b>
                         </td>
                         <td>
