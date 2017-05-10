@@ -117,7 +117,7 @@
         }
         %>
         <li style="width: 25%">
-            <a><img src="images/button_escribiente.png" width="80%" /></a>
+            <a><img src="images/button_novedades.png" width="80%" /></a>
             <ul>
                 <li>
                     <a href="verNovedades.jsp">Ver Novedades</a>

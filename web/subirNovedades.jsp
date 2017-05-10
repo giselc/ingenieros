@@ -38,8 +38,15 @@
     
     <table style="text-align: left" align="center">
         <tr>
+            <td colspan="2">
+                <h2 style="padding: 0px">
+                    Subir Novedades
+                </h2>
+            </td>
+        </tr>
+        <tr>
             <td style="width: 30%">
-                <img src="images/nove.png" width="90%"/>
+                <img src="images/subirNovedades.png" width="90%"/>
             </td>
             <td style="width: 70%">
                 <table>

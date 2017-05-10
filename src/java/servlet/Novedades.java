@@ -109,6 +109,11 @@ public class Novedades extends HttpServlet {
                     json.add("novedad", jab);
                     out.print(json.build());
                 }
+                else{
+                    if(request.getParameter("elim")!= null){
+                        
+                    }
+                }
             }
         }
     }

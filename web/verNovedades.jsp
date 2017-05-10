@@ -12,7 +12,6 @@
 %>
 <script>
     function novedades(fecha,admin){
-         alert(admin);
          xmlhttp=new XMLHttpRequest();
          xmlhttp.onreadystatechange = function() {
              if (xmlhttp.readyState==4 && xmlhttp.status==200) {
@@ -43,7 +42,7 @@
                     datos+= "<tr style='background-color:"+color+"'><td>"+listado[i].nombre+"</td>";
                     datos+="<td style='width:10%'><a target='_blank' href='Novedades/"+listado[i].nombre+"' ><img width='100%' src='images/ver_1.png' /> </a></td>";
                     if(admin){     
-                        datos+="<td style='width:10%'><a target='_blank' href='Novedades/"+listado[i].nombre+"' ><img width='100%' src='images/eliminar.png' /> </a></td>";
+                        datos+="<td style='width:10%'><a target='_blank' href='Novedades?elim="+listado[i].nombre+"' ><img width='100%' src='images/eliminar.png' /> </a></td>";
                     } 
                     datos+="</tr>";
                 }
@@ -58,8 +57,15 @@
 <form id="novedades" method="post" action="Novedades?ver=1">
     <table style="text-align: left" align="center">
         <tr>
+            <td colspan="2">
+                <h2 style="padding: 0px">
+                    Ver Novedades
+                </h2>
+            </td>
+        </tr>
+        <tr>
             <td style="width: 30%">
-                <img src="images/nove.png" width="90%"/>
+                <img src="images/verNovedades.png" width="90%"/>
             </td>
             <td style="width: 70%">
                 <table>
