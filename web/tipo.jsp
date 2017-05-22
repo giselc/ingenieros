@@ -50,8 +50,20 @@
                             mostrar="Mantenimiento Vehículo";
                         } 
                         else{
-                            t=mc.getEspecialidad(id);
-                            mostrar="Especialidad";
+                            if(codigo.equals("ModelosArmamentos")){
+                                t= mc.getModeloArmamento(id);
+                                mostrar="Modelos de Armamentos";
+                            } 
+                            else{
+                                if(codigo.equals("DestinosArmamentos")){
+                                    t= mc.getDestino(id);
+                                    mostrar="Destinos de Armamentos";
+                                } 
+                                else{
+                                    t=mc.getEspecialidad(id);
+                                    mostrar="Especialidad";
+                                }
+                            }
                         }
                     }
                 }

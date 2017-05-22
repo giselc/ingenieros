@@ -1,13 +1,9 @@
 <%-- 
-    Document   : vehiculos
-    Created on : May 16, 2017, 6:57:05 PM
+    Document   : armamentos
+    Created on : May 22, 2017, 12:32:31 AM
     Author     : Gisel
 --%>
 
-<%@page import="Classes.Vehiculo"%>
-<%@page import="Manejadores.ManejadorVehiculo"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="Manejadores.ManejadorClases"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header.jsp" %>
@@ -22,7 +18,7 @@
         return false;
     };
     function confirmar(f){
-        var s="¿Seguro que desea eliminar el vehículo: ";
+        var s="¿Seguro que desea eliminar el armamento: ";
         var r=confirm(s);
         if (r==true)
         {
@@ -34,7 +30,7 @@
         }
     };
 </script>
-<form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=vehiculos'>
+<form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=armamentos'>
     
     <table style="float: right">
         <tr>
@@ -46,7 +42,7 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Veh&iacute;culos del sistema:</h3></td>
+            <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Usuarios del sistema:</h3></td>
             <td style="width: 15%"><a href="index2.jsp"><img src="images/atras.png" width="100%"/></a></td>
             <td style="width: 15%"><a href="vehiculo.jsp" title="Agregar Vehículo"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir vehiculos"src="images/imprimir.png" alt="Submit Form" /></td>

@@ -7,8 +7,11 @@ package Manejadores;
 
 import Classes.AlertaVehiculo;
 import Classes.ConexionBD;
+import Classes.Destino;
 import Classes.Especialidad;
 import Classes.Grado;
+import Classes.ModeloArmamento;
+import Classes.Municion;
 import Classes.Tipo;
 import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
@@ -673,4 +676,220 @@ public class ManejadorCodigos {
         }
         out.print("</table>");
     }
+    
+    public ArrayList<Municion> getMuniciones(){
+        ArrayList<Municion> al= new ArrayList<Municion>();
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from municion";
+            ResultSet rs= s.executeQuery(sql);
+            Municion g;
+            while (rs.next()){
+                g= new Municion(rs.getString("calibre"));
+                al.add(g);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return al;
+    }
+    public Municion getMunicion(String calibre){
+        Municion g=null;
+        try {
+            
+            Statement s= connection.createStatement();
+            String sql="Select * from Municion where calibre='"+calibre+"'";
+            ResultSet rs= s.executeQuery(sql);
+            
+            if (rs.next()){
+                g= new Municion(rs.getString("calibre"));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean agregarMunicion(String calibre){
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into Municion(calibre) values('"+calibre+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                return true;
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarMunicion(String calibre){
+        try {
+            Statement s= connection.createStatement();
+            String sql="select * from armamento where calibre='"+calibre+"'";
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="select * from loteMunicion where idMunicion="+calibre;
+                rs= s.executeQuery(sql);
+                if(rs.next()){
+                    return false;
+                }
+                else{
+                    sql="delete from Municion where calibre="+calibre;
+                    int i= s.executeUpdate(sql);
+                    return (i>0);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public ArrayList<Tipo> getDestinos(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from destinoArmamento";
+            ResultSet rs= s.executeQuery(sql);
+            Destino g;
+            while (rs.next()){
+                g= new Destino(rs.getInt("id"),rs.getString("descripcion"));
+                al.add(g);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return al;
+    }
+    public Destino getDestino(int id){
+        Destino g=null;
+        try {
+            
+            Statement s= connection.createStatement();
+            String sql="Select * from destinoarmamento where id="+id;
+            ResultSet rs= s.executeQuery(sql);
+            
+            if (rs.next()){
+                g= new Destino(rs.getInt("id"),rs.getString("descripcion"));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean agregarDestino(String descripcion){
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into destinoarmamento(descripcion) values('"+descripcion+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                return true;
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean modificarDestino(int id, String desc){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update destinoarmamento set descripcion='"+desc+"' where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarDestino(int id){
+        try {
+            String sql="delete from destinoarmamento where id="+id;
+            Statement s= connection.createStatement();
+             int i= s.executeUpdate(sql);
+            return (i>0);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public ArrayList<Tipo> getModelosArmamento(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from modeloarmamento";
+            ResultSet rs= s.executeQuery(sql);
+            ModeloArmamento g;
+            while (rs.next()){
+                g= new ModeloArmamento(rs.getInt("id"),rs.getString("descripcion"));
+                al.add(g);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return al;
+    }
+    public ModeloArmamento getModeloArmamento(int id){
+        ModeloArmamento g=null;
+        try {
+            
+            Statement s= connection.createStatement();
+            String sql="Select * from ModeloArmamento where id="+id;
+            ResultSet rs= s.executeQuery(sql);
+            
+            if (rs.next()){
+                g= new ModeloArmamento(rs.getInt("id"),rs.getString("descripcion"));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean agregarModeloArmamento(String descripcion){
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into ModeloArmamento(descripcion) values('"+descripcion+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                return true;
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean modificarModeloArmamento(int id, String desc){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update ModeloArmamento set descripcion='"+desc+"' where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarModeloArmamento(int id){
+        try {
+            String sql="delete from ModeloArmamento where id="+id;
+            Statement s= connection.createStatement();
+            int i= s.executeUpdate(sql);
+            return (i>0);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
 }

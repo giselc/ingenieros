@@ -64,7 +64,17 @@ public class Tipo extends HttpServlet {
                                         ok= mc.agregarTipoMantenimientoVehiculo(descripcion);
                                     } 
                                     else{
-                                        ok=mc.agregarEspecialidad(descripcion);
+                                        if(codigo.equals("ModelosArmamentos")){
+                                            ok= mc.agregarModeloArmamento(descripcion);
+                                        } 
+                                        else{
+                                            if(codigo.equals("DestinosArmamentos")){
+                                                ok= mc.agregarDestino(descripcion);
+                                            } 
+                                            else{
+                                                ok=mc.agregarEspecialidad(descripcion);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -101,7 +111,17 @@ public class Tipo extends HttpServlet {
                                         ok= mc.modificarTipoMantenimientoVehiculo(id, descripcion);
                                     } 
                                     else{
-                                        ok=mc.modificarEspecialidad(id, descripcion);
+                                        if(codigo.equals("ModelosArmamentos")){
+                                            ok= mc.modificarModeloArmamento(id, descripcion);
+                                        } 
+                                        else{
+                                            if(codigo.equals("DestinosArmamentos")){
+                                                ok= mc.modificarDestino(id, descripcion);
+                                            } 
+                                            else{
+                                                ok=mc.modificarEspecialidad(id, descripcion);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -140,7 +160,17 @@ public class Tipo extends HttpServlet {
                                         ok= mc.eliminarTipoMantenimientoVehiculo(id);
                                     } 
                                     else{
-                                        ok=mc.eliminarEspecialidad(id);
+                                        if(codigo.equals("ModelosArmamentos")){
+                                            ok= mc.eliminarModeloArmamento(id);
+                                        } 
+                                        else{
+                                            if(codigo.equals("DestinosArmamentos")){
+                                                ok= mc.eliminarDestino(id);
+                                            } 
+                                            else{
+                                                ok=mc.eliminarEspecialidad(id);
+                                            }
+                                        }
                                     }
                                 }
                             }

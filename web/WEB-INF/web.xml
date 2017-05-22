@@ -92,6 +92,22 @@
         <servlet-name>AlertaMantenimiento</servlet-name>
         <servlet-class>servlet.AlertaMantenimiento</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Municion</servlet-name>
+        <servlet-class>servlet.Municion</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ISArmamento</servlet-name>
+        <servlet-class>servlet.ISArmamento</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ObservacionArmamento</servlet-name>
+        <servlet-class>servlet.ObservacionArmamento</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Armamento</servlet-name>
+        <servlet-class>servlet.Armamento</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -167,6 +183,22 @@
     <servlet-mapping>
         <servlet-name>AlertaMantenimiento</servlet-name>
         <url-pattern>/AlertaMantenimiento</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Municion</servlet-name>
+        <url-pattern>/Municion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ISArmamento</servlet-name>
+        <url-pattern>/ISArmamento</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ObservacionArmamento</servlet-name>
+        <url-pattern>/ObservacionArmamento</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Armamento</servlet-name>
+        <url-pattern>/Armamento</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

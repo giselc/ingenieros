@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <%@ include file="header.jsp" %>
 <% 
-    if(u.isAdmin()){
+    if(u.isAdmin()|| u.isS4()){
 
 %>
 <% 

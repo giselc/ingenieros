@@ -92,7 +92,15 @@
                     </ul>
                 </li>
                 <li>
-                    <a  href="armamentos.jsp">Armamento</a>
+                    <a>Armamento</a>
+                    <ul>
+                        <li>
+                            <a href="armamentos.jsp"> Fichas </a>
+                        </li>
+                        <li>
+                            <a  href="lotes.jsp">Lotes</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </li>
@@ -126,6 +134,15 @@
                 </li>
                 <li>
                     <a href="tipos.jsp?codigo=MantenimientoVehiculo">Mantenimientos de veh&iacute;culos</a>
+                </li>
+                <li>
+                    <a href="tipos.jsp?codigo=ModelosArmamentos">Modelos de armamentos</a>
+                </li>
+                <li>
+                    <a href="tipos.jsp?codigo=DestinosArmamentos">Destinos de armamentos</a>
+                </li>
+                <li>
+                    <a href="municiones.jsp">Municiones</a>
                 </li>
                 <li>
                     <a href="Backup">Respaldo</a>

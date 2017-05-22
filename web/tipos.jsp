@@ -83,7 +83,17 @@
                                     at= mc.getTiposMantenimientoVehiculo();
                                 } 
                                 else{
-                                    at=mc.getEspecialidades();
+                                    if(codigo.equals("ModelosArmamentos")){
+                                        at= mc.getModelosArmamento();
+                                    } 
+                                    else{
+                                        if(codigo.equals("DestinosArmamentos")){
+                                            at= mc.getDestinos();
+                                        } 
+                                        else{
+                                            at=mc.getEspecialidades();
+                                        }
+                                    }
                                 }
                             }
                         }
