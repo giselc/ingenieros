@@ -13,7 +13,7 @@
 <script src="js/JIC.js" type="text/javascript"></script>
 <script src="js/demo.js" type="text/javascript"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <body>
+        <body style=" background-color: #8b8683;">
         <% 
         HttpSession sesion = request.getSession();
         if(sesion.getAttribute("usuarioID")!=null){

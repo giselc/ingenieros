@@ -7,7 +7,7 @@
 <%@ include file="header.jsp" %>
 <script src="js/jquery-1.9.1.min.js"></script>
 <%
-    if(u.isAdmin()){
+    if(u.isAdmin()||u.isEscribiente()){
 %>
 
 <script>
@@ -52,9 +52,8 @@
                 <table>
                     <tr>
                         <td>
-                            <div id="enviando" style="display: none; z-index: 5; position: absolute">
-                                <img src="images/cargando (1).gif" />
-                            </div>
+                            <div id="enviando"  style="position: fixed; top:0; left:0; width:100%; height: 100%;background: url('images/cargando (1).gif') center center no-repeat; background-size: 20%; display: none">
+                                </div>
                             <b>Seleccione la fecha:</b>
                         </td>
                         <td>

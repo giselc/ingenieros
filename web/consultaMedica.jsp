@@ -149,7 +149,7 @@
                 </table>
                             <%
                             if(!u.isAdmin() && request.getParameter("id")!=null && Integer.valueOf(request.getParameter("id"))!=-1){
-                                out.print("Las sanciones no se pueden modificar.");
+                                out.print("Las consultas no se pueden modificar.");
                             }
                             else{
                             

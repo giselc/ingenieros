@@ -5,14 +5,17 @@
  */
 package Manejadores;
 
+import Classes.AlertaVehiculo;
 import Classes.ConexionBD;
 import Classes.Especialidad;
 import Classes.Grado;
 import Classes.Tipo;
 import Classes.TipoDocumento;
 import Classes.TipoFamiliar;
+import Classes.TipoMantenimientoVehiculo;
 import Classes.TipoSancion;
 import Classes.UnidadMilitar;
+import Classes.Usuario;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -202,6 +205,82 @@ public class ManejadorCodigos {
         return false;
     }
     
+    public TipoMantenimientoVehiculo getTipoMantenimientoVehiculo(int id){
+        TipoMantenimientoVehiculo g=null;
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from tipomantenimientovehiculo where id="+id;
+            ResultSet rs= s.executeQuery(sql);
+            
+            if (rs.next()){
+                g= new TipoMantenimientoVehiculo(rs.getInt("id"), rs.getString("descripcion"));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return g;
+    }
+    public boolean agregarTipoMantenimientoVehiculo(String desc){
+        try {
+            Statement s= connection.createStatement();
+            String sql="insert into TipoMantenimientoVehiculo(descripcion) values('"+desc+"')";
+            int i= s.executeUpdate(sql);
+            if (i>0){
+                return true;
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean modificarTipoMantenimientoVehiculo(int id, String desc){
+        try {
+            Statement s= connection.createStatement();
+            String sql="update TipoMantenimientoVehiculo set descripcion='"+desc+"' where id="+id;
+            int i= s.executeUpdate(sql);
+            return (i>0);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public boolean eliminarTipoMantenimientoVehiculo(int id){
+        try {
+            Statement s = connection.createStatement();
+            String sql="select * from alertasVehiculo where idTipoMantenimiento="+id;
+            ResultSet rs= s.executeQuery(sql);
+            if(rs.next()){
+                return false;
+            }
+            else{
+                sql="delete from TipoMantenimientoVehiculo where id="+id;
+                int i= s.executeUpdate(sql);
+                return (i>0);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    public ArrayList<Tipo> getTiposMantenimientoVehiculo(){
+        ArrayList<Tipo> al= new ArrayList<Tipo>();
+        try {
+            Statement s= connection.createStatement();
+            String sql="Select * from TipoMantenimientoVehiculo";
+            ResultSet rs= s.executeQuery(sql);
+            TipoMantenimientoVehiculo td;
+            while (rs.next()){
+                td= new TipoMantenimientoVehiculo(rs.getInt("id"), rs.getString("descripcion"));
+                al.add(td);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManejadorCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return al;
+    }
+  
     public ArrayList<Tipo> getTiposDocumentos(){
         ArrayList<Tipo> al= new ArrayList<Tipo>();
         try {

@@ -78,7 +78,23 @@
         if(u.isAdmin() || u.isS4()){
     %>
         <li style="width: 25%">
-            <a href="s4.jsp"><img src="images/button_s4.png" width="80%" /></a>
+            <a><img src="images/button_s4.png" width="80%" /></a>
+            <ul>
+                <li>
+                    <a> Veh&iacute;culos</a>
+                    <ul>
+                        <li>
+                            <a href="vehiculos.jsp"> Fichas </a>
+                        </li>
+                        <li>
+                            <a  href="alertasMantenimiento.jsp">Alertas de Mantenimiento</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a  href="armamentos.jsp">Armamento</a>
+                </li>
+            </ul>
         </li>
     <%
         }
@@ -100,13 +116,16 @@
                     <a href="tipos.jsp?codigo=Grados">Grados</a>
                 </li>
                 <li>
-                    <a href="tipos.jsp?codigo=Documentos">Documentos</a>
+                    <a href="tipos.jsp?codigo=Documentos">Tipo de Documentos</a>
                 </li>
                 <li>
                     <a  href="tipos.jsp?codigo=Sanciones">Tipos de Sanciones</a>
                 </li>
                 <li>
                     <a href="tipos.jsp?codigo=Especialidades">Especialidades</a>
+                </li>
+                <li>
+                    <a href="tipos.jsp?codigo=MantenimientoVehiculo">Mantenimientos de veh&iacute;culos</a>
                 </li>
                 <li>
                     <a href="Backup">Respaldo</a>

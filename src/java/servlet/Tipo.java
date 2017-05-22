@@ -60,7 +60,12 @@ public class Tipo extends HttpServlet {
                                     ok= mc.agregarTipoSancion(descripcion);
                                 } 
                                 else{
-                                    ok=mc.agregarEspecialidad(descripcion);
+                                    if(codigo.equals("MantenimientoVehiculo")){
+                                        ok= mc.agregarTipoMantenimientoVehiculo(descripcion);
+                                    } 
+                                    else{
+                                        ok=mc.agregarEspecialidad(descripcion);
+                                    }
                                 }
                             }
                         }
@@ -92,7 +97,12 @@ public class Tipo extends HttpServlet {
                                     ok= mc.modificarTipoSancion(id, descripcion);
                                 } 
                                 else{
-                                    ok=mc.modificarEspecialidad(id, descripcion);
+                                    if(codigo.equals("MantenimientoVehiculo")){
+                                        ok= mc.modificarTipoMantenimientoVehiculo(id, descripcion);
+                                    } 
+                                    else{
+                                        ok=mc.modificarEspecialidad(id, descripcion);
+                                    }
                                 }
                             }
                         }
@@ -126,7 +136,12 @@ public class Tipo extends HttpServlet {
                                     ok= mc.eliminarTipoSancion(id);
                                 } 
                                 else{
-                                    ok=mc.eliminarEspecialidad(id);
+                                    if(codigo.equals("MantenimientoVehiculo")){
+                                        ok= mc.eliminarTipoMantenimientoVehiculo(id);
+                                    } 
+                                    else{
+                                        ok=mc.eliminarEspecialidad(id);
+                                    }
                                 }
                             }
                         }
@@ -135,7 +150,7 @@ public class Tipo extends HttpServlet {
                         sesion.setAttribute("mensaje", "Eliminado sastifactoriamente.");
                     }
                     else{
-                        sesion.setAttribute("mensaje", "ERROR al eliminar. Personal actual o de historial vinculado.");
+                        sesion.setAttribute("mensaje", "ERROR al eliminar debido a que existe algún vinculo con el mismo.");
                     }
                     
                 }

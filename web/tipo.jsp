@@ -42,11 +42,17 @@
                 else{
                     if(codigo.equals("Sanciones")){
                         t= mc.getTipoSancion(id);
-                        mostrar="Sancion";
+                        mostrar="Sanción";
                     } 
                     else{
-                        t=mc.getEspecialidad(id);
-                        mostrar="Especialidad";
+                        if(codigo.equals("MantenimientoVehiculo")){
+                            t= mc.getTipoMantenimientoVehiculo(id);
+                            mostrar="Mantenimiento Vehículo";
+                        } 
+                        else{
+                            t=mc.getEspecialidad(id);
+                            mostrar="Especialidad";
+                        }
                     }
                 }
             }

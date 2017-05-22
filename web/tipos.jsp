@@ -79,7 +79,12 @@
                                 at= mc.getTiposSanciones();
                             } 
                             else{
-                                at=mc.getEspecialidades();
+                                if(codigo.equals("MantenimientoVehiculo")){
+                                    at= mc.getTiposMantenimientoVehiculo();
+                                } 
+                                else{
+                                    at=mc.getEspecialidades();
+                                }
                             }
                         }
                     }

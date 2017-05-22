@@ -9,6 +9,7 @@ import Classes.RecordListarPersonal;
 import Manejadores.ManejadorClases;
 import Manejadores.ManejadorCodigos;
 import Manejadores.ManejadorPersonal;
+import Manejadores.ManejadorVehiculo;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -117,6 +118,27 @@ public class Listar extends HttpServlet {
                                         ManejadorPersonal mp = new ManejadorPersonal();
                                         mp.imprimirSancionados(out);
                                         mp.CerrarConexionManejador();
+                                    }
+                                    else{
+                                        if(tipo.equals("vehiculo")){
+                                            ManejadorVehiculo mv = new ManejadorVehiculo();
+                                            mv.imprimirVehiculo(request.getParameter("id"), request.getParameter("historial")!=null, request.getParameter("ficha")!=null, out);
+                                            mv.CerrarConexionManejador();
+                                        }
+                                        else{
+                                            if(tipo.equals("vehiculos")){
+                                                ManejadorVehiculo mv = new ManejadorVehiculo();
+                                                mv.imprimirVehiculos(out);
+                                                mv.CerrarConexionManejador();
+                                            }
+                                            else{
+                                                if(tipo.equals("alertasMantenimiento")){
+                                                    ManejadorVehiculo mv = new ManejadorVehiculo();
+                                                    mv.imprimirAlertasMantenimiento(out);
+                                                    mv.CerrarConexionManejador();
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
