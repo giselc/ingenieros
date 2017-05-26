@@ -74,7 +74,7 @@
                             <td>
                                 <input type="file" name="informacionSumaria" id="file" /> 
                                 <%
-                                if(u1!=null){
+                                if(u1!=null&& !u1.getInfromacionSumaria().equals("")){
                                     out.print("<a href='ISVehiculos/"+u1.getId()+u1.getInfromacionSumaria().substring(u1.getInfromacionSumaria().indexOf("."))+"'>"+u1.getInfromacionSumaria()+"</p>");
                                 }
                                 %>

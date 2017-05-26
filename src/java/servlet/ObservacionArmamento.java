@@ -35,7 +35,7 @@ public class ObservacionArmamento extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             ManejadorArmamento mc = new ManejadorArmamento();
-            int idArmamento= Integer.valueOf(request.getParameter("idArmamento"));
+            int idArmamento= Integer.valueOf(request.getParameter("armamento"));
             if(request.getParameter("id")!= null){ //alta o modficacion
                 int id= Integer.valueOf(request.getParameter("id"));
                 String fecha = request.getParameter("fecha");

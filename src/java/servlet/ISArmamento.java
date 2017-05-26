@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import javax.servlet.http.Part;
  *
  * @author Gisel
  */
+@MultipartConfig
 public class ISArmamento extends HttpServlet {
 
     /**
@@ -42,7 +44,7 @@ public class ISArmamento extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             ManejadorArmamento mv = new ManejadorArmamento();
-            int idArmamento = Integer.valueOf(request.getParameter("idArmamento"));
+            int idArmamento = Integer.valueOf(request.getParameter("armamento"));
             if(request.getParameter("id")!= null){ //alta o modficacion
                 Part filePart = request.getPart("informacionSumaria");
                 int id= Integer.valueOf(request.getParameter("id"));
@@ -53,7 +55,7 @@ public class ISArmamento extends HttpServlet {
                     int clave = mv.agregarISArmamento(idArmamento, fecha, this.getFileName(filePart), idOficialArmamento);
                     if(clave!=-1){
                         String s=" Error al subir el archivo.";
-                        if(this.subirArchivo(filePart, clave)){
+                        if(this.subirArchivo(filePart, clave, idArmamento)){
                             s="";
                         }
                         sesion.setAttribute("mensaje", "Información sumaria agregada correctamente."+s);
@@ -68,7 +70,7 @@ public class ISArmamento extends HttpServlet {
                 if(request.getParameter("elim")!= null){
                     int id=Integer.valueOf(request.getParameter("elim"));
                     Classes.ISArmamento o = mv.getInformacionSumariaArmamento(id);
-                    if(this.eliminarArchivo(o.getInformacionSumaria(), id)){
+                    if(this.eliminarArchivo(o.getInformacionSumaria(), id, idArmamento)){
                         if(mv.eliminarISArmamento(id)){
                             sesion.setAttribute("mensaje", "Información sumaria eliminada correctamente.");
                         }
@@ -85,14 +87,18 @@ public class ISArmamento extends HttpServlet {
             response.sendRedirect("armamento.jsp?id="+idArmamento);
         }
     }
-    private boolean eliminarArchivo(String nombre, int idObservacion){
+    private boolean eliminarArchivo(String nombre, int idIS, int idArmamento){
         if(!nombre.equals("")){
-            File f = new File(getServletContext().getRealPath("/")+"/ISVehiculos/"+idObservacion+nombre.substring(nombre.lastIndexOf(".")));
-            return f.delete();
+            File f = new File(getServletContext().getRealPath("/")+"/ISArmamento/"+idArmamento+"-"+idIS+nombre.substring(nombre.lastIndexOf(".")));
+            if(f.exists()){
+                return f.delete();
+                
+            }
+            return true;
         }
         return true;
     }
-    private boolean subirArchivo(Part part, int idISumaria){
+    private boolean subirArchivo(Part part, int idIS, int idArmamento){
         try{
             FileOutputStream output = null;
             String name = this.getFileName(part);
@@ -101,7 +107,7 @@ public class ISArmamento extends HttpServlet {
                 InputStream input = part.getInputStream();
                 try {
                     System.out.print(getServletContext().getRealPath("/"));
-                    output = new FileOutputStream(getServletContext().getRealPath("/")+"/ISVehiculos/"+idISumaria+extension);
+                    output = new FileOutputStream(getServletContext().getRealPath("/")+"/ISArmamento/"+idArmamento+"-"+idIS+extension);
                     int leido = 0;
                     leido = input.read();
                     while (leido != -1) {

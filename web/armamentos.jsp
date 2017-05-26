@@ -4,6 +4,9 @@
     Author     : Gisel
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Classes.Armamento"%>
+<%@page import="Manejadores.ManejadorArmamento"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="header.jsp" %>
@@ -42,31 +45,32 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Usuarios del sistema:</h3></td>
+            <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Armamentos del sistema:</h3></td>
             <td style="width: 15%"><a href="index2.jsp"><img src="images/atras.png" width="100%"/></a></td>
-            <td style="width: 15%"><a href="vehiculo.jsp" title="Agregar Vehículo"><img width="30%" src='images/agregarLista.png' /></a> </td>
+            <td style="width: 15%"><a href="armamento.jsp" title="Agregar Vehículo"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><input type="image" width="30%" title="Imprimir vehiculos"src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>
     </table>
 </form>    
     <table style="width: 100%;" align='center'>
             <%
-                ManejadorVehiculo  mc = new ManejadorVehiculo();
-                ArrayList<Vehiculo> au = mc.getVehiculos();
+                ManejadorArmamento  mc = new ManejadorArmamento();
+                ArrayList<Armamento> au = mc.getArmamentos();
                 mc.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
-                            out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Matricula ONU</h3></td>");
-                            out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Matricula UY</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Marca</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Modelo</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Motor</h3></td>");
-                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Chasis</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Numero</h3></td>");
+                            out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Modelo</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha Alta</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Fecha Baja</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Destino</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Calibre</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Entregado</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                        out.print("</tr>" );
                 int i=0;
                 String color;
-                for (Vehiculo u1: au){
+                for (Armamento u1: au){
                         if ((i%2)==0){
                             color=" #ccccff";
                         }
@@ -76,14 +80,31 @@
                         i++;
 
                     out.print("<tr style='background-color:"+color+"'>");
-                    out.print("<td style='width: 20%' align='center'>"+u1.getMatriculaONU()+"</td>");
-                    out.print("<td style='width: 20%' align='center'>"+u1.getMatriculaUY()+"</td>");
-                    out.print("<td style='width: 10%' align='center'>"+u1.getMarca()+"</td>");
-                    out.print("<td style='width: 10%' align='center'>"+u1.getModelo()+"</td>"); 
-                    out.print("<td style='width: 10%' align='center'>"+u1.getNroMotor()+"</td>"); 
-                    out.print("<td style='width: 10%' align='center'>"+u1.getNroChasis()+"</td>"); 
-                    out.print("<td style='width: 10%' align='center'><a href='vehiculo.jsp?id="+String.valueOf(u1.getMatriculaUY())+"'><img src='images/ver.png' width='25%' /></a></td>");
-                    out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this)\" action='Vehiculo?elim="+u1.getMatriculaUY()+"'><input type='image' width='25%' title='Eliminar Vehiculo' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                    out.print("<td style='width: 10%' align='center'>"+u1.getNumero()+"</td>");
+                    out.print("<td style='width: 20%' align='center'>"+u1.getModelo().getDescripcion()+"</td>");
+                    if(u1.getFechaAlta()!=null){
+                        out.print("<td style='width: 10%' align='center'>"+u1.getFechaAlta()+"</td>");
+                    }
+                    else{
+                        out.print("<td style='width: 10%' align='center'></td>"); 
+                    }
+                    if(u1.getFechaBaja()!=null){
+                        out.print("<td style='width: 10%' align='center'>"+u1.getFechaBaja()+"</td>"); 
+                    }
+                    else{
+                        out.print("<td style='width: 10%' align='center'></td>"); 
+                    }
+                    
+                    out.print("<td style='width: 10%' align='center'>"+u1.getDestino().getDescripcion()+"</td>"); 
+                    out.print("<td style='width: 10%' align='center'>"+u1.getCalibre().getId()+"</td>"); 
+                    if(u1.getEntregado()!=null){
+                        out.print("<td style='width: 10%' align='center'>"+u1.getEntregado().getGrado().getAbreviacion()+" "+u1.getEntregado().getNombre()+" "+u1.getEntregado().getApellido()+"</td>"); 
+                    }
+                    else{
+                        out.print("<td style='width: 10%' align='center'>NO ENTREGADO</td>"); 
+                    }
+                    out.print("<td style='width: 10%' align='center'><a href='armamento.jsp?id="+String.valueOf(u1.getNumero())+"'><img src='images/ver.png' width='25%' /></a></td>");
+                    out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this)\" action='Armamento?elim="+u1.getNumero()+"'><input type='image' width='25%' title='Eliminar Vehiculo' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     out.print("</tr>");
                 }
             %> 

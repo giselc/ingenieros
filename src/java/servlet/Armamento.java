@@ -6,8 +6,10 @@
 package servlet;
 
 import Manejadores.ManejadorArmamento;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,12 +41,13 @@ public class Armamento extends HttpServlet {
                 int id= Integer.valueOf(request.getParameter("id"));
                 String fechaAlta = request.getParameter("fechaAlta");
                 String fechaBaja = request.getParameter("fechaBaja");
-                int idDestino= Integer.valueOf(request.getParameter("idDestino"));
-                int idModeloArmamento= Integer.valueOf(request.getParameter("idModeloArmamento"));
-                int calibre= Integer.valueOf(request.getParameter("calibre"));
-                int idEntregado= Integer.valueOf(request.getParameter("idEntregado"));
+                int idDestino= Integer.valueOf(request.getParameter("destino"));
+                int idModeloArmamento= Integer.valueOf(request.getParameter("modelo"));
+                String calibre= request.getParameter("municion");
+                int idEntregado= Integer.valueOf(request.getParameter("entregado"));
                 if(id==-1){ //alta
-                    if(mc.agregarArmamento(id, idModeloArmamento, fechaAlta, fechaBaja, idDestino, calibre, idEntregado)){
+                    int numero= Integer.valueOf(request.getParameter("numero"));
+                    if(mc.agregarArmamento(numero, idModeloArmamento, fechaAlta, fechaBaja, idDestino, calibre, idEntregado)){
                         sesion.setAttribute("mensaje", "Armamento agregado correctamente.");
                     }
                     else{
@@ -65,8 +68,9 @@ public class Armamento extends HttpServlet {
             else{
                 if(request.getParameter("elim")!= null){
                     int id=Integer.valueOf(request.getParameter("elim"));
+                    this.eliminarArchivo(mc.getInformacionSumariasArmamento(id), id);
                     if(mc.eliminarArmamento(id)){
-                        sesion.setAttribute("mensaje", "Armametno eliminado correctamente.");
+                        sesion.setAttribute("mensaje", "Armamento eliminado correctamente.");
                     }
                     else{
                         sesion.setAttribute("mensaje", "ERROR al eliminar el armamento.");
@@ -77,7 +81,16 @@ public class Armamento extends HttpServlet {
             response.sendRedirect("armamentos.jsp");
         }
     }
-
+    private void eliminarArchivo(ArrayList<Classes.ISArmamento> is, int idArmamento){
+        for (Classes.ISArmamento i : is){
+            if(!i.getInformacionSumaria().equals("")){
+                File f = new File(getServletContext().getRealPath("/")+"/ISArmamento/"+idArmamento+"-"+i.getId()+i.getInformacionSumaria().substring(i.getInformacionSumaria().lastIndexOf(".")));
+                if(f.exists()){
+                    f.delete();
+                }
+            }
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

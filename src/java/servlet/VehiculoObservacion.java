@@ -138,16 +138,16 @@ public class VehiculoObservacion extends HttpServlet {
     private boolean eliminarArchivo(String nombre, int idObservacion){
         if(!nombre.equals("")){
             File f = new File(getServletContext().getRealPath("/")+"/ISVehiculos/"+idObservacion+nombre.substring(nombre.lastIndexOf(".")));
+            if(f.exists()){
             return f.delete();
+            }
         }
         return true;
     }
     private boolean modificarArchivo(Part part, int idObservcion){
         String name = this.getFileName(part);
-        System.out.print(name+"dd");
         boolean b=true;
         if(name!=null && !name.equals("") ){
-            System.out.print("dd2");
             ManejadorVehiculo v = new ManejadorVehiculo();
             ObservacionVehiculo o = v.getObservacionVehiculo(idObservcion);
             if(o.getInfromacionSumaria().equals("")){

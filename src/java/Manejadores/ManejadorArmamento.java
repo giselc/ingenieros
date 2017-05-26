@@ -38,7 +38,7 @@ public class ManejadorArmamento {
         ArrayList<ISArmamento> al= new ArrayList();
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from ISArmamento where idArmamento="+idArmamento;
+            String sql="Select * from ISArmamento where idArmamento="+idArmamento+" order by fecha desc";
             ResultSet rs= s.executeQuery(sql);
             ISArmamento g;
             ManejadorPersonal mp= new ManejadorPersonal();
@@ -56,7 +56,7 @@ public class ManejadorArmamento {
         ISArmamento g=null;
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from destinoArmamento where id="+id;
+            String sql="Select * from ISArmamento where id="+id;
             ResultSet rs= s.executeQuery(sql);
             ManejadorPersonal mp= new ManejadorPersonal();
             if (rs.next()){
@@ -103,13 +103,13 @@ public class ManejadorArmamento {
         ArrayList<Armamento> al= new ArrayList();
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from Armamento";
+            String sql="Select * from Armamento order by numero asc";
             ResultSet rs= s.executeQuery(sql);
             Armamento g;
             ManejadorPersonal mp= new ManejadorPersonal();
             ManejadorCodigos mc = new ManejadorCodigos();
             while (rs.next()){
-                g= new Armamento(rs.getInt("numero"),mc.getModeloArmamento(rs.getInt("idModeloArmamento")),rs.getDate("fechaAlta"),rs.getDate("fechaBaja"),mc.getDestino(rs.getInt("idDestino")),mc.getMunicion(rs.getString("calibre")),mp.getPersonalBasico(rs.getInt("idEntregado")));
+                g= new Armamento(rs.getInt("numero"),mc.getModeloArmamento(rs.getInt("idModelo")),rs.getDate("fechaAlta"),rs.getDate("fechaBaja"),mc.getDestino(rs.getInt("idDestino")),mc.getMunicion(rs.getString("calibre")),mp.getPersonalBasico(rs.getInt("idEntregado")));
                 al.add(g);
             }
             mp.CerrarConexionManejador();
@@ -128,7 +128,7 @@ public class ManejadorArmamento {
             ManejadorPersonal mp= new ManejadorPersonal();
             ManejadorCodigos mc = new ManejadorCodigos();
             if (rs.next()){
-                g= new Armamento(rs.getInt("numero"),mc.getModeloArmamento(rs.getInt("idModeloArmamento")),rs.getDate("fechaAlta"),rs.getDate("fechaBaja"),mc.getDestino(rs.getInt("idDestino")),mc.getMunicion(rs.getString("calibre")),mp.getPersonalBasico(rs.getInt("idEntregado")));
+                g= new Armamento(rs.getInt("numero"),mc.getModeloArmamento(rs.getInt("idModelo")),rs.getDate("fechaAlta"),rs.getDate("fechaBaja"),mc.getDestino(rs.getInt("idDestino")),mc.getMunicion(rs.getString("calibre")),mp.getPersonalBasico(rs.getInt("idEntregado")));
             }
             mc.CerrarConexionManejador();
             mp.CerrarConexionManejador();
@@ -137,10 +137,22 @@ public class ManejadorArmamento {
         }
         return g;
     }
-    public boolean agregarArmamento(int numero, int idModeloArmamento, String fechaAlta, String fechaBaja, int idDestino, int calibre, int idEntregado){
+    public boolean agregarArmamento(int numero, int idModeloArmamento, String fechaAlta, String fechaBaja, int idDestino, String calibre, int idEntregado){
         try {
             Statement s= connection.createStatement();
-            String sql="insert into armamento(numero, idModeloArmamento, fechaAlta, fechaBaja, idDestino, calibre,idEntregado) values("+numero+","+idModeloArmamento+",'"+fechaAlta+"','"+fechaBaja+"',"+idDestino+","+calibre+","+idEntregado+")";
+            if(fechaAlta.equals("")){
+                fechaAlta="NULL";
+            }
+            else{
+                fechaAlta="'"+fechaAlta+"'";
+            }
+            if(fechaBaja.equals("")){
+                fechaBaja="NULL";
+            }
+            else{
+                fechaBaja="'"+fechaBaja+"'";
+            }
+            String sql="insert into armamento(numero, idModelo, fechaAlta, fechaBaja, idDestino, calibre,idEntregado) values("+numero+","+idModeloArmamento+","+fechaAlta+","+fechaBaja+","+idDestino+",'"+calibre+"',"+idEntregado+")";
             int i= s.executeUpdate(sql);
             if (i>0){
                 return true;
@@ -163,10 +175,10 @@ public class ManejadorArmamento {
         }
         return false;
     }
-    public boolean modificarArmamento(int numero, int idModeloArmamento, String fechaAlta, String fechaBaja, int idDestino, int calibre, int idEntregado){
+    public boolean modificarArmamento(int numero, int idModeloArmamento, String fechaAlta, String fechaBaja, int idDestino, String calibre, int idEntregado){
         try {
             Statement s= connection.createStatement();
-            String sql="update grado set idModeloArmamento="+idModeloArmamento+",fechaAlta='"+fechaAlta+"',fechaBaja='"+fechaBaja+"',idDestino="+idDestino+",calibre="+calibre+",idEntregado="+idEntregado+" where numero="+numero;
+            String sql="update grado set idModelo="+idModeloArmamento+",fechaAlta='"+fechaAlta+"',fechaBaja='"+fechaBaja+"',idDestino="+idDestino+",calibre='"+calibre+"',idEntregado="+idEntregado+" where numero="+numero;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {
@@ -179,12 +191,12 @@ public class ManejadorArmamento {
         ArrayList<ObservacionArmamento> al= new ArrayList();
         try {
             Statement s= connection.createStatement();
-            String sql="Select * from ObservacionArmamento where idArmamento="+idArmamento;
+            String sql="Select * from ObservacionArmamento where idArmamento="+idArmamento+" order by fecha desc";
             ResultSet rs= s.executeQuery(sql);
             ObservacionArmamento g;
             ManejadorPersonal mp= new ManejadorPersonal();
             while (rs.next()){
-                g= new ObservacionArmamento(rs.getInt("if"),rs.getDate("fecha"),rs.getString("observaciones"),mp.getPersonalBasico(rs.getInt("idEscribiento")),rs.getInt("idArmamento"));
+                g= new ObservacionArmamento(rs.getInt("id"),rs.getDate("fecha"),rs.getString("observaciones"),mp.getPersonalBasico(rs.getInt("idEscribiente")),rs.getInt("idArmamento"));
                 al.add(g);
             }
             mp.CerrarConexionManejador();
@@ -201,7 +213,7 @@ public class ManejadorArmamento {
             ResultSet rs= s.executeQuery(sql);
             ManejadorPersonal mp= new ManejadorPersonal();
             if (rs.next()){
-                g= new ObservacionArmamento(rs.getInt("if"),rs.getDate("fecha"),rs.getString("observaciones"),mp.getPersonalBasico(rs.getInt("idEscribiento")),rs.getInt("idArmamento"));
+                g= new ObservacionArmamento(rs.getInt("id"),rs.getDate("fecha"),rs.getString("observaciones"),mp.getPersonalBasico(rs.getInt("idEscribiente")),rs.getInt("idArmamento"));
             }
             mp.CerrarConexionManejador();
         } catch (SQLException ex) {
@@ -238,7 +250,7 @@ public class ManejadorArmamento {
     public boolean modificarObservacionArmamento(int id, int idArmamento,String fecha,String observaciones, int idEscribiente){
         try {
             Statement s= connection.createStatement();
-            String sql="update grado set idArmamento="+idArmamento+",fecha='"+fecha+"',observaciones='"+observaciones+"',idEscribiente="+idEscribiente+" where id="+id;
+            String sql="update observacionArmamento set idArmamento="+idArmamento+",fecha='"+fecha+"',observaciones='"+observaciones+"',idEscribiente="+idEscribiente+" where id="+id;
             int i= s.executeUpdate(sql);
             return (i>0);
         } catch (SQLException ex) {

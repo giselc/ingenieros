@@ -89,9 +89,6 @@ public class ManejadorPersonal {
                 p=new Personal(rp);
                 mc.CerrarConexionManejador();
             }
-            else{
-                System.out.print("errorSQL"+sql);
-            }
         } catch (SQLException ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -659,7 +656,7 @@ public class ManejadorPersonal {
         RecordRecalculo rr= new RecordRecalculo();
         rr.dias = dias;
         rr.sancion=sancionInicial;
-        System.out.print(rr.dias + " " + rr.sancion.getFecha().toString());
+        //System.out.print(rr.dias + " " + rr.sancion.getFecha().toString());
         return rr;
     }
     public boolean crearSancion(int ci, int tipoSancion, int orden, String parte, int dias, String fecha, String hora){
@@ -724,9 +721,9 @@ public class ManejadorPersonal {
             if(rs.next()){ // esta sacionado
                 int cantTotalDias= rs.getInt("cantTotalDias");
                 if(((rs.getDate("fechaInicial").getTime()-s.getFecha().getTime())<0)){ //fecha de sancionado menor a la que elimino
-                    System.out.println("Recalculando..");
+                 //   System.out.println("Recalculando..");
                     RecordRecalculo rc = recalcularDias(s.getA().getCi(), s.getTipo().getId());
-                    System.out.println("Fin recalculo..");
+                 //   System.out.println("Fin recalculo..");
                     sql= "update sancionados set fechaInicial='"+rc.sancion.getFecha().toString()+"', cantTotalDias="+ rc.dias +" where ciPersonal="+s.getA().getCi()+" and idTipoSancion="+s.getTipo().getId();
                     s1.executeUpdate(sql);
                 }
