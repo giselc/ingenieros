@@ -4,6 +4,7 @@
     Author     : Gisel
 --%>
 
+<%@page import="Manejadores.ManejadorPersonal"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Classes.Armamento"%>
 <%@page import="Manejadores.ManejadorArmamento"%>
@@ -98,7 +99,7 @@
                     out.print("<td style='width: 10%' align='center'>"+u1.getDestino().getDescripcion()+"</td>"); 
                     out.print("<td style='width: 10%' align='center'>"+u1.getCalibre().getId()+"</td>"); 
                     if(u1.getEntregado()!=null){
-                        out.print("<td style='width: 10%' align='center'>"+u1.getEntregado().getGrado().getAbreviacion()+" "+u1.getEntregado().getNombre()+" "+u1.getEntregado().getApellido()+"</td>"); 
+                        out.print("<td style='width: 10%' align='center'>"+ManejadorPersonal.obtenerNombreCompleto(u1.getEntregado())+"</td>"); 
                     }
                     else{
                         out.print("<td style='width: 10%' align='center'>NO ENTREGADO</td>"); 

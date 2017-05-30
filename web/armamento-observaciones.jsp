@@ -4,6 +4,7 @@
     Author     : Gisel
 --%>
 
+<%@page import="Manejadores.ManejadorPersonal"%>
 <%@page import="Classes.ObservacionArmamento"%>
 <%@page import="Classes.Armamento"%>
 <%@page import="java.util.ArrayList"%>
@@ -69,7 +70,7 @@
                     out.print("<td style='width: 10%' align='center'>"+u1.getFecha()+"</td>");
                     out.print("<td style='width: 20%' align='center'>"+u1.getObservaciones()+"</td>");
                     if(u1.getEscribiente()!=null){
-                        out.print("<td style='width: 10%' align='center'>"+u1.getEscribiente().getGrado().getAbreviacion()+" "+u1.getEscribiente().getNombre()+" "+u1.getEscribiente().getApellido()+"</td>");
+                        out.print("<td style='width: 10%' align='center'>"+ManejadorPersonal.obtenerNombreCompleto(u1.getEscribiente())+"</td>");
                     }
                     else{
                        out.print("<td style='width: 10%' align='center'></td>"); 

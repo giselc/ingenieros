@@ -108,6 +108,14 @@
         <servlet-name>Armamento</servlet-name>
         <servlet-class>servlet.Armamento</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ArmamentoLote</servlet-name>
+        <servlet-class>servlet.ArmamentoLote</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ArmamentoLoteMunicion</servlet-name>
+        <servlet-class>servlet.ArmamentoLoteMunicion</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -199,6 +207,14 @@
     <servlet-mapping>
         <servlet-name>Armamento</servlet-name>
         <url-pattern>/Armamento</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ArmamentoLote</servlet-name>
+        <url-pattern>/ArmamentoLote</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ArmamentoLoteMunicion</servlet-name>
+        <url-pattern>/ArmamentoLoteMunicion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

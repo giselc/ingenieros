@@ -39,13 +39,13 @@
          })();
      </script>
     <div id='dialog2' style="display:none" title="Imprimir Armamento">
-       <form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=Armamento&id=<%=request.getParameter("id")%>'>
+       <form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=armamento&id=<%=request.getParameter("id")%>'>
            <p>
                <b>Ficha:</b>
                <input type="checkbox" name="ficha" checked="checked"/>
            </p>
            <p>
-               <b>Observaciones:</b>
+               <b>Historial:</b>
                <input type="checkbox" name="historial" checked="checked"/>
            </p>
            <input type="submit" value="Imprimir"/>

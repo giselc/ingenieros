@@ -4,6 +4,7 @@
     Author     : Gisel
 --%>
 
+<%@page import="Manejadores.ManejadorPersonal"%>
 <%@page import="Manejadores.ManejadorArmamento"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Classes.ISArmamento"%>
@@ -65,7 +66,7 @@
                     out.print("<tr style='background-color:"+color+"'>");
                     out.print("<td style='width: 10%' align='center'>"+u1.getFecha()+"</td>");
                     out.print("<td style='width: 20%' align='center'><a href='ISArmamento/"+request.getParameter("id")+"-"+u1.getId()+u1.getInformacionSumaria().substring(u1.getInformacionSumaria().indexOf("."))+"'>"+u1.getInformacionSumaria()+"</a></td>");
-                    out.print("<td style='width: 10%' align='center'>"+u1.getOficialArmamento().getGrado().getAbreviacion()+" "+u1.getOficialArmamento().getNombre()+" "+u1.getOficialArmamento().getApellido()+"</td>");
+                    out.print("<td style='width: 10%' align='center'>"+ManejadorPersonal.obtenerNombreCompleto(u1.getOficialArmamento())+"</td>");
                     out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar2(this)\" action='ISArmamento?elim="+u1.getId()+"&armamento="+request.getParameter("id")+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     out.print("</tr>");
                 }

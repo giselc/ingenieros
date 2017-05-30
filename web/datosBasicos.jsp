@@ -137,7 +137,7 @@
         mp.CerrarConexionManejador();
     }
 %>
-<h1 align="center"><u><% if (p!=null){out.print("Personal: "+p.getNombre()+" "+p.getApellido());}else{out.print("Agregar personal");}%></u></h1>
+<h1 align="center"><u><% if (p!=null){out.print("Personal: "+ManejadorPersonal.obtenerNombreCompleto(p));}else{out.print("Agregar personal");}%></u></h1>
 <%
 String foto="";
 if(p==null){

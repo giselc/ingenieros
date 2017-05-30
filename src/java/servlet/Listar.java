@@ -6,6 +6,7 @@
 package servlet;
 
 import Classes.RecordListarPersonal;
+import Manejadores.ManejadorArmamento;
 import Manejadores.ManejadorClases;
 import Manejadores.ManejadorCodigos;
 import Manejadores.ManejadorPersonal;
@@ -136,6 +137,20 @@ public class Listar extends HttpServlet {
                                                     ManejadorVehiculo mv = new ManejadorVehiculo();
                                                     mv.imprimirAlertasMantenimiento(out);
                                                     mv.CerrarConexionManejador();
+                                                }
+                                                else{
+                                                    if(tipo.equals("armamentos")){
+                                                        ManejadorArmamento mv = new ManejadorArmamento();
+                                                        mv.imprimirArmamentos(out);
+                                                        mv.CerrarConexionManejador();
+                                                    }
+                                                    else{
+                                                        if(tipo.equals("armamento")){
+                                                            ManejadorArmamento mv = new ManejadorArmamento();
+                                                            mv.imprimirArmamento(Integer.valueOf(request.getParameter("id")),request.getParameter("ficha")!=null,request.getParameter("historial")!=null,out);
+                                                            mv.CerrarConexionManejador();
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

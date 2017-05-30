@@ -89,8 +89,7 @@
                                 out.print("<select name=\"a\" form=\"formulario\">");
                                 
                                 for(Personal p: ap ){
-                                    mostrarNombre=p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+ p.getApellido();
-                                    out.print("<option value='"+p.getCi()+"'>"+ mostrarNombre +"</option>");
+                                    out.print("<option value='"+p.getCi()+"'>"+ ManejadorPersonal.obtenerNombreCompleto(p) +"</option>");
                                 }
                                
                                 out.print("</select>");
@@ -103,7 +102,7 @@
                                 else{
                                     p=s.getA();
                                 }
-                                out.print(p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+p.getApellido());
+                                out.print(ManejadorPersonal.obtenerNombreCompleto(p));
                                 out.print("<input value='"+p.getCi()+"' hidden='hidden' name='a'");
                             }
                             
@@ -152,12 +151,11 @@
                             <select name="orden" form="formulario" <%if (request.getParameter("ci")!=null){out.print("readonly");} %> required='required'>
                                 <%
                                 for(Personal p: ap ){
-                                    mostrarNombre=p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+ p.getApellido();
                                     String selected ="";
                                     if(s!=null && p.getCi()==s.getOrden().getCi()){
                                         selected="selected";
                                     }
-                                    out.print("<option " + selected +" value='"+p.getCi()+"'>"+ mostrarNombre +"</option>");
+                                    out.print("<option " + selected +" value='"+p.getCi()+"'>"+ ManejadorPersonal.obtenerNombreCompleto(p) +"</option>");
                                 }
                                 mp.CerrarConexionManejador();
                                 mc.CerrarConexionManejador();

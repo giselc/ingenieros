@@ -548,7 +548,7 @@ public class ManejadorPersonal {
         
         return as;
     }
-    public String obtenerNombreCompleto(Personal p){
+    public static String obtenerNombreCompleto(Personal p){
         return (p.getGrado().getAbreviacion()+" "+p.getNombre()+" "+p.getApellido());
     }
     public void imprimirSanciones(int idPersonal,String fechaDesde, String fechaHasta, int tipoSancion, PrintWriter out){
