@@ -63,15 +63,15 @@
                         <td>
                             <% 
                                 java.util.Date hoy = new java.util.Date(); 
-                                String m="";
+                                String m= String.valueOf(hoy.getMonth()+1);
                                 if(hoy.getMonth()+1 <= 9 ){
-                                    m= "0"+(hoy.getMonth()+1);
+                                    m= "0"+m;
                                 }
-                                String d="";
+                                String d=String.valueOf(hoy.getDate());
                                 if(hoy.getDate() <= 9 ){
-                                    d= "0"+(hoy.getDate());
+                                    d= "0"+d;
                                 }
-                                String fecha= (hoy.getYear()+1900) +"-"+ m +"-"+hoy.getDate();
+                                String fecha= (hoy.getYear()+1900) +"-"+ m +"-"+d;
                               %>
                               <input type=date name="fecha" <%=fecha%> <%if( s!=null){out.print("value="+s.getFecha());}else{out.print("value="+fecha);} %> required="required"/>
                         </td>

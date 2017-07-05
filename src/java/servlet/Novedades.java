@@ -27,6 +27,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -48,6 +49,7 @@ public class Novedades extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession sesion = request.getSession();
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             if(request.getParameter("subir")!= null){
@@ -111,11 +113,28 @@ public class Novedades extends HttpServlet {
                 }
                 else{
                     if(request.getParameter("elim")!= null){
-                        
+                        if(eliminarArchivo(request.getParameter("elim"))){
+                            sesion.setAttribute("mensaje", "Novedad eliminada correctamente.");
+                        }
+                        else{
+                            sesion.setAttribute("mensaje", "ERROR al eliminar la novedad.");
+                        }
+                        response.sendRedirect("verNovedades.jsp");
                     }
                 }
             }
         }
+    }
+    private boolean eliminarArchivo(String nombre){
+        if(!nombre.equals("")){
+            File f = new File(getServletContext().getRealPath("/")+"/Novedades/"+nombre);
+            if(f.exists()){
+                return f.delete();
+                
+            }
+            return true;
+        }
+        return true;
     }
     private String getFileName(Part part) {
 		for (String cd : part.getHeader("content-disposition").split(";")) {

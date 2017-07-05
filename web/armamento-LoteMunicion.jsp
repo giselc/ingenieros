@@ -72,7 +72,7 @@
                     <tr>
                         <td><b>Cantidad munici&oacute;n viva:</b> </td>
                         <td>
-                            <p><input type="number" <% if (c!=null){out.print("value="+c.getCantMunicionViva());}%> name="viva" /></p>
+                            <p><input type="number" <% if (c!=null){out.print("value="+c.getCantMunicionViva());}%> name="vivas" /></p>
                         </td>
                     </tr>
                     <tr>

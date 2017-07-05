@@ -546,4 +546,67 @@ datos+="    </table>";
        }
        out.print(datos);
    }
+
+    public void imprimirLotes(PrintWriter out) {
+        ArrayList<Lote> al= this.getLotes();
+        
+        String datos = "<h1>Lotes ingresados al sistema:</h1><table cellspacing=0px border=1px style=\"width: 100%;\" align='center'>" +
+"                <tr style='background-color:#ffcc66'>" +
+"                            <td style='width: 30%' align='center'><h3 style='margin:2%;'>Id</h3></td>" +
+"                            <td style='width: 20%' align='center'><h3 style='margin:2%;'>Fecha</h3></td>" +
+"                </tr>" ;
+                int i=0;
+                String color;
+                for (Lote u1: al){
+                        if ((i%2)==0){
+                            color=" #ccccff";
+                        }
+                        else{
+                            color=" #ffff99";
+                        }
+                        i++;
+
+datos+="         <tr style='background-color:"+color+"'>" +
+"                    <td style='width: 30%' align='center'>"+u1.getId()+"</td>" +
+"                    <td style='width: 20%' align='center'>"+u1.getFechaVencimiento()+"</td>" +
+"                </tr>";
+                }
+datos+="    </table>";
+out.print(datos);
+    }
+
+    public void imprimirLote(String id, PrintWriter out) {
+        Lote v= this.getLote(id);
+        ArrayList<LoteMunicion> lote = this.getMunicionesLote(id);
+        String datos="<h1 align=\"center\">Lote: "+ v.getId() +"/ Vencimiento: "+ v.getFechaVencimiento() +"</h1>\n" +
+"<h3>Municiones:</h3>"+
+"    <table cellspacing=0px border=1px style=\"width: 100%;\" align='center'>" +
+"                <tr style='background-color:#ffcc66'>" +
+"                            <td style='width: 10%' align='center'><h3 style='margin:2%;'>Munición</h3></td>" +
+"                            <td style='width: 20%' align='center'><h3 style='margin:2%;'>Cantidad</h3></td>" +
+"                            <td style='width: 10%' align='center'><h3 style='margin:2%;'>Vivas</h3></td>" +
+"                            <td style='width: 10%' align='center'><h3 style='margin:2%;'>Vainas</h3></td>" +
+"                       </tr>" ;
+                int i=0;
+                String color;
+                for (LoteMunicion u1: lote){
+                        if ((i%2)==0){
+                            color=" #ccccff";
+                        }
+                        else{
+                            color=" #ffff99";
+                        }
+                        i++;
+
+datos+="                    <tr style='background-color:"+color+"'>" +
+"                    <td style='width: 10%' align='center'>"+u1.getMunicion().getId()+"</td>" +
+"                    <td style='width: 20%' align='center'>"+u1.getCantidad()+"</td>" +
+"                   <td style='width: 10%' align='center'>"+u1.getCantMunicionViva()+"</td>" +
+"                    <td style='width: 10%' align='center'>"+u1.getVainas()+"</td>" +
+"                    </tr>" ;
+                }
+datos+="    </table>";
+        out.print(datos);
+    }
+    
 }

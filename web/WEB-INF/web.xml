@@ -8,6 +8,14 @@
         <filter-name>AccesoISVehiculos</filter-name>
         <filter-class>Filtro.AccesoISVehiculos</filter-class>
     </filter>
+    <filter>
+        <filter-name>AccesoDocumentos</filter-name>
+        <filter-class>Filtro.AccesoDocumentos</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AccesoDocumentos</filter-name>
+        <url-pattern>/Documentos/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AccesoISVehiculos</filter-name>
         <url-pattern>/ISVehiculos/*</url-pattern>

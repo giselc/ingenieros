@@ -57,6 +57,14 @@
 <form id="novedades" method="post" action="Novedades?ver=1">
     <table style="text-align: left" align="center">
         <tr>
+            <td>
+            <p id="mensaje" style="color: #990000"><% if(session.getAttribute("mensaje")!=null){out.print("<img src='images/icono-informacion.png' width='10%' /> &nbsp;&nbsp;"+session.getAttribute("mensaje"));}%></p>
+            <%
+                session.setAttribute("mensaje",null);
+            %>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <h2 style="padding: 0px">
                     Ver Novedades

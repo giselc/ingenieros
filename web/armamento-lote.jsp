@@ -34,6 +34,7 @@
         }
     };
 </script>
+<p align="left"><a href="armamento-lotes.jsp"><img src="images/atras.png" width="15%"/></a></p>
 <% 
      if(request.getParameter("id")==null){
         
@@ -47,12 +48,12 @@
                 <p><b>Identificador:</b></p>
             </td>
             <td>
-                <input type=text name="id" required="required" />
+                <input type=text name="idLote" required="required" />
             </td>
         </tr>
         <tr>
             <td>
-                <p><b>Fecha:</b></p>
+                <p><b>Fecha de vencimiento:</b></p>
             </td>
             <td>
                 <input type="date" name="fecha" required="required"/>
@@ -67,9 +68,10 @@
         String id = request.getParameter("id");
         ManejadorArmamento mv = new ManejadorArmamento();
         Lote v= mv.getLote(id);
-        mv.CerrarConexionManejador();
+        
 %>
 <h1 align="center">Lote: <%= v.getId() %>/ Vencimiento: <%= v.getFechaVencimiento() %></h1>
+<form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=lote&id=<%= id %>'>
         <table style="float: right">
         <tr>
             <td>
@@ -82,14 +84,16 @@
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Municiones:</h3></td>
             <td style="width: 15%"><a href="armamento-LoteMunicion.jsp?lote=<%= request.getParameter("id") %>" title="Agregar"><img width="30%" src='images/agregarLista.png' /></a> </td>
+            <td style="width: 15%"><input type="image" width="30%" title="Imprimir"src="images/imprimir.png" alt="Submit Form" /></td>
         </tr>
     </table>
+</form>  
     <table style="width: 100%;" align='center'>
             <%
                 
                 ArrayList<LoteMunicion> ais = new ArrayList();
                 ais=mv.getMunicionesLote(id);
-                
+                mv.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Munición</h3></td>");
                             out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Cantidad</h3></td>");
@@ -119,8 +123,12 @@
             %> 
                 
     </table>
-<%        
+<% 
     }
-    
+}
+else{
+     response.sendRedirect("");
+}
 
 %>
+<%@ include file="footer.jsp" %>

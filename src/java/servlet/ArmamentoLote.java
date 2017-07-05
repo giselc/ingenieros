@@ -36,17 +36,20 @@ public class ArmamentoLote extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             ManejadorArmamento mc = new ManejadorArmamento();
             if(request.getParameter("id")!= null){ //alta o modficacion
-                String id= request.getParameter("id");
+                String id= request.getParameter("idLote");
                 String fecha = request.getParameter("fecha");
                 if(mc.agregarLote(id, fecha)){
                     sesion.setAttribute("mensaje", "Lote agregado correctamente.");
                     mc.CerrarConexionManejador();
-                    response.sendRedirect("armamento-lote?id="+id+".jsp");
+                    response.sendRedirect("armamento-lote.jsp?id="+id);
                 }
                 else{
                     sesion.setAttribute("mensaje", "ERROR al agregar el lote.");
+                    mc.CerrarConexionManejador();
+                    response.sendRedirect("armamento-lotes.jsp");
                 }
                 
+
             }
             else{
                 if(request.getParameter("elim")!= null){
@@ -58,9 +61,9 @@ public class ArmamentoLote extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al eliminar el lote.");
                     }
                 }
+                mc.CerrarConexionManejador();
+                response.sendRedirect("armamento-lotes.jsp");
             }
-            mc.CerrarConexionManejador();
-            response.sendRedirect("armamento-lotes.jsp");
         }
     }
 

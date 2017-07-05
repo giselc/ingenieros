@@ -73,7 +73,7 @@ public class ArmamentoLoteMunicion extends HttpServlet {
                 }
             }
             mc.CerrarConexionManejador();
-            response.sendRedirect("armamento-lote?id="+idLote+".jsp");
+            response.sendRedirect("armamento-lote.jsp?id="+idLote);
         }
     }
 

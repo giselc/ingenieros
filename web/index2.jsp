@@ -98,7 +98,7 @@
                             <a href="armamentos.jsp"> Fichas </a>
                         </li>
                         <li>
-                            <a  href="lotes.jsp">Lotes</a>
+                            <a  href="armamento-lotes.jsp">Lotes</a>
                         </li>
                     </ul>
                 </li>

@@ -30,13 +30,14 @@
     </table>
             
                
-    <table style="width: 50%;" align='center'>
+    <table style="width: 80%;" align='center'>
             <%
                
                 ArrayList<Documento> a = mp.getDocumentosListar(ci);
                 mp.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Tipo Documento</h3></td>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Archivo</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                        out.print("</tr>" );
@@ -53,8 +54,13 @@
 
                     out.print("<tr style='background-color:"+color+"'>");
                     out.print("<td style='width: 10%' align='center'>"+s.getTipo().getDescripcion()+"</td>");
+                    out.print("<td style='width: 10%' align='center'>");
+                    if(!s.getNombre().equals("")){
+                        out.print("<a href='Documentos/"+request.getParameter("id")+"-"+s.getId()+s.getNombre().substring(s.getNombre().indexOf("."))+"'>"+s.getNombre()+"</a>");
+                    }
+                    out.print("</td>");
                     out.print("<td style='width: 10%' align='center'><a href='documento.jsp?id="+String.valueOf(s.getId())+"&ci="+request.getParameter("id")+"'><img title='Editar' src='images/ver.png' width='25%' /></a></td>");
-                    out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='Documento?elim="+s.getId()+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
+                    out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='Documento?elim="+s.getId()+"&ci="+request.getParameter("id")+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     out.print("</tr>");
                 }
             %> 

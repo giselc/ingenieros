@@ -150,6 +150,20 @@ public class Listar extends HttpServlet {
                                                             mv.imprimirArmamento(Integer.valueOf(request.getParameter("id")),request.getParameter("ficha")!=null,request.getParameter("historial")!=null,out);
                                                             mv.CerrarConexionManejador();
                                                         }
+                                                        else{
+                                                            if(tipo.equals("lotes")){
+                                                                ManejadorArmamento mv = new ManejadorArmamento();
+                                                                mv.imprimirLotes(out);
+                                                                mv.CerrarConexionManejador();
+                                                            }
+                                                            else{
+                                                                if(tipo.equals("lote")){
+                                                                    ManejadorArmamento mv = new ManejadorArmamento();
+                                                                    mv.imprimirLote(request.getParameter("id"),out);
+                                                                    mv.CerrarConexionManejador();
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

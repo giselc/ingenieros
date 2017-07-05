@@ -17,17 +17,21 @@ public class Documento {
     private int id;
     private Personal p;
     private TipoDocumento tipo;
-    private Blob imagen;
-
+    private String nombre;
     
     
-    public Documento(int id, Personal p, TipoDocumento tipo, Blob imagen) {
+    public Documento(int id, Personal p, TipoDocumento tipo,String nombre) {
         this.id = id;
         this.tipo = tipo;
-        this.imagen = imagen;
         this.p = p;
+        this.nombre=nombre;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    
     public Personal getP() {
         return p;
     }
@@ -38,10 +42,6 @@ public class Documento {
 
     public TipoDocumento getTipo() {
         return tipo;
-    }
-
-    public Blob getImagen() {
-        return imagen;
     }
 
     

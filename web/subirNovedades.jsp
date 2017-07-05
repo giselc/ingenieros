@@ -62,7 +62,7 @@
                     </tr>
                      <tr>
                         <td>
-                            <b>Seleccione el archivo a subir:</b>
+                            <b>Seleccione el/los archivo/s a subir:</b>
                         </td>
                         <td>
                             <input type="file" name="novedad" id="file" required="required" multiple="multiple"/> 

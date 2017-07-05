@@ -890,7 +890,7 @@ public class ManejadorPersonal {
             ManejadorCodigos mc = new ManejadorCodigos();
             Personal p = this.getPersonalBasico(idPersonal);
             while(rs.next()){
-                documento=new Documento(rs.getInt("id"),p,mc.getTipoDocumento(rs.getInt("idTipoDocumento")),null);
+                documento=new Documento(rs.getInt("id"),p,mc.getTipoDocumento(rs.getInt("idTipoDocumento")),rs.getString("nombre"));
                 as.add(documento);
             }
             mc.CerrarConexionManejador();
@@ -908,7 +908,7 @@ public class ManejadorPersonal {
             ResultSet rs = s.executeQuery(sql);
             ManejadorCodigos mc = new ManejadorCodigos();
             if(rs.next()){
-                p= new Documento(id, this.getPersonalBasico(rs.getInt("idPersonal")), mc.getTipoDocumento(rs.getInt("idTipoDocumento")), rs.getBlob("imagen"));
+                p= new Documento(id, this.getPersonalBasico(rs.getInt("idPersonal")), mc.getTipoDocumento(rs.getInt("idTipoDocumento")), rs.getString("nombre"));
             }
             mc.CerrarConexionManejador();
         } catch (SQLException ex) {
@@ -916,22 +916,12 @@ public class ManejadorPersonal {
         }
         return p;
     }
-    public boolean modificarDocumento(int id, int tipoDocumento, String foto){
+    public boolean modificarDocumento(int id, int tipoDocumento, String nombre){
         try {
-            String strFoto="";
-            if(!foto.equals("")){
-                 strFoto=", imagen=?";
-            }
-            String sql= "update documentos set idTipoDocumento=?"+strFoto+" where id="+id;
+            String sql= "update documentos set idTipoDocumento=?, nombre=? where id="+id;
             PreparedStatement s= connection.prepareStatement(sql);
             s.setInt(1,tipoDocumento);
-            if(!foto.equals("")){
-                byte[] imageByte = Base64.getDecoder().decode(foto);
-                Blob blob = connection.createBlob();//Where connection is the connection to db object. 
-                blob.setBytes(1, imageByte);
-                s.setBlob(2, blob);
-            }
-           
+            s.setString(2,nombre);
             int result = s.executeUpdate();
             if(result>0){
                 return true;
@@ -941,24 +931,22 @@ public class ManejadorPersonal {
         }
         return false;
     }
-    public boolean crearDocumento(int tipoDocumento, int idPersonal, String foto){
+    public int crearDocumento(int tipoDocumento, int idPersonal, String nombre){
+        int clave = -1;
         try {
-            String sql= "insert into documentos (idPersonal, idTipoDocumento, imagen) values(?,?,?)";
-            PreparedStatement s= connection.prepareStatement(sql);
-            s.setInt(1,idPersonal);
-            s.setInt(2, tipoDocumento);
-            byte[] imageByte = Base64.getDecoder().decode(foto);
-            Blob blob = connection.createBlob();//Where connection is the connection to db object. 
-            blob.setBytes(1, imageByte);
-            s.setBlob(3, blob);
-            int result = s.executeUpdate();
+            String sql= "insert into documentos (idPersonal, idTipoDocumento, nombre) values("+idPersonal+","+tipoDocumento+",'"+nombre+"')";
+            Statement s= connection.createStatement();
+            int result = s.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
             if(result>0){
-                return true;
+                ResultSet rs=s.getGeneratedKeys(); //obtengo las ultimas llaves generadas
+                while(rs.next()){ 
+                    clave=rs.getInt(1);
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(ManejadorClases.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return clave;
     }
     public boolean eliminarDocumento(int id){
         try {
