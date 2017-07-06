@@ -32,7 +32,7 @@
 %>
 
     <div id='dialog1' style="display:none" title="Imprimir sanciones">
-        <form method="post" id="formulario2" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=sanciones&ci=<%=ci%>'>
+        <form method="post" id="formListar" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=sanciones&ci=<%=ci%>'>
             <p>
                 <b>Desde:</b>
                 <input type="date" name="fechaDesde"/>
@@ -43,7 +43,7 @@
             </p>
             <p>
                 <b>Tipo de Sanci&oacute;n:</b>
-                <select name="tipoSancion" form="formulario2">
+                <select name="tipoSancion" form="formListar">
                     <%
                     mc= new ManejadorCodigos();
                     ArrayList<Tipo> at = mc.getTiposSanciones();

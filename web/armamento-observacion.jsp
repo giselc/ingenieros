@@ -24,6 +24,7 @@
         mv.CerrarConexionManejador();
     }
 %>
+<p align="left"><a href="armamento.jsp?id=<%= request.getParameter("armamento") %>"><img src="images/atras.png" width="15%"/></a></p> 
 <h1 align="center"><u><% if (v!=null){out.print("Editar Observación armamento");}else{out.print("Agregar observación armamento");}%></u></h1>
 <form method="post" name="formulario" id="formulario" action="ObservacionArmamento?id=<%if (v!=null){out.print(v.getId());}else{out.print("-1");} %>&armamento=<%= request.getParameter("armamento") %>" >
     <table  width='70%' align='center' style="text-align: left">

@@ -26,6 +26,7 @@
 
     }
 </script>
+<p align="left"><a href="armamento.jsp?id=<%= request.getParameter("armamento") %>"><img src="images/atras.png" width="15%"/></a></p> 
 <form id="isArmamento" enctype="multipart/form-data" method="post" action="ISArmamento?id=-1&armamento=<%= request.getParameter("armamento") %>" onsubmit=" return enviandoSubmit(this);">
     
     <table style="text-align: left" align="center">

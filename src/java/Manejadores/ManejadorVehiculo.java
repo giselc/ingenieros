@@ -235,7 +235,7 @@ public class ManejadorVehiculo {
     }
     public boolean agregarVehiculo(String matriculaUY, String matriculaONU, String marca, String modelo, int nroMotor, int nroChasis, double consumo, int tipo, int horaskilometrosinicial){
         try {
-            String sql= "insert into vehiculos (matriculaUY, matriculaONU, marca,modelo, nroMotor,nroChasis,consumo,tipo,horaskilometrosInicial,horaskilometrosTotal) values(?,?,?,?,?,?,?,?,?)";
+            String sql= "insert into vehiculos (matriculaUY, matriculaONU, marca,modelo, nroMotor,nroChasis,consumo,tipo,horaskilometrosInicial,horaskilometrosTotal) values(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement s= connection.prepareStatement(sql);
             s.setString(1,matriculaUY);
             s.setString(2, matriculaONU);

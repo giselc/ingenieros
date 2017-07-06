@@ -25,6 +25,7 @@
         mv.CerrarConexionManejador();
     }
 %>
+<p align="left"><a href="vehiculo.jsp?id=<%= request.getParameter("vehiculo") %>"><img src="images/atras.png" width="15%"/></a></p> 
 <h1 align="center"><u><% if (u1!=null){out.print("Alerta para el vehículo: "+request.getParameter("vehiculo"));}else{out.print("Agregar alerta para el vehículo: "+request.getParameter("vehiculo"));}%></u></h1>
 
 

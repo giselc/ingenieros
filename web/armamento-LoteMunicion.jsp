@@ -29,7 +29,7 @@
         c= mp.getMunicionLote(id);
     }
 %>
-
+<p align="left"><a href="armamento-lote.jsp?id=<%= request.getParameter("lote") %>"><img src="images/atras.png" width="15%"/></a></p> 
 <h1 align="center"><u><% if (c!=null){out.print("Modificar");}else{out.print("Agregar al lote: "+request.getParameter("lote"));}%></u></h1>
     <table  width='70%' style="font-size: 130%; text-align: left" >
         <tr>
