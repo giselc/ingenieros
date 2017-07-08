@@ -15,7 +15,7 @@ import java.sql.Date;
 public class RecordPersonal {
     public Grado grado;
     public int gradoInt;
-    
+    public int idONU;
     public String nombre;
     public String apellido;
     public int ci;

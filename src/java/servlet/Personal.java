@@ -52,7 +52,7 @@ public class Personal extends HttpServlet {
                 rp.apellido = request.getParameter("apellido");
                 rp.fechaNac = request.getParameter("fechaNac");
                 rp.vtoCI =request.getParameter("vtoCi");
-                
+                rp.idONU = Integer.valueOf(request.getParameter("idONU"));
                 rp.pasaporte = request.getParameter("pasaporte");
                 rp.vtoPas = request.getParameter("vtoPas");
                 rp.cc = request.getParameter("cc");
@@ -93,7 +93,7 @@ public class Personal extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al ingresar el personal sistema.");
                     }
                     mp.CerrarConexionManejador();
-                    response.sendRedirect("s1-personal.jsp");
+                    response.sendRedirect("personal.jsp?id="+rp.ci);
                 }
                 else{ //modificacion
                     if( mp.modificarPersonalDatosBasicos(rp)){
@@ -103,7 +103,7 @@ public class Personal extends HttpServlet {
                         sesion.setAttribute("mensaje", "ERROR al modificar el personal.");
                     }
                     mp.CerrarConexionManejador();
-                    response.sendRedirect("s1-personal.jsp");
+                    response.sendRedirect("personal.jsp?id="+rp.ci);
                 }
             }
             else{

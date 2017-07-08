@@ -23,23 +23,23 @@
     String mostrar="";
     
     ManejadorPersonal mp= new ManejadorPersonal();
-    int ci=-1;
     if(request.getParameter("id")!=null){ //si es alta o si es ver
         int id= Integer.valueOf(request.getParameter("id"));
         c= mp.getConsultaMedica(id);
-        ci=c.getIdPersonal().getCi();
     }
 %>
 
     <%
         if(request.getParameter("ci")!=null){
-            ci= Integer.valueOf(request.getParameter("ci"));
-        }
-        if(ci!=-1){
             %>
-            <p align="left"><a <% if (request.getParameter("ci")!=null){out.print("href='personal.jsp?id="+ci+"'");}else{out.print("href='s1-historiaClinica.jsp'");}%>><img src="images/atras.png" width="15%"/></a></p>
+            <p align="left"><a href='personal.jsp?id=<%=request.getParameter("ci")%>'><img src="images/atras.png" width="15%"/></a></p>
             <%
             
+        }
+        else{
+            %>
+            <p align="left"><a href='s1-historiaClinica.jsp'><img src="images/atras.png" width="15%"/></a></p>
+            <%
         }
     %>
     <h1 align="center"><u><% if (c!=null){out.print("Ver");}else{out.print("Alta");}%></u></h1>

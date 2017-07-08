@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 //PERSONAL DE HISTORIAL TIENE NULL DOCUMENTOS.
 public class Personal {
+    private int idONU;
     private Blob foto;
     private Grado grado;
     private String nombre;
@@ -45,6 +46,7 @@ public class Personal {
     private ArrayList<Especialidad> especialidades;
 
     public Personal(RecordPersonal rp) {
+        this.idONU = rp.idONU;
         this.foto = rp.fotoBlob;
         this.grado = rp.grado;
         this.nombre = rp.nombre;
@@ -95,6 +97,10 @@ public class Personal {
         this.apoderado = rp.apoderado;
         this.familiares = new ArrayList<>();
         this.especialidades = new ArrayList<>();
+    }
+
+    public int getIdONU() {
+        return idONU;
     }
 
     public Blob getFoto() {

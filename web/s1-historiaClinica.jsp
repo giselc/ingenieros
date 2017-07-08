@@ -91,7 +91,7 @@
         </tr>
         <tr>
             <td style="width: 55%"><h3 style="float: left; font-family: sans-serif">Historia Cl&iacute;nica:</h3></td>
-            <td style="width: 15%"><a href="consultaMedica.jsp?" title="Agregar"><img width="30%" src='images/agregarLista.png' /></a> </td>
+            <td style="width: 15%"><a href="consultaMedica.jsp" title="Agregar"><img width="30%" src='images/agregarLista.png' /></a> </td>
             <td style="width: 15%"><img src="images/imprimir.png" width="30%" onclick="abrir_dialog(dialog3)" /> </td>
         </tr>
     </table>

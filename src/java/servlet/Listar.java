@@ -88,6 +88,7 @@ public class Listar extends HttpServlet {
                         else{
                             if(tipo.equals("todoElPersonal")){
                                 RecordListarPersonal rl= new RecordListarPersonal();
+                                rl.idONU = request.getParameter("idONU")!=null;
                                 rl.nombreCompleto = request.getParameter("nombreCompleto")!=null;
                                 rl.carneSalud = request.getParameter("carneSalud")!=null;
                                 rl.ciVto = request.getParameter("ciVto")!=null;

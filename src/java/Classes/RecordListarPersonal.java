@@ -12,6 +12,7 @@ package Classes;
 public class RecordListarPersonal {
     public boolean nombreCompleto;
     public boolean ci;
+    public boolean idONU;
     public boolean ciVto;
     public boolean fechaNac;
     public boolean pasaporte;

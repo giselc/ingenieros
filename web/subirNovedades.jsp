@@ -34,6 +34,7 @@
 
     }
 </script>
+<p align="left"><a href='index2.jsp'><img src="images/atras.png" width="15%"/></a></p>
 <form id="novedades" enctype="multipart/form-data" method="post" action="Novedades?subir=1" onsubmit=" return novedadesSubmit(this);">
     
     <table style="text-align: left" align="center">

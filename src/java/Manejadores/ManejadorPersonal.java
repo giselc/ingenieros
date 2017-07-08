@@ -70,6 +70,7 @@ public class ManejadorPersonal {
                 rp.nombre=rs.getString("nombres");
                 rp.apellido=rs.getString("apellidos");
                 rp.ci=rs.getInt("ci");
+                rp.idONU=rs.getInt("idONU");
                 rp.fechaNac=rs.getString("FechaNac");
                 rp.vtoCI=rs.getString("vtoCi");
                 rp.pasaporte=rs.getString("pasaporte");
@@ -212,6 +213,7 @@ public class ManejadorPersonal {
                 rp.nombre=rs.getString("nombres");
                 rp.apellido=rs.getString("apellidos");
                 rp.ci=rs.getInt("ci");
+                rp.idONU=rs.getInt("idONU");
                 rp.fechaNac=rs.getString("FechaNac");
                 rp.vtoCI=rs.getString("vtoCi");
                 rp.pasaporte=rs.getString("pasaporte");
@@ -261,32 +263,34 @@ public class ManejadorPersonal {
                 e=",vtoCarneSalud";
                 e1=",?";
             }
-            String sql= "insert into personal (ci, nombres, apellidos,grado, pasaporte,cc,ccNro,expMision,lugarExpMision,licenciaConducir, nroLicCond, catLicCond,carneSalud,unidadMilitar,foto"+a+b+c+d+e+") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"+a1+b1+c1+d1+e1+")";
+            String sql= "insert into personal (idONU,ci, nombres, apellidos,grado, pasaporte,cc,ccNro,expMision,lugarExpMision,licenciaConducir, nroLicCond, catLicCond,carneSalud,unidadMilitar,foto"+a+b+c+d+e+") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"+a1+b1+c1+d1+e1+")";
             PreparedStatement s= connection.prepareStatement(sql);
-            s.setInt(1,rp.ci);
-            s.setString(2, rp.nombre);
-            s.setString(3, rp.apellido);
-            s.setInt(4, rp.gradoInt);
-            s.setString(5, rp.pasaporte);
-            s.setString(6, rp.cc);
-            s.setInt(7,rp.ccNro);
-            s.setBoolean(8, rp.expMision);
-            s.setString(9, rp.lugarExpMision);
-            s.setBoolean(10, rp.licenciaConducir);
-            s.setInt(11,rp.nroLicCond);
-            s.setString(12, rp.catLicCond);
-            s.setBoolean(13, rp.carneSalud);
-            s.setInt(14,rp.unidadMilitarId);
+            int i = 1;
+            s.setInt(i++,rp.idONU);
+            s.setInt(i++,rp.ci);
+            s.setString(i++, rp.nombre);
+            s.setString(i++, rp.apellido);
+            s.setInt(i++, rp.gradoInt);
+            s.setString(i++, rp.pasaporte);
+            s.setString(i++, rp.cc);
+            s.setInt(i++,rp.ccNro);
+            s.setBoolean(i++, rp.expMision);
+            s.setString(i++, rp.lugarExpMision);
+            s.setBoolean(i++, rp.licenciaConducir);
+            s.setInt(i++,rp.nroLicCond);
+            s.setString(i++, rp.catLicCond);
+            s.setBoolean(i++, rp.carneSalud);
+            s.setInt(i++,rp.unidadMilitarId);
             if(rp.foto==null || rp.foto.equals("")){
-                s.setNull(15, NULL);
+                s.setNull(i++, NULL);
             }
             else{
                 byte[] imageByte = Base64.getDecoder().decode(rp.foto);
                 Blob blob = connection.createBlob();//Where connection is the connection to db object. 
                 blob.setBytes(1, imageByte);
-                s.setBlob(15, blob);
+                s.setBlob(i++, blob);
             }
-            int i = 16;
+            
             if(!rp.vtoLicCond.equals("")){
                 s.setString(i++, rp.vtoLicCond);
             }
@@ -334,22 +338,24 @@ public class ManejadorPersonal {
                 if(!rp.vtoCarneSalud.equals("")){
                     e=",vtoCarneSalud=?";
                 }
-                String sql= "update personal set nombres=?, apellidos=?, grado=?, pasaporte=?, cc=? ,ccNro=? ,expMision=? ,lugarExpMision=? ,licenciaConducir=? , nroLicCond=? , catLicCond=? , carneSalud=? , unidadMilitar=?"+strFoto+a+b+c+d+e+" where ci="+rp.ci;
+                String sql= "update personal set idONU=?, nombres=?, apellidos=?, grado=?, pasaporte=?, cc=? ,ccNro=? ,expMision=? ,lugarExpMision=? ,licenciaConducir=? , nroLicCond=? , catLicCond=? , carneSalud=? , unidadMilitar=?"+strFoto+a+b+c+d+e+" where ci="+rp.ci;
                 PreparedStatement s= connection.prepareStatement(sql);
-                s.setString(1, rp.nombre);
-                s.setString(2, rp.apellido);
-                s.setInt(3, rp.gradoInt);
-                s.setString(4, rp.pasaporte);
-                s.setString(5, rp.cc);
-                s.setInt(6,rp.ccNro);
-                s.setBoolean(7, rp.expMision);
-                s.setString(8, rp.lugarExpMision);
-                s.setBoolean(9, rp.licenciaConducir);
-                s.setInt(10,rp.nroLicCond);
-                s.setString(11, rp.catLicCond);
-                s.setBoolean(12, rp.carneSalud);
-                s.setInt(13,rp.unidadMilitarId);
-                int i=14;
+                int i=1;
+                s.setInt(i++, rp.idONU);
+                s.setString(i++, rp.nombre);
+                s.setString(i++, rp.apellido);
+                s.setInt(i++, rp.gradoInt);
+                s.setString(i++, rp.pasaporte);
+                s.setString(i++, rp.cc);
+                s.setInt(i++,rp.ccNro);
+                s.setBoolean(i++, rp.expMision);
+                s.setString(i++, rp.lugarExpMision);
+                s.setBoolean(i++, rp.licenciaConducir);
+                s.setInt(i++,rp.nroLicCond);
+                s.setString(i++, rp.catLicCond);
+                s.setBoolean(i++, rp.carneSalud);
+                s.setInt(i++,rp.unidadMilitarId);
+                
                 if (!rp.foto.equals("")){
                     byte[] imageByte = Base64.getDecoder().decode(rp.foto);
                     Blob blob = connection.createBlob();//Where connection is the connection to db object. 
@@ -1246,9 +1252,20 @@ public class ManejadorPersonal {
         }
     }
     public void imprimirDatosBasicos(Personal p, PrintWriter out) throws SQLException{
-        
+        String idONU = "";
+        if(p.getIdONU()!= -1){
+            idONU=String.valueOf(p.getIdONU());
+        }
             String datos =    "<h3 align='center'>DATOS BASICOS</h3>"+
 "               <table  width='50%' align='center' >\n" +
+"                    <tr>\n" +
+"                        <td>\n" +
+"                            <b>ID:</b>\n" +
+"                        </td>\n" +
+"                        <td>\n" +
+"                            "+idONU+"\n" +
+"                        </td>\n" +
+"                    </tr>\n" +                    
 "                    <tr>\n" +
 "                        <td>\n" +
 "                            <b>C.I.:</b>\n" +
@@ -1584,6 +1601,9 @@ datos+="                        <tr>\n" +
         String datos="<h3 align='center'>PERSONAL DEL SISTEMA</h3>";
         datos+="<table style=\"width: 100%;\">"+
         "<tr style='background-color:#ffcc66'>";
+        if(rl.idONU){
+            datos+="<td align='center'><h3 style='margin:2%;'>ID</h3></td>";
+        }
         if(rl.nombreCompleto){
             datos+="<td align='center'><h3 style='margin:2%;'>Nombre Completo</h3></td>";
         }
@@ -1633,6 +1653,9 @@ datos+="                        <tr>\n" +
             i++;
 
             datos+="<tr style='background-color:"+color+"'>";
+            if(rl.idONU){
+                datos+="<td align='center'><h3 style='margin:2%;'>"+p.getIdONU()+"</h3></td>";
+            }
             if(rl.nombreCompleto){
                 datos+="<td align='center'><h3 style='margin:2%;'>"+this.obtenerNombreCompleto(p)+"</h3></td>";
             }

@@ -184,6 +184,14 @@ else{
                 <table>
                     <tr>
                         <td>
+                            <p><b>ID:</b></p>
+                        </td>
+                        <td>
+                            <input type=number name="idONU" <%if( p!=null && p.getIdONU()!=-1 ){ out.print("value='"+Integer.valueOf(p.getIdONU())+"'"); out.print("readonly=\"readonly\"");} %> required="required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <p><b>C.I.:</b></p>
                         </td>
                         <td>

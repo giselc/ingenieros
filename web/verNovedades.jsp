@@ -53,7 +53,7 @@
          xmlhttp.send();
      }
 </script>
-
+<p align="left"><a href='index2.jsp'><img src="images/atras.png" width="15%"/></a></p>
 <form id="novedades" method="post" action="Novedades?ver=1">
     <table style="text-align: left" align="center">
         <tr>

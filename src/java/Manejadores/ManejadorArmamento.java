@@ -428,7 +428,7 @@ datos+="                        <td style='width: 10%' align='center'></td>" ;
 datos+="                        <td style='width: 10%' align='center'>"+u1.getFechaBaja()+"</td>" ;
                     }
                     else{
-datos+="                        out.print(\"<td style='width: 10%' align='center'></td>" ;
+datos+="                        <td style='width: 10%' align='center'></td>" ;
                     }
 datos+="                    <td style='width: 10%' align='center'>"+u1.getDestino().getDescripcion()+"</td>" +
 "                    <td style='width: 10%' align='center'>"+u1.getCalibre().getId()+"</td>" ;

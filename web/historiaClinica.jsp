@@ -84,7 +84,7 @@
                     out.print("<td style='width: 20%' align='center'>"+c.getDiagnostico()+"</td>");
                     out.print("<td style='width: 10%' align='center'>"+mp.obtenerNombreCompleto(c.getIdMedico())+"</td>");
                     out.print("<td style='width: 20%' align='center'>"+c.getTratamiento()+"</td>");
-                    out.print("<td style='width: 10%' align='center'><a href='consultaMedica.jsp?id="+String.valueOf(c.getId())+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
+                    out.print("<td style='width: 10%' align='center'><a href='consultaMedica.jsp?id="+String.valueOf(c.getId())+"&ci="+ci+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
                     if(u.isAdmin()){
                         out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='ConsultaMedica?elim="+c.getId()+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     }
@@ -120,7 +120,7 @@
                     out.print("<td style='width: 20%' align='center'>"+c.getDiagnostico()+"</td>");
                     out.print("<td style='width: 10%' align='center'>"+mp.obtenerNombreCompleto(c.getIdMedico())+"</td>");
                     out.print("<td style='width: 20%' align='center'>"+c.getTratamiento()+"</td>");
-                    out.print("<td style='width: 10%' align='center'><a href='consultaMedica.jsp?id="+String.valueOf(c.getId())+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
+                    out.print("<td style='width: 10%' align='center'><a href='consultaMedica.jsp?id="+String.valueOf(c.getId())+"&ci="+ci+"' ><img title='Ver' src='images/ver.png' width='25%' /></a></td>");
                     if(u.isAdmin()){
                         out.print("<td style='width: 10%' align='center'><form method='post' onsubmit=\"return confirmar(this,'')\" action='ConsultaMedica?elim="+c.getId()+"'><input type='image' width='25%' title='Eliminar' src='images/eliminar.png' alt='Submit Form' /> </form></td>");
                     }

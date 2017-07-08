@@ -80,6 +80,10 @@
 <div id='dialog2' style="display:none" title="Imprimir personal">
     <form method="post" target="_blank" onsubmit="return listar(this)" name="formListar" action='Listar?tipo=todoElPersonal'>
         <p>
+            <b>ID:</b>
+            <input type="checkbox" id="idONU" name="idONU" checked="checked"/>
+        </p>
+        <p>
             <b>Nombre Completo:</b>
             <input type="checkbox" id="nombreCompleto" name="nombreCompleto" checked="checked"/>
         </p>
@@ -87,37 +91,37 @@
             <b>CI</b>
             <input type="checkbox" id="ci" name="ci" checked="checked"/>
             <b>Vto.:</b>
-            <input type="checkbox" name="ciVto" checked="checked"/>
+            <input type="checkbox" name="ciVto"/>
         </p>
         <p>
             <b>Fecha de Nacimiento:</b>
-            <input type="checkbox" name="fechaNac" checked="checked"/>
+            <input type="checkbox" name="fechaNac"/>
         </p>
         <p>
             <b>Pasaporte:</b>
-            <input type="checkbox" name="pasaporte" checked="checked"/>
+            <input type="checkbox" name="pasaporte"/>
             <b>Vto.:</b>
-            <input type="checkbox" name="vtoPas" checked="checked"/>
+            <input type="checkbox" name="vtoPas"/>
         </p>
          <p>
             <b>Credencial:</b>
-            <input type="checkbox" name="credencial" checked="checked"/>
+            <input type="checkbox" name="credencial" />
         </p>
         <p>
             <b>Misiones anteriores:</b>
-            <input type="checkbox" name="misiones" checked="checked"/>
+            <input type="checkbox" name="misiones"/>
         </p>
         <p>
             <b>Licencia de Conducir:</b>
-            <input type="checkbox" name="licencia" checked="checked"/>
+            <input type="checkbox" name="licencia" />
             <b>Vto.:</b>
-            <input type="checkbox" name="vtoLic" checked="checked"/>
+            <input type="checkbox" name="vtoLic"/>
         </p>
         <p>
             <b>Carné de Salud:</b>
-            <input type="checkbox" name="carneSalud" checked="checked"/>
+            <input type="checkbox" name="carneSalud" />
             <b>Vto.:</b>
-            <input type="checkbox" name="vtoCarne" checked="checked"/>
+            <input type="checkbox" name="vtoCarne" />
         </p>
         <input type="submit" value="Imprimir"/>
     </form>
@@ -145,9 +149,10 @@
                 ArrayList<Personal> au = mc.getListaPersonalBasico();
                 mc.CerrarConexionManejador();
                 out.print("<tr style='background-color:#ffcc66'>");
+                            out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>ID</h3></td>");
                             out.print("<td style='width: 10%' align='center'><h3 style='margin:2%;'>Grado</h3></td>");
-                            out.print("<td style='width: 25%' align='center'><h3 style='margin:2%;'>Nombres</h3></td>");
-                            out.print("<td style='width: 35%' align='center'><h3 style='margin:2%;'>Apellidos</h3></td>");
+                            out.print("<td style='width: 20%' align='center'><h3 style='margin:2%;'>Nombres</h3></td>");
+                            out.print("<td style='width: 30%' align='center'><h3 style='margin:2%;'>Apellidos</h3></td>");
                             out.print("<td style='width: 15%' align='center'><h3 style='margin:2%;'>CI</h3></td>");
                             out.print("<td style='width: 10%' align='center'></td>");
                             if(u.isAdmin()){
@@ -166,8 +171,9 @@
                         i++;
 
                     out.print("<tr style='background-color:"+color+"'>");
+                    out.print("<td style='width: 10%' align='center'>"+u1.getIdONU()+"</td>");
                     out.print("<td style='width: 10%' align='center'>"+u1.getGrado().getAbreviacion()+"</td>"); 
-                    out.print("<td style='width: 25%' align='center'>"+u1.getNombre()+"</td>");
+                    out.print("<td style='width: 20%' align='center'>"+u1.getNombre()+"</td>");
                     out.print("<td style='width: 30%' align='center'>"+u1.getApellido()+"</td>");
                     out.print("<td style='width: 15%' align='center'>"+u1.getCi()+"</td>");
                     out.print("<td style='width: 10%' align='center'><a href='personal.jsp?id="+String.valueOf(u1.getCi())+"'><img src='images/ver.png' width='25%' /></a></td>");
